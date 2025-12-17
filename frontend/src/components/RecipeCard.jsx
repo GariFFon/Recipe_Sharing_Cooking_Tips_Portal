@@ -30,7 +30,8 @@ const RecipeCard = ({ recipe }) => {
 
             <div className="card-content">
                 <div className="card-top-meta">
-                    <span className="card-category">RECIPES</span>
+                    <span className={`diet-dot ${recipe.dietaryType === 'Non-Veg' ? 'non-veg' : 'veg'}`}></span>
+                    <span className="card-category">{recipe.cuisine || 'RECIPES'}</span>
                     <span className="card-dot">•</span>
                     <span className="card-difficulty">{recipe.difficulty || 'Medium'}</span>
                 </div>

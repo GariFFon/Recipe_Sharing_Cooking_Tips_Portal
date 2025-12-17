@@ -106,7 +106,29 @@ const RecipeDetails = () => {
 
                 <div className="recipe-grid">
                     <div className="ingredients-section sticky-section">
-                        <h3>Ingredients</h3>
+                        <div className="ingredients-header">
+                            <h3>Ingredients</h3>
+                            <div className="scaling-switch">
+                                <button
+                                    className={Math.abs(currentServings - baseServings * 0.5) < 0.001 ? 'active' : ''}
+                                    onClick={() => setCurrentServings(baseServings * 0.5)}
+                                >
+                                    0.5x
+                                </button>
+                                <button
+                                    className={Math.abs(currentServings - baseServings) < 0.001 ? 'active' : ''}
+                                    onClick={() => setCurrentServings(baseServings)}
+                                >
+                                    1x
+                                </button>
+                                <button
+                                    className={Math.abs(currentServings - baseServings * 2) < 0.001 ? 'active' : ''}
+                                    onClick={() => setCurrentServings(baseServings * 2)}
+                                >
+                                    2x
+                                </button>
+                            </div>
+                        </div>
                         <p className="scale-note">Adjusted for {currentServings} servings</p>
                         <ul>
                             {recipe.ingredients.map((ing, index) => (

@@ -140,6 +140,15 @@
     }
 }
 
+.ingredients-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #000;
+    padding-bottom: 0.5rem;
+}
+
 .ingredients-section h3,
 .instructions-section h3 {
     font-size: 1.5rem;
@@ -147,6 +156,42 @@
     border-bottom: 2px solid #000;
     display: inline-block;
     padding-bottom: 0.5rem;
+}
+
+.ingredients-section h3 {
+    margin-bottom: 0;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.scaling-switch {
+    display: flex;
+    background: #f0f0f0;
+    border-radius: 8px;
+    padding: 4px;
+    gap: 0;
+}
+
+.scaling-switch button {
+    background: transparent;
+    border: none;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.scaling-switch button:hover {
+    color: #000;
+}
+
+.scaling-switch button.active {
+    background: #fff;
+    color: #000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .ingredients-section ul {

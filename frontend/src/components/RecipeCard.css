@@ -105,6 +105,25 @@
     color: #999;
 }
 
+.diet-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.diet-dot.veg {
+    background-color: #2ecc71;
+    /* Green */
+    box-shadow: 0 0 0 2px rgba(46, 204, 113, 0.2);
+}
+
+.diet-dot.non-veg {
+    background-color: #e74c3c;
+    /* Red */
+    box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
+}
+
 .card-difficulty {
     color: var(--color-accent);
 }

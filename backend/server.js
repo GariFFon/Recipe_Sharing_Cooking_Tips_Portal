@@ -31,6 +31,8 @@ const recipeSchema = new mongoose.Schema({
   cookTime: { type: String, default: '30 mins' },
   servings: { type: String, default: '4' },
   difficulty: { type: String, default: 'Medium' },
+  cuisine: { type: String, default: 'Global' },
+  dietaryType: { type: String, enum: ['Veg', 'Non-Veg', 'Vegan'], default: 'Veg' },
   createdAt: { type: Date, default: Date.now }
 });
 
