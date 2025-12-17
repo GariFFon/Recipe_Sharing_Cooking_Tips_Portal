@@ -1,0 +1,118 @@
+.add-recipe-page {
+    padding: var(--spacing-xl) 0;
+    max-width: 800px;
+}
+
+.form-wrapper {
+    padding: 2.5rem;
+    border-radius: var(--radius);
+}
+
+.form-subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 3rem;
+    font-style: italic;
+}
+
+.form-section {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px dashed #ddd;
+}
+
+.form-section h3 {
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+    color: #1a1a1a;
+}
+
+.form-row {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+.submit-btn-large {
+    width: 100%;
+    padding: 1.2rem;
+    background-color: #1a1a1a;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    transition: all 0.3s;
+    margin-top: 1rem;
+}
+
+.submit-btn-large:hover {
+    background-color: #333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.submit-btn-large:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+select {
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    background: white;
+    width: 100%;
+}
+
+.form-title {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.recipe-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group textarea {
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.8);
+    transition: all 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(212, 163, 115, 0.2);
+}
+
+.submit-btn {
+    margin-top: 1rem;
+    width: 100%;
+}
