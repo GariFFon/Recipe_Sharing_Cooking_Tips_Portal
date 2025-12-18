@@ -1,15 +1,69 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('../models/User');
 const Recipe = require('../models/Recipe');
 const { auth, JWT_SECRET } = require('../middleware/auth');
 
 const router = express.Router();
 
+// Configure Passport with Google OAuth Strategy
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: 'http://localhost:5001/api/auth/google/callback'
+  },
+  async (accessToken, refreshToken, profile, done) => {
+    try {
+      // Check if user exists with this Google ID
+      let user = await User.findOne({ googleId: profile.id });
+      
+      if (user) {
+        return done(null, user);
+      }
+      
+      // Check if user exists with the same email
+      user = await User.findOne({ email: profile.emails[0].value });
+      
+      if (user) {
+        // Link Google account to existing user
+        user.googleId = profile.id;
+        await user.save();
+        return done(null, user);
+      }
+      
+      // Create new user
+      user = await User.create({
+        name: profile.displayName,
+        email: profile.emails[0].value,
+        googleId: profile.id
+      });
+      
+      done(null, user);
+    } catch (error) {
+      done(error, null);
+    }
+  }
+));
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findById(id);
+    done(null, user);
+  } catch (error) {
+    done(error, null);
+  }
+});
+
 // Signup Route
 router.post('/signup', async (req, res) => {
   try {
-    const { name, email, password, age } = req.body;
+    const { name, email, password } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -21,8 +75,7 @@ router.post('/signup', async (req, res) => {
     const user = new User({
       name,
       email,
-      password,
-      age
+      password
     });
 
     await user.save();
@@ -40,8 +93,7 @@ router.post('/signup', async (req, res) => {
       user: {
         id: user._id,
         name: user.name,
-        email: user.email,
-        age: user.age
+        email: user.email
       }
     });
   } catch (error) {
@@ -80,8 +132,7 @@ router.post('/login', async (req, res) => {
       user: {
         id: user._id,
         name: user.name,
-        email: user.email,
-        age: user.age
+        email: user.email
       }
     });
   } catch (error) {
@@ -106,7 +157,6 @@ router.get('/profile', auth, async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
-        age: user.age,
         createdAt: user.createdAt
       },
       recipes,
@@ -131,13 +181,42 @@ router.get('/verify', auth, async (req, res) => {
       user: {
         id: user._id,
         name: user.name,
-        email: user.email,
-        age: user.age
+        email: user.email
       }
     });
   } catch (error) {
     res.status(500).json({ message: 'Error verifying token' });
   }
 });
+
+// Google OAuth Routes
+router.get('/google',
+  passport.authenticate('google', { 
+    scope: ['profile', 'email'],
+    session: false
+  })
+);
+
+router.get('/google/callback',
+  passport.authenticate('google', { 
+    failureRedirect: 'http://localhost:5173/login',
+    session: false 
+  }),
+  (req, res) => {
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: req.user._id, email: req.user.email },
+      JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    // Redirect to frontend with token
+    res.redirect(`http://localhost:5173/auth/callback?token=${token}&user=${encodeURIComponent(JSON.stringify({
+      id: req.user._id,
+      name: req.user.name,
+      email: req.user.email
+    }))}`);
+  }
+);
 
 module.exports = router;

@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 //this file is used to mange authentication state across the app
 //Basically it provides login, logout functionalities and stores user info and token in localStorage
 const AuthContext = createContext();
@@ -24,17 +24,17 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
     }, []);
 
-    const login = (userData, token) => {
+    const login = useCallback((userData, token) => {
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(userData));
         setUser(userData);
-    };
+    }, []);
 
-    const logout = () => {
+    const logout = useCallback(() => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         setUser(null);
-    };
+    }, []);
 
     const value = {
         user,

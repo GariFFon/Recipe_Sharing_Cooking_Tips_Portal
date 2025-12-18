@@ -17,13 +17,15 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, 'Password is required'],
+    required: function() {
+      return !this.googleId; // Password not required if using Google OAuth
+    },
     minlength: 6
   },
-  age: {
-    type: Number,
-    min: [1, 'Age must be at least 1'],
-    max: [120, 'Age must be less than 120']
+  googleId: {
+    type: String,
+    unique: true,
+    sparse: true // Allow null values but ensure uniqueness when present
   },
   createdAt: {
     type: Date,

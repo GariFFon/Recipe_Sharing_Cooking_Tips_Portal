@@ -80,9 +80,6 @@ const Profile = () => {
                     <div className="profile-details">
                         <h1 className="profile-name">{profileData?.user.name}</h1>
                         <p className="profile-email">{profileData?.user.email}</p>
-                        {profileData?.user.age && (
-                            <p className="profile-age">Age: {profileData.user.age} years</p>
-                        )}
                         <div className="profile-stats">
                             <div className="stat-item">
                                 <span className="stat-number">{profileData?.recipeCount || 0}</span>

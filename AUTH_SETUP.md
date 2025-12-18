@@ -3,10 +3,10 @@
 ## ✨ New Features
 
 ### User Authentication
-- **Sign Up**: New users can create an account with name, email, age, and password
+- **Sign Up**: New users can create an account with name, email, and password
 - **Login**: Existing users can log in with email and password
 - **Profile Page**: Users can view their profile with:
-  - Name, email, and age
+  - Name and email
   - Number of recipes shared
   - List of all recipes they've created
   - Member since date
@@ -77,7 +77,6 @@
 - Fill in your details:
   - Full Name
   - Email Address
-  - Age
   - Password (minimum 6 characters)
   - Confirm Password
 - Click "Sign Up"
@@ -93,7 +92,7 @@
 - After logging in, your name will appear in the navigation bar
 - Click on your name to view your profile
 - Your profile shows:
-  - Your name, email, and age
+  - Your name and email
   - Number of recipes you've shared
   - All recipes you've created
 - Click "Logout" to sign out
@@ -122,7 +121,6 @@
   name: String (required),
   email: String (required, unique),
   password: String (required, hashed),
-  age: Number,
   createdAt: Date
 }
 ```

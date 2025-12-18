@@ -10,6 +10,7 @@ import Signup from './pages/Signup';
 import Profile from './pages/Profile';
 import About from './pages/About';
 import ComingSoon from './pages/ComingSoon';
+import AuthCallback from './pages/AuthCallback';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/about" element={<About />} />
             <Route path="/coming-soon" element={<ComingSoon />} />
+            <Route path="/auth/callback" element={<AuthCallback />} />
           </Routes>
         </div>
       </AuthProvider>

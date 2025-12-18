@@ -2,13 +2,15 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const passport = require('passport');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 // Middleware
 app.use(express.json());
 app.use(cors());
+app.use(passport.initialize());
 
 // MongoDB Connection
 // For simplicity in this demo, if no MONGO_URI is provided, we'll log a warning.
