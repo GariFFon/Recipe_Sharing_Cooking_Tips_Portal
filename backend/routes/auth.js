@@ -9,6 +9,26 @@ const { auth, JWT_SECRET } = require('../middleware/auth');
 
 const router = express.Router();
 
+// Helper function to normalize email addresses (especially for Gmail)
+const normalizeEmail = (email) => {
+  if (!email) return email;
+  
+  email = email.toLowerCase().trim();
+  
+  // For Gmail addresses, remove dots from the username part
+  const emailParts = email.split('@');
+  if (emailParts.length === 2) {
+    const domain = emailParts[1];
+    // Apply normalization for gmail.com and googlemail.com
+    if (domain === 'gmail.com' || domain === 'googlemail.com') {
+      const username = emailParts[0].replace(/\./g, '');
+      return `${username}@${domain}`;
+    }
+  }
+  
+  return email;
+};
+
 // Configure Passport with Google OAuth Strategy
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
@@ -17,6 +37,8 @@ passport.use(new GoogleStrategy({
   },
   async (accessToken, refreshToken, profile, done) => {
     try {
+      const googleEmail = normalizeEmail(profile.emails[0].value);
+      
       // Check if user exists with this Google ID
       let user = await User.findOne({ googleId: profile.id });
       
@@ -25,7 +47,7 @@ passport.use(new GoogleStrategy({
       }
       
       // Check if user exists with the same email
-      user = await User.findOne({ email: profile.emails[0].value });
+      user = await User.findOne({ email: googleEmail });
       
       if (user) {
         // Link Google account to existing user
@@ -37,7 +59,7 @@ passport.use(new GoogleStrategy({
       // Create new user
       user = await User.create({
         name: profile.displayName,
-        email: profile.emails[0].value,
+        email: googleEmail,
         googleId: profile.id
       });
       
@@ -91,7 +113,8 @@ router.post('/signup', [
       });
     }
 
-    const { name, email, password } = req.body;
+    const { name, password } = req.body;
+    const email = normalizeEmail(req.body.email);
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -154,7 +177,8 @@ router.post('/login', [
       });
     }
 
-    const { email, password } = req.body;
+    const { password } = req.body;
+    const email = normalizeEmail(req.body.email);
 
     // Find user by email
     const user = await User.findOne({ email });
@@ -235,6 +259,146 @@ router.get('/verify', auth, async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: 'Error verifying token' });
+  }
+});
+
+// Set Password Route (for Google OAuth users who don't have a password)
+router.post('/set-password', [
+  auth,
+  body('password')
+    .notEmpty().withMessage('Password is required')
+    .isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
+    .matches(/\d/).withMessage('Password must contain at least one number')
+], async (req, res) => {
+  try {
+    // Check for validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ 
+        message: 'Validation failed',
+        errors: errors.array().map(err => ({
+          field: err.path,
+          message: err.msg
+        }))
+      });
+    }
+
+    const { password } = req.body;
+
+    // Find user
+    const user = await User.findById(req.userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Check if user already has a password
+    if (user.password) {
+      return res.status(400).json({ 
+        message: 'Password already exists. Use change password instead.' 
+      });
+    }
+
+    // Set password
+    user.password = password;
+    
+    // Mark password as modified explicitly to ensure pre-save hook runs
+    user.markModified('password');
+    
+    await user.save();
+
+    res.json({
+      message: 'Password set successfully',
+      hasPassword: true
+    });
+  } catch (error) {
+    console.error('Set password error:', error);
+    res.status(500).json({ message: 'Error setting password' });
+  }
+});
+
+// Change Password Route (for users who already have a password)
+router.post('/change-password', [
+  auth,
+  body('currentPassword')
+    .notEmpty().withMessage('Current password is required'),
+  body('newPassword')
+    .notEmpty().withMessage('New password is required')
+    .isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
+    .matches(/\d/).withMessage('Password must contain at least one number')
+], async (req, res) => {
+  try {
+    // Check for validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ 
+        message: 'Validation failed',
+        errors: errors.array().map(err => ({
+          field: err.path,
+          message: err.msg
+        }))
+      });
+    }
+
+    const { currentPassword, newPassword } = req.body;
+
+    // Find user
+    const user = await User.findById(req.userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Check if user has a password
+    if (!user.password) {
+      return res.status(400).json({ 
+        message: 'No password set. Use set password instead.' 
+      });
+    }
+
+    // Verify current password
+    const isPasswordValid = await user.comparePassword(currentPassword);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: 'Current password is incorrect' });
+    }
+
+    // Check if new password is different
+    if (currentPassword === newPassword) {
+      return res.status(400).json({ 
+        message: 'New password must be different from current password' 
+      });
+    }
+
+    // Update password
+    user.password = newPassword;
+    
+    // Mark password as modified explicitly to ensure pre-save hook runs
+    user.markModified('password');
+    
+    await user.save();
+
+    res.json({
+      message: 'Password changed successfully'
+    });
+  } catch (error) {
+    console.error('Change password error:', error);
+    res.status(500).json({ message: 'Error changing password' });
+  }
+});
+
+// Check Password Status Route
+router.get('/password-status', auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({
+      hasPassword: !!user.password,
+      hasGoogleAuth: !!user.googleId
+    });
+  } catch (error) {
+    console.error('Password status error:', error);
+    res.status(500).json({ message: 'Error checking password status' });
   }
 });
 
