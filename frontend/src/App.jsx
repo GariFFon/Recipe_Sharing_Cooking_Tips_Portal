@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
+import Recipes from './pages/Recipes';
 import AddRecipe from './pages/AddRecipe';
 import RecipeDetails from './pages/RecipeDetails';
 import Login from './pages/Login';
@@ -21,6 +22,7 @@ function App() {
           <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/recipes" element={<Recipes />} />
             <Route path="/add" element={<AddRecipe />} />
             <Route path="/recipe/:id" element={<RecipeDetails />} />
             <Route path="/login" element={<Login />} />
