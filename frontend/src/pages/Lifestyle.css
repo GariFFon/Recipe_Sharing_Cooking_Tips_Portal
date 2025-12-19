@@ -1,0 +1,430 @@
+/* Lifestyle.css */
+
+/* Global Reset for this page */
+.lifestyle-page {
+    background-color: #fdfaf3;
+    /* MATCHED with Navbar (was #f8f5f2) */
+    color: #111;
+    overflow-x: hidden;
+    font-family: 'Lato', sans-serif;
+}
+
+/* --- Hero Section --- */
+.life-hero-fullscreen {
+    height: 60vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: #fdfaf3;
+    /* MATCHED with Navbar */
+    position: relative;
+    padding-top: 0;
+    margin-bottom: 4rem;
+}
+
+/* ... (skipping unchanged classes) ... */
+
+/* --- Content Sections (ZigZag) --- */
+.life-content-wrapper {
+    padding: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.life-section {
+    display: flex;
+    min-height: 90vh;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.life-img-wrapper,
+.life-text-content {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6rem;
+}
+
+.life-img-wrapper {
+    padding: 0;
+    /* REVERTED: Removed the 6rem inset */
+    height: 90vh;
+    overflow: hidden;
+    position: relative;
+}
+
+.life-img {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.7s ease;
+    /* REVERTED: Removed outline/frame properties */
+}
+
+.life-section:hover .life-img {
+    /* REVERTED: Removed hover outline */
+    transform: scale(1.02);
+}
+
+.life-supertitle {
+    font-size: 1rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    color: #888;
+    animation: fadeUp 1s ease forwards;
+    opacity: 0;
+}
+
+.life-mega-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 6vw, 6rem);
+    /* Reduced from 10rem to be more elegant */
+    line-height: 1.1;
+    font-weight: 400;
+    color: #1a1a1a;
+    margin-bottom: 2rem;
+    /* Reduced margin */
+    animation: fadeUp 1s ease 0.2s forwards;
+    opacity: 0;
+}
+
+.life-mega-title em {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: #d4a373;
+    font-weight: 400;
+}
+
+.scroll-indicator {
+    position: absolute;
+    bottom: -80px;
+    /* Push it down */
+    left: 0;
+    width: 100%;
+    /* Centering method without transform */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    animation: fadeUp 1s ease 0.5s forwards;
+    opacity: 0;
+}
+
+.scroll-text {
+    font-family: 'Lato', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #1a1a1a;
+    margin-bottom: 5px;
+}
+
+.mouse-icon {
+    width: 26px;
+    height: 42px;
+    border: 1px solid #1a1a1a;
+    border-radius: 20px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.wheel {
+    position: absolute;
+    top: 8px;
+    width: 3px;
+    height: 6px;
+    background-color: #1a1a1a;
+    border-radius: 2px;
+    animation: scrollWheel 2s infinite;
+}
+
+.scroll-line {
+    width: 1px;
+    height: 30px;
+    background-color: rgba(26, 26, 26, 0.3);
+}
+
+@keyframes scrollWheel {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+}
+
+/* --- Content Sections (ZigZag) --- */
+.life-content-wrapper {
+    padding: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    /* Top separator */
+}
+
+.life-section {
+    display: flex;
+    min-height: 90vh;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    /* Subtle section dividers */
+}
+
+.life-img-wrapper,
+.life-text-content {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6rem;
+}
+
+.life-img-wrapper {
+    padding: 0;
+    /* REVERTED FROM 6rem */
+    height: 90vh;
+    overflow: hidden;
+    position: relative;
+}
+
+.life-img {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.5s ease;
+    /* Removed outline properties */
+}
+
+.life-section:hover .life-img {
+    transform: scale(1.05);
+}
+
+/* Alignment Logic */
+.align-left {
+    flex-direction: row;
+}
+
+.align-right {
+    flex-direction: row-reverse;
+}
+
+/* Typography in Sections */
+.life-section-subtitle {
+    font-size: 0.85rem;
+    letter-spacing: 0.25em;
+    /* Wider tracking = more premium */
+    text-transform: uppercase;
+    color: #d4a373;
+    margin-bottom: 2rem;
+    display: block;
+    position: relative;
+    padding-left: 50px;
+    /* Line decoration */
+}
+
+.life-section-subtitle::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 30px;
+    height: 1px;
+    background-color: #d4a373;
+}
+
+.life-section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    line-height: 1.1;
+    margin-bottom: 2rem;
+    color: #1a1a1a;
+}
+
+.life-section-desc {
+    font-size: 1.15rem;
+    line-height: 1.9;
+    /* More air */
+    color: #555;
+    margin-bottom: 3.5rem;
+    max-width: 500px;
+    font-weight: 300;
+}
+
+.life-btn-underline {
+    background: none;
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    /* Thinner initial line */
+    padding: 0 0 10px 0;
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    align-self: flex-start;
+    transition: all 0.4s ease;
+    color: #1a1a1a;
+}
+
+.life-btn-underline:hover {
+    color: #d4a373;
+    border-color: #d4a373;
+    padding-right: 20px;
+    /* Slide effect */
+}
+
+/* --- Simple Elegant Quote --- */
+.life-quote-fullscreen {
+    height: 50vh;
+    /* Reduced height */
+    background: transparent;
+    /* No heavy image */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    /* Subtle separator */
+}
+
+.quote-overlay {
+    display: none;
+    /* Hide overlay */
+}
+
+.quote-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: #1a1a1a;
+    /* Dark text */
+    padding: 2rem;
+    max-width: 800px;
+}
+
+.quote-content p {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    /* Slightly smaller, more refined */
+    font-style: italic;
+    margin-bottom: 2rem;
+    line-height: 1.3;
+}
+
+.quote-content span {
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    color: #888;
+}
+
+/* --- Lighter Footer --- */
+.life-footer-simple {
+    padding: 6rem 0;
+    text-align: center;
+    background: #fdfaf3;
+    /* MATCHED with Navbar */
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.footer-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: #1a1a1a;
+    font-style: italic;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.footer-link {
+    font-family: 'Lato', sans-serif;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    color: #555;
+    transition: color 0.3s;
+}
+
+.footer-link:hover {
+    color: #d4a373;
+}
+
+.separator {
+    color: #ccc;
+    font-weight: 300;
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 968px) {
+    .life-mega-title {
+        font-size: 4rem;
+    }
+
+    .life-section {
+        flex-direction: column-reverse !important;
+        /* Image on top? No, usually column creates Img then Text. Wait, DOM order is Img then Text. So column puts Img on top. */
+        flex-direction: column !important;
+        min-height: auto;
+        padding-bottom: 2rem;
+    }
+
+    /* Override any specific alignment classes */
+    .align-left,
+    .align-right {
+        flex-direction: column !important;
+    }
+
+    .life-img-wrapper {
+        width: 100%;
+        height: 400px;
+        /* Fixed robust height for mobile */
+        flex: none;
+        /* Don't shrink/grow */
+    }
+
+    .life-text-content {
+        width: 100%;
+        padding: 3rem 1.5rem;
+        height: auto;
+        flex: none;
+        text-align: center;
+        /* Center text on mobile for better balance */
+    }
+
+    .life-section-title {
+        font-size: 2.5rem;
+    }
+
+    .quote-content p {
+        font-size: 2rem;
+    }
+}
+
+/* Animations */
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

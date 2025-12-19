@@ -11,6 +11,7 @@ import Profile from './pages/Profile';
 import About from './pages/About';
 import ComingSoon from './pages/ComingSoon';
 import AuthCallback from './pages/AuthCallback';
+import Lifestyle from './pages/Lifestyle';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/about" element={<About />} />
+            <Route path="/lifestyle" element={<Lifestyle />} />
             <Route path="/coming-soon" element={<ComingSoon />} />
             <Route path="/auth/callback" element={<AuthCallback />} />
           </Routes>
