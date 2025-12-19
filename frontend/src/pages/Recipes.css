@@ -47,30 +47,34 @@
 
 .hero-search input {
     width: 100%;
-    padding: 1rem 1.5rem;
-    padding-right: 3.5rem;
-    border: 1px solid #ddd;
+    padding: 1.2rem 2rem;
+    padding-right: 4rem;
+    border: 1px solid var(--color-border);
     border-radius: 50px;
-    font-size: 1rem;
-    font-family: var(--font-body);
+    /* Pill-shaped curved look */
+    font-size: 1.1rem;
+    font-family: var(--font-heading);
+    font-style: italic;
     outline: none;
     transition: all 0.3s;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    background-color: var(--color-bg);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
     cursor: pointer;
+    color: var(--color-text);
 }
 
 .hero-search:hover input {
-    border-color: #000;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border-color: var(--color-text-light);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
 }
 
 .search-btn {
     position: absolute;
-    right: 15px;
+    right: 20px;
     top: 50%;
     transform: translateY(-50%);
     background: none;
-    color: #999;
+    color: var(--color-text-light);
     cursor: pointer;
     border: none;
     display: flex;
@@ -82,7 +86,7 @@
 }
 
 .hero-search:hover .search-btn {
-    color: #000;
+    color: var(--color-text);
 }
 
 .filter-panel {

@@ -1,4 +1,4 @@
-/* Search Modal Overlay - Spotlight Style */
+/* Search Modal Overlay - Diary Aesthetic */
 .search-modal-overlay {
     position: fixed;
     top: 0;
@@ -13,35 +13,35 @@
     align-items: flex-start;
     padding-top: 15vh;
     opacity: 0;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none;
 }
 
 .search-modal-overlay.active {
-    background-color: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(20px);
+    background-color: rgba(44, 44, 44, 0.3);
+    /* Softer overlay */
+    backdrop-filter: blur(8px);
     opacity: 1;
     pointer-events: all;
 }
 
-/* Spotlight Search Modal Container */
+/* Diary Search Modal Container */
 .search-modal.spotlight-style {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(40px) saturate(180%);
-    -webkit-backdrop-filter: blur(40px) saturate(180%);
-    border-radius: 18px;
+    background: var(--color-bg);
+    border-radius: 24px;
+    /* Curved corners for a softer diary look */
     width: 100%;
-    max-width: 680px;
-    max-height: 70vh;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4),
-                0 0 1px rgba(0, 0, 0, 0.1);
+    max-width: 720px;
+    max-height: 80vh;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12),
+        0 0 1px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     position: relative;
-    transform: scale(0.95) translateY(-20px);
+    transform: scale(0.98) translateY(-10px);
     opacity: 0;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 0.5px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    border: 1px solid var(--color-border);
     overflow: hidden;
 }
 
@@ -53,16 +53,18 @@
 /* Spotlight Search Container */
 .spotlight-search-container {
     position: relative;
-    padding: 16px 20px;
+    padding: 24px 30px;
     background: transparent;
     display: flex;
     align-items: center;
-    gap: 12px;
-    border-bottom: 0.5px solid rgba(0, 0, 0, 0.08);
+    gap: 16px;
+    border-bottom: 2px solid var(--color-border);
+    /* Thicker diary line */
 }
 
 .spotlight-search-icon {
-    color: rgba(0, 0, 0, 0.5);
+    color: var(--color-text-light);
+    opacity: 0.6;
     flex-shrink: 0;
 }
 
@@ -71,38 +73,39 @@
     border: none;
     outline: none;
     background: transparent;
-    font-size: 24px;
+    font-size: 28px;
     font-weight: 400;
-    color: #000;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    letter-spacing: -0.5px;
+    color: var(--color-text);
+    font-family: var(--font-heading);
+    /* Playfair Display */
+    letter-spacing: -0.02em;
+    font-style: italic;
+    /* Handwritten feel */
 }
 
 .spotlight-search-input::placeholder {
-    color: rgba(0, 0, 0, 0.3);
+    color: var(--color-text-light);
+    opacity: 0.4;
+    font-style: italic;
 }
 
 .spotlight-search-btn {
-    background: rgba(0, 0, 0, 0.05);
-    border: none;
-    border-radius: 6px;
-    width: 32px;
-    height: 32px;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: 0px;
+    width: 38px;
+    height: 38px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s ease;
-    color: rgba(0, 0, 0, 0.6);
+    color: var(--color-text);
 }
 
 .spotlight-search-btn:hover {
-    background: rgba(0, 0, 0, 0.1);
-    color: #000;
-}
-
-.spotlight-search-btn:active {
-    transform: scale(0.95);
+    background: var(--color-border);
+    color: var(--color-text);
 }
 
 .spotlight-loading-indicator {
@@ -116,67 +119,40 @@
 .spotlight-spinner {
     width: 20px;
     height: 20px;
-    border: 2px solid rgba(0, 0, 0, 0.1);
-    border-top: 2px solid rgba(0, 0, 0, 0.6);
+    border: 2px solid var(--color-border);
+    border-top: 2px solid var(--color-text);
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 /* Spotlight Results Container */
 .spotlight-results {
     flex: 1;
     overflow-y: auto;
-    max-height: calc(70vh - 80px);
+    max-height: calc(80vh - 100px);
 }
 
-/* Custom Scrollbar for Spotlight */
+/* Custom Scrollbar */
 .spotlight-results::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
 }
 
 .spotlight-results::-webkit-scrollbar-track {
-    background: transparent;
+    background: var(--color-bg);
 }
 
 .spotlight-results::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-}
-
-.spotlight-results::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.3);
-}
-
-/* Spotlight Placeholder */
-.spotlight-placeholder {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 60px 20px;
-}
-
-.spotlight-hint {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    color: rgba(0, 0, 0, 0.4);
-    font-size: 14px;
-}
-
-.spotlight-hint kbd {
-    background: rgba(0, 0, 0, 0.06);
-    border: 0.5px solid rgba(0, 0, 0, 0.1);
-    border-radius: 6px;
-    padding: 4px 10px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    font-size: 16px;
-    font-weight: 500;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    background: var(--color-border);
 }
 
 /* Spotlight Empty State */
@@ -185,70 +161,64 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 60px 20px;
-    gap: 16px;
+    padding: 80px 20px;
+    gap: 20px;
     text-align: center;
 }
 
 .spotlight-empty svg {
-    color: rgba(0, 0, 0, 0.2);
+    color: var(--color-border);
 }
 
 .spotlight-empty p {
-    font-size: 15px;
-    color: rgba(0, 0, 0, 0.5);
+    font-family: var(--font-heading);
+    font-size: 18px;
+    font-style: italic;
+    color: var(--color-text-light);
     margin: 0;
 }
 
 /* Spotlight Results List */
 .spotlight-results-list {
-    padding: 8px;
-    animation: fadeIn 0.2s ease;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+    padding: 0;
 }
 
 /* Spotlight Result Item */
 .spotlight-result-item {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 10px 12px;
-    border-radius: 8px;
+    gap: 16px;
+    padding: 16px 30px;
+    border-bottom: 0.5px solid var(--color-border);
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: background 0.2s ease;
     background: transparent;
 }
 
-.spotlight-result-item:hover {
-    background: rgba(0, 0, 0, 0.06);
+.spotlight-result-item:last-child {
+    border-bottom: none;
 }
 
-.spotlight-result-item:active {
-    background: rgba(0, 0, 0, 0.1);
-    transform: scale(0.98);
+.spotlight-result-item:hover {
+    background: #f8f5eb;
+    /* Slightly darker parchment */
 }
 
 .spotlight-result-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 8px;
+    width: 56px;
+    height: 56px;
+    border-radius: 2px;
     overflow: hidden;
     flex-shrink: 0;
-    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--color-border);
 }
 
 .spotlight-result-icon img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    filter: sepia(0.1);
+    /* Subtle vintage feel for images */
 }
 
 .spotlight-result-content {
@@ -257,10 +227,11 @@
 }
 
 .spotlight-result-title {
-    font-size: 15px;
+    font-family: var(--font-heading);
+    font-size: 18px;
     font-weight: 500;
-    color: #000;
-    margin-bottom: 2px;
+    color: var(--color-text);
+    margin-bottom: 4px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -268,164 +239,60 @@
 
 .spotlight-result-subtitle {
     font-size: 13px;
-    color: rgba(0, 0, 0, 0.5);
+    color: var(--color-text-light);
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    font-family: var(--font-body);
 }
 
 .spotlight-result-subtitle .dietary-badge {
-    background: rgba(0, 0, 0, 0.08);
-    padding: 2px 8px;
-    border-radius: 4px;
+    color: var(--color-text);
+    padding: 2px 0;
     font-size: 11px;
-    font-weight: 500;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.1em;
+    border-bottom: 1px solid var(--color-border);
 }
 
 .spotlight-result-action {
-    color: rgba(0, 0, 0, 0.3);
+    color: var(--color-border);
     display: flex;
     align-items: center;
-    transition: all 0.15s ease;
+    transition: all 0.2s ease;
 }
 
 .spotlight-result-item:hover .spotlight-result-action {
-    color: rgba(0, 0, 0, 0.5);
-    transform: translateX(2px);
+    color: var(--color-text);
+    transform: translateX(4px);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
     .search-modal-overlay {
-        padding-top: 10vh;
+        padding-top: 5vh;
     }
 
     .search-modal.spotlight-style {
-        max-width: 95%;
-        max-height: 75vh;
-        border-radius: 16px;
+        max-width: 92%;
+        max-height: 85vh;
     }
 
     .spotlight-search-container {
-        padding: 14px 16px;
-    }
-
-    .spotlight-search-icon {
-        width: 24px;
-        height: 24px;
+        padding: 18px 20px;
     }
 
     .spotlight-search-input {
-        font-size: 20px;
-    }
-
-    .spotlight-results {
-        max-height: calc(75vh - 70px);
+        font-size: 22px;
     }
 
     .spotlight-result-item {
-        padding: 8px 10px;
+        padding: 12px 20px;
     }
 
     .spotlight-result-icon {
-        width: 42px;
-        height: 42px;
-    }
-
-    .spotlight-result-title {
-        font-size: 14px;
-    }
-
-    .spotlight-result-subtitle {
-        font-size: 12px;
+        width: 48px;
+        height: 48px;
     }
 }
-
-@media (max-width: 480px) {
-    .spotlight-search-input {
-        font-size: 18px;
-    }
-
-    .spotlight-result-icon {
-        width: 38px;
-        height: 38px;
-    }
-}
-
-/* Dark mode support (optional) */
-@media (prefers-color-scheme: dark) {
-    .search-modal.spotlight-style {
-        background: rgba(40, 40, 40, 0.85);
-        border: 0.5px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .spotlight-search-icon {
-        color: rgba(255, 255, 255, 0.5);
-    }
-
-    .spotlight-search-input {
-        color: #fff;
-    }
-
-    .spotlight-search-input::placeholder {
-        color: rgba(255, 255, 255, 0.3);
-    }
-
-    .spotlight-search-btn {
-        background: rgba(255, 255, 255, 0.08);
-        color: rgba(255, 255, 255, 0.6);
-    }
-
-    .spotlight-search-btn:hover {
-        background: rgba(255, 255, 255, 0.15);
-        color: #fff;
-    }
-
-    .spotlight-hint {
-        color: rgba(255, 255, 255, 0.4);
-    }
-
-    .spotlight-hint kbd {
-        background: rgba(255, 255, 255, 0.08);
-        border: 0.5px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .spotlight-result-item:hover {
-        background: rgba(255, 255, 255, 0.08);
-    }
-
-    .spotlight-result-item:active {
-        background: rgba(255, 255, 255, 0.12);
-    }
-
-    .spotlight-result-title {
-        color: #fff;
-    }
-
-    .spotlight-result-subtitle {
-        color: rgba(255, 255, 255, 0.5);
-    }
-
-    .spotlight-result-subtitle .dietary-badge {
-        background: rgba(255, 255, 255, 0.1);
-    }
-
-    .spotlight-result-action {
-        color: rgba(255, 255, 255, 0.3);
-    }
-
-    .spotlight-result-item:hover .spotlight-result-action {
-        color: rgba(255, 255, 255, 0.5);
-    }
-
-    .spotlight-empty p {
-        color: rgba(255, 255, 255, 0.5);
-    }
-
-    .spotlight-empty svg {
-        color: rgba(255, 255, 255, 0.2);
-    }
-}
-

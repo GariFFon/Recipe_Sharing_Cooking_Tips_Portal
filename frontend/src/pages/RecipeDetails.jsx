@@ -72,7 +72,7 @@ const RecipeDetails = () => {
 
     return (
         <div className="container recipe-details-page">
-            <Link to="/" className="back-link">← Back to Recipes</Link>
+            <Link to="/recipes" className="back-link">← Back to Recipes</Link>
 
             <div className="details-header">
                 <h1 className="details-title">{recipe.title}</h1>
