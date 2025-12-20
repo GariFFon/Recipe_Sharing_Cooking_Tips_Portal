@@ -1,29 +1,39 @@
 .recipe-card {
     display: flex;
     flex-direction: column;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 16px;
-    /* User requested smooth edges */
+    background: #ebe6d8;
+    /* Parchment/Beige background from image */
+    border-radius: 30px;
+    /* Very smooth rounded corners */
     overflow: hidden;
-    /* transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); */
-    /* Handled by GSAP */
-    text-align: left;
-    /* Resetting from previous center alignment for a card look */
-    border: 1px solid rgba(0, 0, 0, 0.03);
+    text-align: center;
+    border: none;
+    padding: 2.5rem 1.5rem;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    min-height: 420px;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
 
 .recipe-card:hover {
-    /* transform: translateY(-8px); */
-    /* Handled by GSAP if needed, but title lift and image zoom are primary */
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    transform: translateY(-10px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+}
+
+.card-image-outer-wrapper {
+    position: relative;
+    width: fit-content;
+    margin: 0 auto 2rem;
 }
 
 .card-image-wrapper {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 4/5;
-    /* Slightly taller than square */
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
     overflow: hidden;
+    border: 6px solid white;
+    /* Thick white border from image */
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     background-color: #f4f4f4;
 }
 
@@ -31,138 +41,94 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* transition: transform 0.7s ease; */
-    /* Handled by GSAP */
-}
-
-/* .recipe-card:hover .card-image {
-    transform: scale(1.08);
-} */
-/* Handled by GSAP */
-
-/* Like Button */
-.like-btn {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: white;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    opacity: 0;
-    transform: translateY(-10px);
-    color: #ccc;
-}
-
-.recipe-card:hover .like-btn {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.like-btn:hover {
-    transform: scale(1.1);
-}
-
-.like-btn.liked {
-    color: #e63946;
-    fill: #e63946;
 }
 
 /* Time Tag */
 .time-tag {
     position: absolute;
-    bottom: 1rem;
-    left: 1rem;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.75rem;
+    bottom: 20px;
+    right: -15px;
+    /* Adjust to overlap slightly like in image */
+    background: #ffd93d;
+    /* Vibrant yellow from image */
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
     font-weight: 700;
     color: #333;
-    backdrop-filter: blur(4px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
 }
 
 .card-content {
-    padding: 1.5rem;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    flex-grow: 1;
-}
-
-.card-top-meta {
-    display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-weight: 700;
-    color: #999;
-}
-
-.diet-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    display: inline-block;
-}
-
-.diet-dot.veg {
-    background-color: #2ecc71;
-    /* Green */
-    box-shadow: 0 0 0 2px rgba(46, 204, 113, 0.2);
-}
-
-.diet-dot.non-veg {
-    background-color: #e74c3c;
-    /* Red */
-    box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
-}
-
-.card-difficulty {
-    color: var(--color-accent);
 }
 
 .card-title {
     font-family: var(--font-heading);
-    font-size: 1.4rem;
-    font-weight: 600;
-    line-height: 1.3;
-    color: #1a1a1a;
-    margin: 0.2rem 0 0.8rem;
+    font-size: 2rem;
+    /* Larger serif title */
+    font-weight: 700;
+    line-height: 1.2;
+    color: #4a3e2e;
+    /* Darker brown tone for title */
+    margin: 0 0 0.5rem;
     will-change: transform;
-    /* Hint for GSAP */
 }
 
-.card-bottom-meta {
-    margin-top: auto;
-    /* Push to bottom */
+.card-meta {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #1a1a1a;
-    opacity: 0.6;
-    transition: opacity 0.3s;
+    justify-content: center;
+    gap: 0.8rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 700;
+    color: #8c7d6b;
+    /* Muted brown for meta */
 }
 
-.recipe-card:hover .card-bottom-meta {
-    opacity: 1;
+.card-dot {
+    opacity: 0.5;
 }
 
-.arrow-icon {
-    transition: transform 0.3s ease;
+.diet-text.veg {
+    color: #487e4c;
+    /* Darker green */
 }
 
-.recipe-card:hover .arrow-icon {
-    transform: translateX(4px);
+.diet-text.non-veg {
+    color: #9d3e3e;
+    /* Darker red */
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .card-image-wrapper {
+        width: 180px;
+        height: 180px;
+    }
+
+    .card-title {
+        font-size: 1.6rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .recipe-card {
+        padding: 2rem 1rem;
+    }
+
+    .card-image-wrapper {
+        width: 160px;
+        height: 160px;
+    }
+
+    .card-title {
+        font-size: 1.4rem;
+    }
 }
