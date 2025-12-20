@@ -148,10 +148,15 @@
 }
 
 .results-count {
-    font-size: 0.9rem;
-    color: #999;
+    font-size: 0.85rem;
+    color: #888;
     font-family: var(--font-body);
+    letter-spacing: 0.15em;
+    font-weight: 500;
+    margin-top: 0.5rem;
+    display: block;
 }
+
 
 .loading,
 .empty-state {

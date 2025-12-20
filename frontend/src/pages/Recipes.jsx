@@ -130,9 +130,11 @@ const Recipes = () => {
                     {!loading && (
                         <p className="results-count">
                             {searchTerm
-                                ? `${filteredRecipes.length} ${filteredRecipes.length === 1 ? 'recipe' : 'recipes'} found`
-                                : `${filterType === 'All' ? totalRecipes : filterType === 'Veg' ? totalVeg : totalNonVeg} ${(filterType === 'All' ? totalRecipes : filterType === 'Veg' ? totalVeg : totalNonVeg) === 1 ? 'recipe exists' : 'recipes exist'
-                                } in database`}
+                                ? `${filteredRecipes.length} ${filteredRecipes.length === 1 ? 'RECIPE' : 'RECIPES'} FOUND`
+                                : `${filterType === 'All' ? totalRecipes : filterType === 'Veg' ? totalVeg : totalNonVeg} ${(filterType === 'All' ? totalRecipes : filterType === 'Veg' ? totalVeg : totalNonVeg) === 1 ? 'RECIPE' : 'RECIPES'
+                                }`}
+
+
                         </p>
                     )}
                 </div>
