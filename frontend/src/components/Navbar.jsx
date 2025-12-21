@@ -17,7 +17,7 @@ const Navbar = () => {
                     <div className="nav-actions">
                         {user ? (
                             <Link to="/profile" className="btn-outline">
-                                {user.name.toUpperCase()}
+                                {user?.name?.toUpperCase()}
                             </Link>
                         ) : (
                             <>
