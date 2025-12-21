@@ -35,6 +35,18 @@ app.use('/api/auth', authRoutes);
 
 // Routes
 
+// GET random recipes for homepage marquee (Top 10 random)
+app.get('/api/recipes/random', async (req, res) => {
+  try {
+    const recipes = await Recipe.aggregate([
+      { $sample: { size: 10 } }
+    ]);
+    res.json(recipes);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 // GET all recipes with pagination
 app.get('/api/recipes', async (req, res) => {
   try {

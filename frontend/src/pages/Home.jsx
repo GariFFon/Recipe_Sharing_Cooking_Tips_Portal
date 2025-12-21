@@ -1,32 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { EffectCoverflow, Pagination, Autoplay } from 'swiper/modules';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+import 'swiper/css/pagination';
+
 import './Home.css';
 
 const Home = () => {
-    // Featured Data
-    const featuredRecipes = [
-        {
-            id: 1,
-            title: "Rustic Roasted Tomato Basil Soup",
-            category: "Comfort",
-            image: "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80",
-            time: "55 mins"
-        },
-        {
-            id: 2,
-            title: "Creamy Butter Chicken",
-            category: "Dinner",
-            image: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=800&q=80",
-            time: "40 mins"
-        },
-        {
-            id: 3,
-            title: "Classic Chocolate Chip",
-            category: "Dessert",
-            image: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=800&q=80",
-            time: "25 mins"
-        }
-    ];
+    const [randomRecipes, setRandomRecipes] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchRandomRecipes = async () => {
+            try {
+                const response = await fetch('http://localhost:5001/api/recipes/random');
+                const data = await response.json();
+                setRandomRecipes(data);
+                setLoading(false);
+            } catch (error) {
+                console.error('Error fetching random recipes:', error);
+                setLoading(false);
+            }
+        };
+
+        fetchRandomRecipes();
+    }, []);
 
     return (
         <div className="home-container">
@@ -59,29 +61,69 @@ const Home = () => {
                 </div>
             </header>
 
-            {/* Featured Collection */}
-            <section className="section-organic">
+            {/* 3D Coverflow Carousel Section */}
+            <section className="section-full-width">
                 <div className="section-header-center">
-                    <span className="script-sub">Fresh from the Oven</span>
-                    <h2 className="section-title">Weekly Favorites</h2>
+                    <span className="script-sub">Constant Inspiration</span>
+                    <h2 className="section-title">Discover New Flavors</h2>
                 </div>
 
-                <div className="cards-scroll-container">
-                    {featuredRecipes.map((recipe) => (
-                        <div key={recipe.id} className="recipe-card-organic">
-                            <div className="card-img-wrapper">
-                                <img src={recipe.image} alt={recipe.title} />
-                                <span className="card-tag">{recipe.category}</span>
-                            </div>
-                            <div className="card-info">
-                                <h3>{recipe.title}</h3>
-                                <div className="card-meta">
-                                    <span>⏱️ {recipe.time}</span>
-                                    <Link to={`/recipes/${recipe.id}`} className="card-link">View Recipe</Link>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
+                <div className="carousel-container">
+                    {loading ? (
+                        <div className="loading-spinner">Loading delicious ideas...</div>
+                    ) : (
+                        <Swiper
+                            effect={'coverflow'}
+                            grabCursor={true}
+                            centeredSlides={true}
+                            loop={true}
+                            slidesPerView={'auto'}
+                            breakpoints={{
+                                768: {
+                                    slidesPerView: 3,
+                                }
+                            }}
+                            coverflowEffect={{
+                                rotate: 50,
+                                stretch: 0,
+                                depth: 100,
+                                modifier: 1,
+                                slideShadows: true,
+                            }}
+                            pagination={true}
+                            autoplay={{
+                                delay: 2500,
+                                disableOnInteraction: false,
+                            }}
+                            modules={[EffectCoverflow, Pagination, Autoplay]}
+                            className="mySwiper"
+                        >
+                            {randomRecipes.map((recipe, index) => (
+                                <SwiperSlide key={`${recipe._id}-${index}`} className="swiper-slide-custom">
+                                    <Link to={`/recipes/${recipe._id}`} className="marquee-card-premium">
+                                        <div className="premium-img-wrapper">
+                                            <img src={recipe.image} alt={recipe.title} />
+                                            <div className="premium-overlay">
+                                                <div className="overlay-content">
+                                                    <span className="view-recipe-btn">View Recipe</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="premium-card-info">
+                                            <div className="premium-card-header">
+                                                <span className="premium-difficulty">{recipe.difficulty || 'Easy'}</span>
+                                                <span className="premium-time">{recipe.prepTime || '30 min'}</span>
+                                            </div>
+                                            <h4>{recipe.title}</h4>
+                                            <div className="premium-card-footer">
+                                                <span className="cook-now-text">Cook Now <span className="arrow">→</span></span>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                </SwiperSlide>
+                            ))}
+                        </Swiper>
+                    )}
                 </div>
             </section>
 
@@ -90,7 +132,7 @@ const Home = () => {
                 <div className="narrative-container">
                     <div className="narrative-visual">
                         <img
-                            src="https://images.unsplash.com/photo-1556910103-1c02745a30bf?q=80&w=2000&auto=format&fit=crop"
+                            src="https://images.unsplash.com/photo-1556909212-d5b604d0c90d?q=80&w=2000&auto=format&fit=crop"
                             alt="Cooking Together"
                             className="narrative-img"
                         />
@@ -101,10 +143,13 @@ const Home = () => {
                         <p>
                             Food is about connection. It's the pause in a busy day, the laughter shared over a simmering pot, and the comfort of a warm meal. We believe in sustainable sourcing, mindful preparation, and the joy of sharing.
                         </p>
+                        <p>
+                            We are building a community where every recipe tells a story and every meal brings us closer together.
+                        </p>
                         <ul className="narrative-list">
-                            <li>🌿 Seasonal & Fresh</li>
-                            <li>🤝 Community Driven</li>
-                            <li>✨ Simple & Honest</li>
+                            <li>🌿 Seasonal & Fresh Ingredients</li>
+                            <li>🤝 Community Driven Sharing</li>
+                            <li>✨ Simple & Honest Cooking</li>
                         </ul>
                     </div>
                 </div>
