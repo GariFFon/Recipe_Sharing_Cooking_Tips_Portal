@@ -18,6 +18,7 @@ const Profile = () => {
     const [passwordError, setPasswordError] = useState('');
     const [passwordSuccess, setPasswordSuccess] = useState('');
     const [passwordLoading, setPasswordLoading] = useState(false);
+    const [activeTab, setActiveTab] = useState('recipes');
     const navigate = useNavigate();
     const { logout } = useAuth();
 
@@ -258,6 +259,10 @@ const Profile = () => {
                                 <span className="stat-label">Recipes Shared</span>
                             </div>
                             <div className="stat-item">
+                                <span className="stat-number">{profileData?.user.favorites?.length || 0}</span>
+                                <span className="stat-label">Favorites</span>
+                            </div>
+                            <div className="stat-item">
                                 <span className="stat-number">
                                     {profileData?.user.createdAt ?
                                         new Date(profileData.user.createdAt).toLocaleDateString('en-US', {
@@ -284,7 +289,10 @@ const Profile = () => {
                 </div>
             </div>
 
-            {/* Password Modal */}
+            {/* Password Modal - Keeping unchanged but included in replace block if needed or skipping if I can target specific range */}
+
+            {/* ... Password Modal Code ... (Actually I should try to target just the profile-content div if possible to avoid re-writing modal code, but the task described replacing layout) */}
+
             {showPasswordModal && (
                 <div className="modal-overlay" onClick={() => setShowPasswordModal(false)}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -354,27 +362,77 @@ const Profile = () => {
             )}
 
             <div className="profile-content">
-                <div className="section-header">
-                    <h2>My Recipes</h2>
-                    <Link to="/add" className="add-recipe-link">
-                        + Add New Recipe
-                    </Link>
+                <div className="profile-main">
+                    <div className="tabs-header">
+                        <button
+                            className={`tab-btn ${activeTab === 'recipes' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('recipes')}
+                        >
+                            My Recipes
+                        </button>
+                        <button
+                            className={`tab-btn ${activeTab === 'favorites' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('favorites')}
+                        >
+                            My Favorites
+                        </button>
+                    </div>
+
+                    {activeTab === 'recipes' ? (
+                        <>
+                            {/* Header for Add Recipe */}
+                            <div className="section-header" style={{ marginBottom: '1rem' }}>
+                                <span style={{ color: '#666' }}>Recipes you have shared with the community.</span>
+                                <Link to="/add" className="add-recipe-link">
+                                    + Add New Recipe
+                                </Link>
+                            </div>
+
+                            {profileData?.recipes && profileData.recipes.length > 0 ? (
+                                <div className="recipes-grid">
+                                    {profileData.recipes.map((recipe) => (
+                                        <RecipeCard key={recipe._id} recipe={recipe} />
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="no-recipes">
+                                    <p>You haven't shared any recipes yet!</p>
+                                    <Link to="/add" className="start-sharing-button">
+                                        Share Your First Recipe
+                                    </Link>
+                                </div>
+                            )}
+                        </>
+                    ) : (
+                        <>
+                            {/* Favorites Tab */}
+                            <div className="section-header" style={{ marginBottom: '1rem' }}>
+                                <span style={{ color: '#666' }}>Recipes you have collected.</span>
+                            </div>
+
+                            {profileData?.user?.favorites && profileData.user.favorites.length > 0 ? (
+                                <div className="recipes-grid">
+                                    {profileData.user.favorites.map((recipe) => (
+                                        // Handle if recipe is populated or just ID (though backend populates it)
+                                        typeof recipe === 'object' ?
+                                            <RecipeCard key={recipe._id} recipe={recipe} /> : null
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="no-recipes">
+                                    <p>You haven't added any favorites yet!</p>
+                                    <Link to="/recipes" className="start-sharing-button">
+                                        Explore Recipes
+                                    </Link>
+                                </div>
+                            )}
+                        </>
+                    )}
                 </div>
 
-                {profileData?.recipes && profileData.recipes.length > 0 ? (
-                    <div className="recipes-grid">
-                        {profileData.recipes.map((recipe) => (
-                            <RecipeCard key={recipe._id} recipe={recipe} />
-                        ))}
-                    </div>
-                ) : (
-                    <div className="no-recipes">
-                        <p>You haven't shared any recipes yet!</p>
-                        <Link to="/add" className="start-sharing-button">
-                            Share Your First Recipe
-                        </Link>
-                    </div>
-                )}
+                <div className="profile-sidebar">
+                    <SuggestionsWidget />
+                </div>
             </div>
         </div>
     );

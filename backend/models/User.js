@@ -27,6 +27,10 @@ const userSchema = new mongoose.Schema({
     unique: true,
     sparse: true // Allow null values but ensure uniqueness when present
   },
+  favorites: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Recipe'
+  }],
   createdAt: {
     type: Date,
     default: Date.now

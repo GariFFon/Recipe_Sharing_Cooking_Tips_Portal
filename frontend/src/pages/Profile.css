@@ -282,93 +282,111 @@
     transform: none;
 }
 
+.recipes-grid {
+    display: flex;
+    overflow-x: auto;
+    gap: 2rem;
+    margin-top: 2rem;
+    padding-bottom: 2rem;
+    scroll-snap-type: x mandatory;
+    /* Hide scrollbar for cleaner look by default, but user asked for it */
+    scrollbar-width: thin;
+    /* Firefox */
+    scrollbar-color: #888 #f1f1f1;
+    /* Firefox */
+}
+
+/* Custom Scrollbar for Webkit */
+.recipes-grid::-webkit-scrollbar {
+    height: 10px;
+}
+
+.recipes-grid::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px;
+}
+
+.recipes-grid::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 5px;
+    border: 2px solid #f1f1f1;
+}
+
+.recipes-grid::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
+
+/* Ensure items in the scroll container behave */
+.recipes-grid>* {
+    min-width: 320px;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+}
+
 .profile-content {
     margin-top: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 3rem;
 }
 
-.section-header {
+.profile-main {
+    min-width: 0;
+    /* Prevents grid blowout */
+}
+
+.profile-sidebar {
+    position: sticky;
+    top: 2rem;
+    height: fit-content;
+}
+
+.tabs-header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    gap: 2rem;
     margin-bottom: 2rem;
+    border-bottom: 1px solid #eee;
 }
 
-.section-header h2 {
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 1rem 0;
     font-family: var(--font-heading);
-    font-size: 1.75rem;
+    font-size: 1.5rem;
+    color: #999;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.tab-btn:hover {
+    color: #666;
+}
+
+.tab-btn.active {
     color: #000;
 }
 
-.add-recipe-link {
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
     background-color: #000;
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 0.95rem;
-    transition: all 0.3s ease;
-    text-decoration: none;
+    border-radius: 3px 3px 0 0;
 }
 
-.add-recipe-link:hover {
-    background-color: #333;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
+@media (max-width: 1024px) {
+    .profile-content {
+        grid-template-columns: 1fr;
+    }
 
-.recipes-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-}
-
-.no-recipes {
-    text-align: center;
-    padding: 4rem 2rem;
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: 16px;
-    border: 1px dashed var(--color-border);
-}
-
-.no-recipes p {
-    font-size: 1.25rem;
-    color: #666;
-    margin-bottom: 1.5rem;
-}
-
-.start-sharing-button {
-    display: inline-block;
-    background-color: #000;
-    color: white;
-    padding: 1rem 2rem;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 1rem;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.start-sharing-button:hover {
-    background-color: #333;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.loading {
-    text-align: center;
-    padding: 4rem 2rem;
-    font-size: 1.25rem;
-    color: #666;
-}
-
-.error-message {
-    background-color: #fee;
-    color: #c33;
-    padding: 1rem 1.5rem;
-    border-radius: 8px;
-    border-left: 4px solid #c33;
-    font-size: 1rem;
+    .profile-sidebar {
+        position: static;
+    }
 }
 
 @media (max-width: 768px) {

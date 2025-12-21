@@ -12,9 +12,9 @@ const router = express.Router();
 // Helper function to normalize email addresses (especially for Gmail)
 const normalizeEmail = (email) => {
   if (!email) return email;
-  
+
   email = email.toLowerCase().trim();
-  
+
   // For Gmail addresses, remove dots from the username part
   const emailParts = email.split('@');
   if (emailParts.length === 2) {
@@ -25,44 +25,44 @@ const normalizeEmail = (email) => {
       return `${username}@${domain}`;
     }
   }
-  
+
   return email;
 };
 
 // Configure Passport with Google OAuth Strategy
 passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: 'http://localhost:5001/api/auth/google/callback'
-  },
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: 'http://localhost:5001/api/auth/google/callback'
+},
   async (accessToken, refreshToken, profile, done) => {
     try {
       const googleEmail = normalizeEmail(profile.emails[0].value);
-      
+
       // Check if user exists with this Google ID
       let user = await User.findOne({ googleId: profile.id });
-      
+
       if (user) {
         return done(null, user);
       }
-      
+
       // Check if user exists with the same email
       user = await User.findOne({ email: googleEmail });
-      
+
       if (user) {
         // Link Google account to existing user
         user.googleId = profile.id;
         await user.save();
         return done(null, user);
       }
-      
+
       // Create new user
       user = await User.create({
         name: profile.displayName,
         email: googleEmail,
         googleId: profile.id
       });
-      
+
       done(null, user);
     } catch (error) {
       done(error, null);
@@ -104,7 +104,7 @@ router.post('/signup', [
     // Check for validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         message: 'Validation failed',
         errors: errors.array().map(err => ({
           field: err.path,
@@ -168,7 +168,7 @@ router.post('/login', [
     // Check for validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         message: 'Validation failed',
         errors: errors.array().map(err => ({
           field: err.path,
@@ -217,7 +217,7 @@ router.post('/login', [
 // Get Current User Profile
 router.get('/profile', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.userId).select('-password');
+    const user = await User.findById(req.userId).select('-password').populate('favorites');
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -230,7 +230,8 @@ router.get('/profile', auth, async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
-        createdAt: user.createdAt
+        createdAt: user.createdAt,
+        favorites: user.favorites || []
       },
       recipes,
       recipeCount: recipes.length
@@ -238,6 +239,48 @@ router.get('/profile', auth, async (req, res) => {
   } catch (error) {
     console.error('Profile error:', error);
     res.status(500).json({ message: 'Error fetching profile' });
+  }
+});
+
+// Toggle Favorite Route
+router.post('/favorites/:recipeId', auth, async (req, res) => {
+  try {
+    const { recipeId } = req.params;
+    const user = await User.findById(req.userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Check if recipe exists
+    const recipe = await Recipe.findById(recipeId);
+    if (!recipe) {
+      return res.status(404).json({ message: 'Recipe not found' });
+    }
+
+    const index = user.favorites.indexOf(recipeId);
+    let isFavorited = false;
+
+    if (index === -1) {
+      // Add to favorites
+      user.favorites.push(recipeId);
+      isFavorited = true;
+    } else {
+      // Remove from favorites
+      user.favorites.splice(index, 1);
+      isFavorited = false;
+    }
+
+    await user.save();
+
+    res.json({
+      message: isFavorited ? 'Recipe added to favorites' : 'Recipe removed from favorites',
+      isFavorited,
+      favorites: user.favorites
+    });
+  } catch (error) {
+    console.error('Toggle favorite error:', error);
+    res.status(500).json({ message: 'Error updating favorites' });
   }
 });
 
@@ -274,7 +317,7 @@ router.post('/set-password', [
     // Check for validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         message: 'Validation failed',
         errors: errors.array().map(err => ({
           field: err.path,
@@ -293,17 +336,17 @@ router.post('/set-password', [
 
     // Check if user already has a password
     if (user.password) {
-      return res.status(400).json({ 
-        message: 'Password already exists. Use change password instead.' 
+      return res.status(400).json({
+        message: 'Password already exists. Use change password instead.'
       });
     }
 
     // Set password
     user.password = password;
-    
+
     // Mark password as modified explicitly to ensure pre-save hook runs
     user.markModified('password');
-    
+
     await user.save();
 
     res.json({
@@ -330,7 +373,7 @@ router.post('/change-password', [
     // Check for validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         message: 'Validation failed',
         errors: errors.array().map(err => ({
           field: err.path,
@@ -349,8 +392,8 @@ router.post('/change-password', [
 
     // Check if user has a password
     if (!user.password) {
-      return res.status(400).json({ 
-        message: 'No password set. Use set password instead.' 
+      return res.status(400).json({
+        message: 'No password set. Use set password instead.'
       });
     }
 
@@ -362,17 +405,17 @@ router.post('/change-password', [
 
     // Check if new password is different
     if (currentPassword === newPassword) {
-      return res.status(400).json({ 
-        message: 'New password must be different from current password' 
+      return res.status(400).json({
+        message: 'New password must be different from current password'
       });
     }
 
     // Update password
     user.password = newPassword;
-    
+
     // Mark password as modified explicitly to ensure pre-save hook runs
     user.markModified('password');
-    
+
     await user.save();
 
     res.json({
@@ -404,16 +447,16 @@ router.get('/password-status', auth, async (req, res) => {
 
 // Google OAuth Routes
 router.get('/google',
-  passport.authenticate('google', { 
+  passport.authenticate('google', {
     scope: ['profile', 'email'],
     session: false
   })
 );
 
 router.get('/google/callback',
-  passport.authenticate('google', { 
+  passport.authenticate('google', {
     failureRedirect: 'http://localhost:5173/login',
-    session: false 
+    session: false
   }),
   (req, res) => {
     // Generate JWT token
