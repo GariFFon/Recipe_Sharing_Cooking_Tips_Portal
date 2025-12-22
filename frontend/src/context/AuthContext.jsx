@@ -13,27 +13,34 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [token, setToken] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         // Check if user is logged in on mount
         const storedUser = localStorage.getItem('user');
+        const storedToken = localStorage.getItem('token');
         if (storedUser) {
             setUser(JSON.parse(storedUser));
+        }
+        if (storedToken) {
+            setToken(storedToken);
         }
         setLoading(false);
     }, []);
 
-    const login = useCallback((userData, token) => {
-        localStorage.setItem('token', token);
+    const login = useCallback((userData, authToken) => {
+        localStorage.setItem('token', authToken);
         localStorage.setItem('user', JSON.stringify(userData));
         setUser(userData);
+        setToken(authToken);
     }, []);
 
     const logout = useCallback(() => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         setUser(null);
+        setToken(null);
     }, []);
 
     const updateUser = useCallback((u) => {
@@ -43,6 +50,7 @@ export const AuthProvider = ({ children }) => {
 
     const value = {
         user,
+        token,
         login,
         logout,
         updateUser,

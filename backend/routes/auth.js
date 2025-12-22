@@ -47,8 +47,17 @@ passport.use(new GoogleStrategy({
         // Update photo if available
         if (profile.photos && profile.photos.length > 0) {
           user.photo = profile.photos[0].value;
-          await user.save();
         }
+        // Ensure passwordSet field exists (for existing users created before this feature)
+        if (user.passwordSet === undefined || user.passwordSet === null) {
+          // If user has a password, mark as set, otherwise mark as not set
+          user.passwordSet = !!user.password;
+        }
+        // Set authProvider if not set
+        if (!user.authProvider) {
+          user.authProvider = 'google';
+        }
+        await user.save();
         return done(null, user);
       }
 
@@ -61,6 +70,13 @@ passport.use(new GoogleStrategy({
         if (profile.photos && profile.photos.length > 0) {
           user.photo = profile.photos[0].value;
         }
+        // For existing email users, check if they have password set
+        if (user.passwordSet === undefined || user.passwordSet === null) {
+          user.passwordSet = !!user.password;
+        }
+        if (!user.authProvider) {
+          user.authProvider = user.password ? 'local' : 'google';
+        }
         await user.save();
         return done(null, user);
       }
@@ -70,7 +86,9 @@ passport.use(new GoogleStrategy({
         name: profile.displayName,
         email: googleEmail,
         googleId: profile.id,
-        photo: profile.photos && profile.photos.length > 0 ? profile.photos[0].value : ''
+        photo: profile.photos && profile.photos.length > 0 ? profile.photos[0].value : '',
+        passwordSet: false,
+        authProvider: 'google'
       });
 
       done(null, user);
@@ -460,6 +478,59 @@ router.get('/password-status', auth, async (req, res) => {
   }
 });
 
+// Set Password for Google OAuth Users
+router.post('/set-password', [
+  auth,
+  body('password')
+    .isLength({ min: 6 })
+    .withMessage('Password must be at least 6 characters long')
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
+    .withMessage('Password must contain at least one uppercase letter, one lowercase letter, and one number')
+], async (req, res) => {
+  try {
+    // Validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ 
+        message: 'Validation error', 
+        errors: errors.array() 
+      });
+    }
+
+    const { password } = req.body;
+
+    // Find user
+    const user = await User.findById(req.userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Check if password is already set
+    if (user.passwordSet && user.password) {
+      return res.status(400).json({ message: 'Password already set. Use change password instead.' });
+    }
+
+    // Set the password
+    user.password = password;
+    user.passwordSet = true;
+    await user.save();
+
+    res.json({
+      message: 'Password set successfully',
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        passwordSet: user.passwordSet,
+        photo: user.photo
+      }
+    });
+  } catch (error) {
+    console.error('Set password error:', error);
+    res.status(500).json({ message: 'Error setting password' });
+  }
+});
+
 // Google OAuth Routes
 router.get('/google',
   passport.authenticate('google', {
@@ -481,12 +552,22 @@ router.get('/google/callback',
       { expiresIn: '7d' }
     );
 
-    // Redirect to frontend with token
-    res.redirect(`http://localhost:5173/auth/callback?token=${token}&user=${encodeURIComponent(JSON.stringify({
+    // Determine redirect based on password status
+    const redirectTo = !req.user.passwordSet ? '/set-password' : '/';
+    
+    // Debug logging
+    console.log('🔐 Google OAuth Callback Debug:');
+    console.log('User:', req.user.email);
+    console.log('passwordSet:', req.user.passwordSet);
+    console.log('redirectTo:', redirectTo);
+
+    // Redirect to frontend with token and redirectTo
+    res.redirect(`http://localhost:5173/auth/callback?token=${token}&redirectTo=${redirectTo}&user=${encodeURIComponent(JSON.stringify({
       id: req.user._id,
       name: req.user.name,
       email: req.user.email,
-      photo: req.user.photo
+      photo: req.user.photo,
+      passwordSet: req.user.passwordSet
     }))}`);
   }
 );

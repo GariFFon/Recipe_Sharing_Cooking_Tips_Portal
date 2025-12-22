@@ -27,6 +27,15 @@ const userSchema = new mongoose.Schema({
     unique: true,
     sparse: true // Allow null values but ensure uniqueness when present
   },
+  passwordSet: {
+    type: Boolean,
+    default: true // true for normal signups, false for Google OAuth until they set it
+  },
+  authProvider: {
+    type: String,
+    enum: ['local', 'google'],
+    default: 'local'
+  },
   favorites: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Recipe'

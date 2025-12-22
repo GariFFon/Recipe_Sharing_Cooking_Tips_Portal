@@ -13,6 +13,7 @@ import Profile from './pages/Profile';
 import About from './pages/About';
 import ComingSoon from './pages/ComingSoon';
 import AuthCallback from './pages/AuthCallback';
+import SetPassword from './pages/SetPassword';
 import Lifestyle from './pages/Lifestyle';
 
 import ScrollToTop from './components/ScrollToTop';
@@ -37,6 +38,7 @@ function App() {
               <Route path="/lifestyle" element={<Lifestyle />} />
               <Route path="/coming-soon" element={<ComingSoon />} />
               <Route path="/auth/callback" element={<AuthCallback />} />
+              <Route path="/set-password" element={<SetPassword />} />
             </Routes>
           </div>
         </AuthProvider>
