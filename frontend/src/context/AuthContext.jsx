@@ -44,8 +44,10 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const updateUser = useCallback((u) => {
+        console.log('🔄 Updating user in context:', u);
         setUser(u);
         localStorage.setItem('user', JSON.stringify(u));
+        console.log('✅ User saved to localStorage');
     }, []);
 
     const value = {

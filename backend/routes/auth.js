@@ -338,60 +338,6 @@ router.get('/verify', auth, async (req, res) => {
   }
 });
 
-// Set Password Route (for Google OAuth users who don't have a password)
-router.post('/set-password', [
-  auth,
-  body('password')
-    .notEmpty().withMessage('Password is required')
-    .isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
-    .matches(/\d/).withMessage('Password must contain at least one number')
-], async (req, res) => {
-  try {
-    // Check for validation errors
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        message: 'Validation failed',
-        errors: errors.array().map(err => ({
-          field: err.path,
-          message: err.msg
-        }))
-      });
-    }
-
-    const { password } = req.body;
-
-    // Find user
-    const user = await User.findById(req.userId);
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    // Check if user already has a password
-    if (user.password) {
-      return res.status(400).json({
-        message: 'Password already exists. Use change password instead.'
-      });
-    }
-
-    // Set password
-    user.password = password;
-
-    // Mark password as modified explicitly to ensure pre-save hook runs
-    user.markModified('password');
-
-    await user.save();
-
-    res.json({
-      message: 'Password set successfully',
-      hasPassword: true
-    });
-  } catch (error) {
-    console.error('Set password error:', error);
-    res.status(500).json({ message: 'Error setting password' });
-  }
-});
-
 // Change Password Route (for users who already have a password)
 router.post('/change-password', [
   auth,
@@ -500,20 +446,40 @@ router.post('/set-password', [
     const { password } = req.body;
 
     // Find user
-    const user = await User.findById(req.userId);
+    let user = await User.findById(req.userId);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
+
+    console.log('📝 Before password update:');
+    console.log('  passwordSet:', user.passwordSet);
+    console.log('  hasPassword:', !!user.password);
 
     // Check if password is already set
     if (user.passwordSet && user.password) {
       return res.status(400).json({ message: 'Password already set. Use change password instead.' });
     }
 
-    // Set the password
-    user.password = password;
-    user.passwordSet = true;
-    await user.save();
+    // Hash the password manually before updating
+    const bcrypt = require('bcryptjs');
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Use findByIdAndUpdate to ensure both fields are updated atomically
+    user = await User.findByIdAndUpdate(
+      req.userId,
+      {
+        $set: {
+          password: hashedPassword,
+          passwordSet: true
+        }
+      },
+      { new: true, runValidators: false }
+    );
+    
+    console.log('✅ After update:');
+    console.log('  passwordSet:', user.passwordSet);
+    console.log('  hasPassword:', !!user.password);
 
     res.json({
       message: 'Password set successfully',

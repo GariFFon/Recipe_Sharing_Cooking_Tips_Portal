@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './SetPassword.css';
@@ -11,7 +11,25 @@ const SetPassword = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const navigate = useNavigate();
-    const { user, token } = useAuth();
+    const { user, token, updateUser } = useAuth();
+
+    // Redirect if password is already set
+    useEffect(() => {
+        console.log('SetPassword - User data:', user);
+        console.log('SetPassword - passwordSet:', user?.passwordSet);
+        
+        if (!user) {
+            // No user logged in, redirect to login
+            navigate('/login', { replace: true });
+            return;
+        }
+        
+        if (user.passwordSet === true) {
+            // Password already set, redirect to home
+            console.log('Password already set, redirecting to home');
+            navigate('/', { replace: true });
+        }
+    }, [user, navigate]);
 
     const validatePassword = (pwd) => {
         if (pwd.length < 6) {
@@ -48,6 +66,9 @@ const SetPassword = () => {
         setLoading(true);
 
         try {
+            console.log('Setting password for user:', user?.email);
+            console.log('Using token:', token ? 'present' : 'missing');
+            
             const response = await fetch('http://localhost:5001/api/auth/set-password', {
                 method: 'POST',
                 headers: {
@@ -58,12 +79,19 @@ const SetPassword = () => {
             });
 
             const data = await response.json();
+            console.log('Set password response:', data);
 
             if (!response.ok) {
                 throw new Error(data.message || 'Failed to set password');
             }
 
+            // Update user in context with passwordSet: true
+            const updatedUser = data.user ? data.user : { ...user, passwordSet: true };
+            console.log('Updating user in context:', updatedUser);
+            updateUser(updatedUser);
+
             // Success - redirect to home
+            console.log('Password set successfully, redirecting to home');
             navigate('/', { replace: true });
         } catch (err) {
             setError(err.message || 'Error setting password. Please try again.');
