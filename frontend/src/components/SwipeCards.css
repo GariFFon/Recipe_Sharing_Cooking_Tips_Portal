@@ -1,0 +1,56 @@
+/* Swipeable Cards Component - Vanilla CSS */
+.swipe-cards-container {
+    display: grid;
+    height: 800px;
+    width: 100%;
+    place-items: center;
+    background: transparent;
+    position: relative;
+    overflow: visible;
+}
+
+.swipe-card {
+    height: 650px;
+    width: 520px;
+    transform-origin: bottom;
+    border-radius: 0.5rem; /* rounded-lg */
+    background: white;
+    object-fit: cover;
+    cursor: grab;
+    grid-row: 1;
+    grid-column: 1;
+    user-select: none;
+    -webkit-user-drag: none;
+    position: relative;
+}
+
+.swipe-card:hover {
+    cursor: grab;
+}
+
+.swipe-card:active {
+    cursor: grabbing;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .swipe-cards-container {
+        height: 400px;
+    }
+
+    .swipe-card {
+        height: 320px;
+        width: 240px;
+    }
+}
+
+@media (max-width: 480px) {
+    .swipe-cards-container {
+        height: 350px;
+    }
+
+    .swipe-card {
+        height: 280px;
+        width: 200px;
+    }
+}

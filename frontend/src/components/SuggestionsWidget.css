@@ -1,17 +1,18 @@
+/* Suggestions Widget - Clean & Simple */
 .suggestions-widget {
     background: white;
-    border-radius: 12px;
-    padding: 1rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .widget-title {
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1.2rem;
     color: #333;
     border-bottom: 2px solid #f0f0f0;
-    padding-bottom: 0.5rem;
+    padding-bottom: 0.6rem;
 }
 
 /* Carousel Container */
@@ -19,10 +20,8 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    padding: 0rem;
     position: relative;
     min-height: 200px;
-    /* Prevent layout jump */
 }
 
 /* Carousel Item */
@@ -32,13 +31,13 @@
     text-decoration: none;
     color: inherit;
     gap: 0.8rem;
-    animation: fadeIn 0.5s ease-in-out;
+    animation: fadeIn 0.4s ease;
 }
 
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(5px);
+        transform: translateY(8px);
     }
 
     to {
@@ -50,17 +49,17 @@
 /* Image */
 .carousel-image {
     width: 100%;
-    height: 200px;
-
-    border-radius: 20px;
+    height: 180px;
+    border-radius: 12px;
     overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .carousel-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.5s ease;
+    transition: transform 0.3s ease;
 }
 
 .carousel-item:hover .carousel-image img {
@@ -73,8 +72,8 @@
 }
 
 .carousel-info h4 {
-    font-size: 1.1rem;
-    margin: 0.5rem 0 0.2rem 0;
+    font-size: 1rem;
+    margin: 0.3rem 0;
     color: #333;
     font-weight: 600;
 }
@@ -88,8 +87,8 @@
 .carousel-dots {
     display: flex;
     justify-content: center;
-    gap: 8px;
-    margin-top: 0.5rem;
+    gap: 6px;
+    margin-top: 0.8rem;
 }
 
 .carousel-dot {
@@ -99,14 +98,13 @@
     background-color: #ddd;
     border: none;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.2s ease;
     padding: 0;
 }
 
 .carousel-dot.active {
     background-color: #ff6b6b;
-    /* Use theme color */
-    transform: scale(1.2);
+    transform: scale(1.3);
 }
 
 .carousel-dot:hover {
@@ -126,11 +124,10 @@
     }
 }
 
-/* ========== DARK MODE STYLES FOR SUGGESTIONS WIDGET ========== */
-
+/* Dark Mode */
 .dark-mode .suggestions-widget {
     background: #2d2d2d;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .dark-mode .widget-title {
@@ -151,7 +148,7 @@
 }
 
 .dark-mode .carousel-dot.active {
-    background-color: #d4a373;
+    background-color: #ff6b6b;
 }
 
 .dark-mode .carousel-dot:hover {

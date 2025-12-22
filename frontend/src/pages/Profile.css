@@ -1,38 +1,62 @@
+/* ========================================
+   PROFILE PAGE - FUNKY MODERN REDESIGN
+   Bold • 3D • Vibrant • Premium
+======================================== */
+
 .profile-container {
     min-height: 80vh;
-    padding: 6rem 2rem 2rem;
+    padding: 10rem 2rem 2rem;
     max-width: 1400px;
     margin: 0 auto;
+    background-color: #fdfaf3;
 }
 
 .profile-header {
     margin-bottom: 3rem;
 }
 
+/* FUNKY PROFILE CARD - 3D EFFECT */
 .profile-info-card {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    background: #ffffff;
+    border-radius: 20px;
+    border: 4px solid #1a1a1a;
+    box-shadow: 12px 12px 0 #1a1a1a;
     padding: 3rem;
     display: flex;
     align-items: center;
     gap: 2rem;
     position: relative;
-    border: 1px solid var(--color-border);
+    transform: rotate(-0.5deg);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    margin-bottom: 3rem;
 }
 
+.profile-info-card:hover {
+    transform: rotate(0deg) translateY(-5px);
+    box-shadow: 16px 16px 0 #ffd93d;
+}
+
+/* FUNKY AVATAR - BOLD BORDER */
 .profile-avatar {
-    width: 120px;
-    height: 120px;
+    width: 140px;
+    height: 140px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #000 0%, #444 100%);
+    background: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 100%);
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 3rem;
-    font-weight: 600;
+    font-size: 3.5rem;
+    font-weight: 900;
     flex-shrink: 0;
+    border: 5px solid #1a1a1a;
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
+
+.profile-avatar:hover {
+    transform: rotate(5deg) scale(1.05);
+    box-shadow: 10px 10px 0 #4ecdc4;
 }
 
 .profile-details {
@@ -40,10 +64,32 @@
 }
 
 .profile-name {
-    font-family: var(--font-heading);
-    font-size: 2rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
     margin-bottom: 0.5rem;
-    color: #000;
+    color: #1a1a1a;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+}
+
+.profile-name-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.pro-badge {
+    background: #ffd93d;
+    color: #1a1a1a;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    border: 2px solid #1a1a1a;
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.1);
+    transform: rotate(-2deg);
 }
 
 .profile-email {
@@ -52,31 +98,68 @@
     margin-bottom: 1.5rem;
 }
 
+/* FUNKY STATS - PILL STYLE */
 .profile-stats {
     display: flex;
-    gap: 3rem;
+    gap: 1.5rem;
     margin-top: 1.5rem;
+    flex-wrap: wrap;
 }
 
 .stat-item {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+    background: #fff;
+    border: 3px solid #1a1a1a;
+    border-radius: 15px;
+    padding: 1rem 1.5rem;
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.1);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.stat-item:nth-child(1) {
+    transform: rotate(-1deg);
+    border-color: #ff6b6b;
+}
+
+.stat-item:nth-child(2) {
+    transform: rotate(1deg);
+    border-color: #4ecdc4;
+}
+
+.stat-item:nth-child(3) {
+    transform: rotate(-0.5deg);
+    border-color: #ffd93d;
+}
+
+.stat-item:hover {
+    transform: rotate(0deg) translateY(-5px) scale(1.05);
+    box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.2);
 }
 
 .stat-number {
-    font-size: 1.75rem;
-    font-weight: 600;
-    color: #000;
+    font-size: 2rem;
+    font-weight: 900;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.stat-icon {
+    font-size: 1.5rem;
 }
 
 .stat-label {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     color: #666;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.1em;
+    font-weight: 700;
 }
 
+/* FUNKY ACTION BUTTONS */
 .profile-actions {
     position: absolute;
     top: 2rem;
@@ -87,39 +170,46 @@
 }
 
 .password-button {
-    background-color: #444;
-    color: white;
+    background-color: #fff;
+    color: #1a1a1a;
     padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    font-weight: 600;
+    border: 3px solid #1a1a1a;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 800;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: 4px 4px 0 #1a1a1a;
 }
 
 .password-button:hover {
-    background-color: #555;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    background-color: #4ecdc4;
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 #1a1a1a;
 }
 
 .logout-button {
-    background-color: #000;
+    background-color: #1a1a1a;
     color: white;
     padding: 0.875rem 1.75rem;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    font-weight: 600;
+    border: 3px solid #1a1a1a;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 800;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: 4px 4px 0 #ff6b6b;
 }
 
 .logout-button:hover {
-    background-color: #333;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    background-color: #ff6b6b;
+    color: #fff;
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 #1a1a1a;
 }
 
 /* Password Modal Styles */
@@ -289,11 +379,123 @@
     margin-top: 2rem;
     padding-bottom: 2rem;
     scroll-snap-type: x mandatory;
-    /* Hide scrollbar for cleaner look by default, but user asked for it */
     scrollbar-width: thin;
-    /* Firefox */
     scrollbar-color: #888 #f1f1f1;
-    /* Firefox */
+}
+
+/* FUNKY ADD NEW CARD */
+.add-new-card {
+    min-width: 320px;
+    height: 400px;
+    background: #fff;
+    border: 4px dashed #1a1a1a;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    text-decoration: none;
+    color: #1a1a1a;
+    font-weight: 800;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.05);
+    transform: rotate(-1deg);
+}
+
+.add-new-card:hover {
+    background: #f5f5f5;
+    border-style: solid;
+    border-color: #4ecdc4;
+    box-shadow: 8px 8px 0 rgba(78, 205, 196, 0.3);
+    transform: rotate(0deg);
+}
+
+/* NO RECIPES STATE */
+.no-recipes {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: #fff;
+    border: 3px solid #1a1a1a;
+    border-radius: 20px;
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.1);
+}
+
+.no-recipes p {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.start-sharing-button {
+    display: inline-block;
+    background: #1a1a1a;
+    color: #fff;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 3px solid #1a1a1a;
+    box-shadow: 4px 4px 0 #4ecdc4;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.start-sharing-button:hover {
+    background: #4ecdc4;
+    color: #1a1a1a;
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 #1a1a1a;
+}
+
+/* FLOATING RECOMMENDATIONS WIDGET */
+.floating-recommendations {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 320px;
+    background: #fff;
+    border: 4px solid #1a1a1a;
+    border-radius: 20px;
+    box-shadow: 8px 8px 0 #1a1a1a;
+    z-index: 100;
+    cursor: move;
+    transform: rotate(-1deg);
+    transition: all 0.3s ease;
+}
+
+.floating-recommendations:hover {
+    transform: rotate(0deg);
+    box-shadow: 12px 12px 0 #ffd93d;
+}
+
+.floating-header {
+    background: #1a1a1a;
+    color: #fff;
+    padding: 1rem 1.5rem;
+    border-radius: 16px 16px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.9rem;
+}
+
+.drag-handle {
+    font-size: 1.2rem;
+    cursor: grab;
+    opacity: 0.7;
+}
+
+.drag-handle:active {
+    cursor: grabbing;
 }
 
 /* Custom Scrollbar for Webkit */
@@ -325,61 +527,66 @@
 
 .profile-content {
     margin-top: 2rem;
-    display: grid;
-    grid-template-columns: 1fr 300px;
-    gap: 3rem;
 }
 
 .profile-main {
-    min-width: 0;
-    /* Prevents grid blowout */
+    width: 100%;
 }
 
 .profile-sidebar {
-    position: sticky;
-    top: 2rem;
-    height: fit-content;
+    display: none;
+    /* Hidden for now, using floating widget instead */
 }
 
+/* FUNKY PILL TABS */
 .tabs-header {
     display: flex;
-    gap: 2rem;
-    margin-bottom: 2rem;
-    border-bottom: 1px solid #eee;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+    border-bottom: none;
+    justify-content: center;
 }
 
 .tab-btn {
-    background: none;
-    border: none;
-    padding: 1rem 0;
-    font-family: var(--font-heading);
-    font-size: 1.5rem;
-    color: #999;
+    background: #fff;
+    border: 3px solid #1a1a1a;
+    padding: 1rem 2.5rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1a1a1a;
     cursor: pointer;
     position: relative;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border-radius: 50px;
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.1);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .tab-btn:hover {
-    color: #666;
+    transform: translateY(-3px);
+    box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.15);
 }
 
 .tab-btn.active {
-    color: #000;
+    background: #1a1a1a;
+    color: #fff;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 6px 6px 0 #ffd93d;
 }
 
 .tab-btn.active::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background-color: #000;
-    border-radius: 3px 3px 0 0;
+    display: none;
 }
 
 @media (max-width: 1024px) {
+    .floating-recommendations {
+        width: 280px;
+        bottom: 1rem;
+        right: 1rem;
+    }
+
     .profile-content {
         grid-template-columns: 1fr;
     }
@@ -398,6 +605,7 @@
         flex-direction: column;
         text-align: center;
         padding: 2rem;
+        transform: rotate(0deg);
     }
 
     .profile-avatar {
@@ -407,12 +615,17 @@
     }
 
     .profile-name {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
     }
 
     .profile-stats {
         justify-content: center;
-        gap: 2rem;
+        gap: 1rem;
+    }
+
+    .stat-item {
+        transform: rotate(0deg) !important;
+        min-width: 120px;
     }
 
     .profile-actions {
@@ -426,10 +639,15 @@
         width: 100%;
     }
 
-    .section-header {
+    .tabs-header {
         flex-direction: column;
         gap: 1rem;
-        align-items: stretch;
+    }
+
+    .tab-btn {
+        width: 100%;
+        padding: 0.8rem 1.5rem;
+        font-size: 1.1rem;
     }
 
     .modal-content {
@@ -447,6 +665,13 @@
 
     .add-recipe-link {
         text-align: center;
+    }
+
+    .floating-recommendations {
+        width: calc(100% - 2rem);
+        left: 1rem;
+        right: 1rem;
+        bottom: 1rem;
     }
 
     .recipes-grid {
@@ -576,6 +801,215 @@
 .dark-mode .tab-btn {
     color: #666;
 }
+
+.dark-mode .tab-btn.active {
+    color: #e8e8e8;
+}
+
+/* ========================================
+   COMPREHENSIVE DARK MODE - GRAY THEME
+======================================== */
+
+.dark-mode .profile-container {
+    background-color: #1a1a1a;
+}
+
+.dark-mode .profile-info-card {
+    background: #2d2d2d;
+    border-color: #555;
+    box-shadow: 12px 12px 0 rgba(85, 85, 85, 0.5);
+}
+
+.dark-mode .profile-info-card:hover {
+    box-shadow: 16px 16px 0 rgba(78, 205, 196, 0.3);
+}
+
+.dark-mode .profile-name {
+    color: #fff;
+}
+
+.dark-mode .profile-email {
+    color: #aaa;
+}
+
+.dark-mode .pro-badge {
+    background: #4ecdc4;
+    color: #1a1a1a;
+    border-color: #4ecdc4;
+}
+
+.dark-mode .stat-item {
+    background: #2d2d2d;
+}
+
+.dark-mode .stat-item:nth-child(1) {
+    border-color: #ff6b6b;
+    transform: rotate(2deg);
+}
+
+.dark-mode .stat-item:nth-child(2) {
+    border-color: #4ecdc4;
+    transform: rotate(-1deg);
+}
+
+.dark-mode .stat-item:nth-child(3) {
+    border-color: #ffd93d;
+}
+
+.dark-mode .stat-item:nth-child(1):hover {
+    box-shadow: 6px 6px 0 rgba(255, 107, 107, 0.3);
+}
+
+.dark-mode .stat-item:nth-child(2):hover {
+    box-shadow: 6px 6px 0 rgba(78, 205, 196, 0.3);
+}
+
+.dark-mode .stat-item:nth-child(3):hover {
+    box-shadow: 6px 6px 0 rgba(255, 217, 61, 0.3);
+}
+
+.dark-mode .stat-item:nth-child(1) .stat-number {
+    color: #ff6b6b;
+}
+
+.dark-mode .stat-item:nth-child(2) .stat-number {
+    color: #4ecdc4;
+}
+
+.dark-mode .stat-item:nth-child(3) .stat-number {
+    color: #ffd93d;
+}
+
+.dark-mode .stat-label {
+    color: #aaa;
+}
+
+.dark-mode .password-button {
+    background: #2d2d2d;
+    color: #fff;
+    border-color: #666;
+}
+
+.dark-mode .password-button:hover {
+    background: #3d3d3d;
+    border-color: #777;
+}
+
+.dark-mode .logout-button {
+    background: #ff6b6b;
+    border-color: #ff6b6b;
+}
+
+.dark-mode .logout-button:hover {
+    background: #ff4d4d;
+}
+
+.dark-mode .tab-btn {
+    background: #2d2d2d;
+    color: #aaa;
+    border-color: #555;
+}
+
+.dark-mode .tab-btn:hover {
+    background: #3d3d3d;
+    border-color: #ffd93d;
+    color: #ffd93d;
+}
+
+.dark-mode .tab-btn.active {
+    background: #1a1a1a;
+    color: #fff;
+    border-color: #ffd93d;
+    box-shadow: 6px 6px 0 rgba(255, 217, 61, 0.3);
+}
+
+.dark-mode .add-new-card {
+    background: #2d2d2d;
+    border-color: #555;
+    border-style: dashed;
+}
+
+.dark-mode .add-new-card:hover {
+    background: #3d3d3d;
+    border-color: #4ecdc4;
+    border-style: solid;
+}
+
+.dark-mode .add-icon {
+    color: #4ecdc4;
+}
+
+.dark-mode .add-text {
+    color: #aaa;
+}
+
+.dark-mode .no-recipes-card {
+    background: #2d2d2d;
+    border-color: #555;
+}
+
+.dark-mode .no-recipes-title {
+    color: #fff;
+}
+
+.dark-mode .no-recipes-text {
+    color: #aaa;
+}
+
+.dark-mode .create-recipe-btn {
+    background: #4ecdc4;
+    color: #1a1a1a;
+    border-color: #4ecdc4;
+}
+
+.dark-mode .create-recipe-btn:hover {
+    background: #44a3a3;
+}
+
+.dark-mode .floating-recommendations {
+    background: #2d2d2d;
+    border-color: #555;
+}
+
+.dark-mode .recommendations-header {
+    background: #1a1a1a;
+    border-bottom-color: #555;
+}
+
+.dark-mode .recommendations-title {
+    color: #fff;
+}
+
+.dark-mode .drag-handle {
+    color: #aaa;
+}
+
+.dark-mode .modal-overlay {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.dark-mode .modal-content {
+    background: #2d2d2d;
+    border-color: #555;
+}
+
+.dark-mode .modal-header {
+    background: #1a1a1a;
+    border-bottom-color: #555;
+}
+
+.dark-mode .modal-title {
+    color: #fff;
+}
+
+.dark-mode .close-button {
+    color: #aaa;
+}
+
+.dark-mode .close-button:hover {
+    color: #fff;
+}
+
 
 .dark-mode .tab-btn:hover {
     color: #a0a0a0;

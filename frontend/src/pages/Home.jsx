@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Pagination, Autoplay } from 'swiper/modules';
 import Footer from '../components/Footer';
+import SwipeCards from '../components/SwipeCards';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -202,11 +203,7 @@ const Home = () => {
             <section className="section-narrative">
                 <div className="narrative-container">
                     <div className="narrative-visual">
-                        <img
-                            src="https://images.unsplash.com/photo-1556909212-d5b604d0c90d?q=80&w=2000&auto=format&fit=crop"
-                            alt="Cooking Together"
-                            className="narrative-img"
-                        />
+                        <SwipeCards />
                     </div>
                     <div className="narrative-content">
                         <span className="script-sub">Why We Cook</span>
