@@ -13,6 +13,9 @@ app.use(express.json());
 app.use(cors());
 app.use(passport.initialize());
 
+// Serve uploaded files statically
+app.use('/uploads', express.static('uploads'));
+
 // MongoDB Connection
 // For simplicity in this demo, if no MONGO_URI is provided, we'll log a warning.
 // Ideally, the user should provide a .env file.

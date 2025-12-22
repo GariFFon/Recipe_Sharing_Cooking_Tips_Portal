@@ -1,0 +1,498 @@
+/* Draggable Recommendations Widget */
+
+.drag-constraints {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9998;
+}
+
+.draggable-recommendations {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    cursor: grab;
+    overflow: hidden;
+
+    /* Funky Sticker Effect */
+    background: #ffffff;
+    border: 3px solid #1a1a1a;
+    border-radius: 12px;
+    box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.draggable-recommendations:active {
+    cursor: grabbing;
+}
+
+.draggable-recommendations:hover {
+    box-shadow: 10px 10px 0px rgba(0, 0, 0, 0.25);
+    transform: translateY(-2px);
+}
+
+/* Drag Handle / Tab */
+.drag-handle {
+    height: 66px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0 1.5rem;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    background: linear-gradient(135deg, #ffeb3b 0%, #ffd700 100%);
+    border-bottom: 3px solid #1a1a1a;
+}
+
+.drag-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #1a1a1a;
+    font-style: italic;
+    flex: 1;
+    text-align: center;
+}
+
+.collapse-btn-inline {
+    background: #1a1a1a;
+    border: 2px solid #1a1a1a;
+    border-radius: 0;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    color: #ffeb3b;
+    box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.3);
+    flex-shrink: 0;
+}
+
+.collapse-btn-inline:hover {
+    background: #000;
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.4);
+}
+
+.collapse-btn-inline:active {
+    transform: translate(1px, 1px);
+    box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.3);
+}
+
+.expand-icon {
+    font-size: 1.4rem;
+    color: #1a1a1a;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+/* Expanded Content */
+.recommendations-content {
+    padding: 0 1.5rem 1.5rem;
+    overflow: hidden;
+}
+
+.recommendations-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0;
+    border: none;
+}
+
+.recommendations-header h3 {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: #1a1a1a;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    line-height: 1;
+}
+
+.collapse-btn {
+    background: #ffeb3b;
+    border: 2px solid #1a1a1a;
+    border-radius: 0;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    color: #1a1a1a;
+    box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.8);
+    flex-shrink: 0;
+}
+
+.collapse-btn:hover {
+    background: #1a1a1a;
+    color: #ffeb3b;
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.8);
+}
+
+.collapse-btn:active {
+    transform: translate(1px, 1px);
+    box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8);
+}
+
+/* Carousel Container */
+.carousel-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 1rem;
+    perspective: 1000px;
+}
+
+.carousel-slide {
+    width: 100%;
+}
+
+.carousel-card {
+    display: block;
+    text-decoration: none;
+    background: #ffffff;
+    border: 3px solid #1a1a1a;
+    border-radius: 4px;
+    /* Sharper corners for sticker look */
+    overflow: hidden;
+    position: relative;
+    box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.9);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform: rotate(-1deg);
+}
+
+.carousel-card:hover {
+    transform: rotate(1deg) scale(1.02) translateY(-4px);
+    box-shadow: 8px 8px 0px #d4a373;
+    border-color: #1a1a1a;
+}
+
+.carousel-image {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+    border-bottom: 3px solid #1a1a1a;
+}
+
+.carousel-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.carousel-card:hover .carousel-image img {
+    transform: scale(1.15) rotate(2deg);
+}
+
+.carousel-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #ffeb3b;
+    /* Bright yellow */
+    border: 2px solid #1a1a1a;
+    border-radius: 0;
+    padding: 0.35rem 0.8rem;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #1a1a1a;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.8);
+    transform: rotate(3deg);
+    z-index: 2;
+}
+
+.carousel-info {
+    padding: 1.2rem;
+    background: #fff;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.carousel-info h4 {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin: 0 0 0.75rem 0;
+    line-height: 1.2;
+    text-transform: uppercase;
+    width: 100%;
+}
+
+.carousel-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.time-badge {
+    background: #1a1a1a;
+    border: 2px solid #1a1a1a;
+    border-radius: 20px;
+    padding: 0.25rem 0.8rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Carousel Indicators */
+.carousel-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    border: 2px solid #1a1a1a;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+    box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
+}
+
+.indicator.active {
+    background: #ffeb3b;
+    transform: scale(1.2);
+    box-shadow: 2px 2px 0px #1a1a1a;
+}
+
+.indicator:hover {
+    transform: translateY(-2px);
+    box-shadow: 2px 4px 0px rgba(0, 0, 0, 0.5);
+}
+
+/* Drag Hint */
+.drag-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 2px dashed rgba(26, 26, 26, 0.2);
+    color: #666;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.drag-hint svg {
+    font-size: 1rem;
+    animation: bounceDown 2s infinite;
+}
+
+@keyframes bounceDown {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(4px);
+    }
+}
+
+/* Dark Mode */
+.dark-mode .draggable-recommendations {
+    background: #2d2d2d;
+    border: 3px solid #e0e0e0;
+    box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.5);
+}
+
+.dark-mode .draggable-recommendations:hover {
+    box-shadow: 10px 10px 0px rgba(0, 0, 0, 0.6);
+    border-color: #ffeb3b;
+}
+
+.dark-mode .drag-text {
+    color: #1a1a1a;
+}
+
+.dark-mode .drag-handle {
+    background: linear-gradient(135deg, #ffeb3b 0%, #ffd700 100%);
+    border-bottom-color: #000;
+}
+
+.dark-mode .recommendations-header {
+    border: none;
+}
+
+.dark-mode .recommendations-header h3 {
+    color: #ffffff;
+}
+
+.dark-mode .collapse-btn {
+    background: #ffeb3b;
+    border-color: #1a1a1a;
+    color: #1a1a1a;
+    box-shadow: 3px 3px 0px #000;
+}
+
+.dark-mode .collapse-btn:hover {
+    background: #e0e0e0;
+    color: #1a1a1a;
+    box-shadow: 5px 5px 0px #000;
+}
+
+.dark-mode .recommendation-card {
+    background: rgba(26, 26, 26, 0.5);
+    border-color: rgba(224, 224, 224, 0.15);
+}
+
+.dark-mode .recommendation-card:hover {
+    background: rgba(212, 175, 55, 0.1);
+    border-color: rgba(212, 175, 55, 0.4);
+}
+
+.dark-mode .rec-info h4 {
+    color: #e8e8e8;
+}
+
+.dark-mode .rec-time {
+    color: #a0a0a0;
+}
+
+.dark-mode .drag-hint {
+    border-top-color: rgba(255, 255, 255, 0.2);
+    color: #a0a0a0;
+}
+
+/* Carousel Dark Mode */
+.dark-mode .carousel-card {
+    background: #2d2d2d;
+    border-color: #e0e0e0;
+    box-shadow: 6px 6px 0px #000;
+}
+
+.dark-mode .carousel-card:hover {
+    border-color: #ffeb3b;
+    box-shadow: 8px 8px 0px #ffeb3b;
+}
+
+.dark-mode .carousel-image {
+    border-bottom-color: #e0e0e0;
+}
+
+.dark-mode .carousel-info {
+    background: #2d2d2d;
+}
+
+.dark-mode .carousel-info h4 {
+    color: #ffffff;
+}
+
+.dark-mode .carousel-badge {
+    background: #ffeb3b;
+    border-color: #1a1a1a;
+    color: #000;
+    box-shadow: 3px 3px 0px #ffffff;
+}
+
+.dark-mode .time-badge {
+    background: #e0e0e0;
+    border-color: #e0e0e0;
+    color: #1a1a1a;
+}
+
+.dark-mode .carousel-btn {
+    background: rgba(45, 45, 45, 0.8);
+    border-color: rgba(224, 224, 224, 0.3);
+    color: #e8e8e8;
+}
+
+.dark-mode .carousel-btn:hover {
+    background: rgba(212, 175, 55, 0.3);
+    border-color: rgba(212, 175, 55, 0.5);
+}
+
+.dark-mode .indicator {
+    background: #4d4d4d;
+    border-color: #e0e0e0;
+    box-shadow: 2px 2px 0px #000;
+}
+
+.dark-mode .indicator.active {
+    background: #ffeb3b;
+    border-color: #1a1a1a;
+    box-shadow: 2px 2px 0px #ffffff;
+}
+
+/* Pulse Animation for Expand Icon */
+.expand-icon.pulse {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.15);
+        opacity: 0.8;
+    }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .draggable-recommendations {
+        bottom: 10px;
+        right: 10px;
+    }
+
+    .draggable-recommendations.expanded {
+        width: calc(100vw - 20px) !important;
+        max-width: 350px;
+    }
+
+    .drag-text {
+        font-size: 0.75rem;
+    }
+
+    .recommendations-content {
+        max-height: 320px;
+    }
+}

@@ -2,9 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import RecipeCard from '../components/RecipeCard';
-import SuggestionsWidget from '../components/SuggestionsWidget';
+import DraggableRecommendations from '../components/DraggableRecommendations';
 import { motion, AnimatePresence } from 'framer-motion';
 import './Profile.css';
+
+// Helper function to get full image URL
+const getImageUrl = (path) => {
+    if (!path) return '';
+    if (path.startsWith('http')) return path; // Already a full URL (e.g., Google photos)
+    return `http://localhost:5001${path}`; // Prepend backend URL for uploaded images
+};
 
 /**
  * Profile Page Component
@@ -26,6 +33,10 @@ const Profile = () => {
     const [passwordSuccess, setPasswordSuccess] = useState('');
     const [passwordLoading, setPasswordLoading] = useState(false);
     const [activeTab, setActiveTab] = useState('recipes');
+    const [profileImage, setProfileImage] = useState(null);
+    const [bannerImage, setBannerImage] = useState(null);
+    const [profileImagePreview, setProfileImagePreview] = useState(null);
+    const [bannerImagePreview, setBannerImagePreview] = useState(null);
 
     const handleFavoriteToggle = (recipe, isLiked) => {
         setProfileData(prevData => {
@@ -262,6 +273,102 @@ const Profile = () => {
         }
     };
 
+    const handleProfileImageChange = async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                alert('File size must be less than 5MB');
+                return;
+            }
+            if (!file.type.startsWith('image/')) {
+                alert('Please select an image file');
+                return;
+            }
+
+            // Show preview immediately
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setProfileImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+
+            // Upload to server
+            const formData = new FormData();
+            formData.append('profileImage', file);
+
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch('http://localhost:5001/api/auth/upload-profile-picture', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    // Refresh profile to get updated data from server
+                    setProfileImagePreview(null);
+                    await fetchProfile();
+                } else {
+                    alert(data.message || 'Failed to upload image');
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                alert('Failed to upload image');
+            }
+        }
+    };
+
+    const handleBannerImageChange = async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            if (file.size > 10 * 1024 * 1024) { // 10MB limit
+                alert('File size must be less than 10MB');
+                return;
+            }
+            if (!file.type.startsWith('image/')) {
+                alert('Please select an image file');
+                return;
+            }
+
+            // Show preview immediately
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setBannerImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+
+            // Upload to server
+            const formData = new FormData();
+            formData.append('bannerImage', file);
+
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch('http://localhost:5001/api/auth/upload-banner', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    // Refresh profile to get updated data from server
+                    setBannerImagePreview(null);
+                    await fetchProfile();
+                } else {
+                    alert(data.message || 'Failed to upload image');
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                alert('Failed to upload image');
+            }
+        }
+    };
+
     const handleLogout = () => {
         logout();
         navigate('/login');
@@ -280,8 +387,8 @@ const Profile = () => {
             <div className="profile-container">
                 <div className="error-message-container">
                     <div className="error-message">{error}</div>
-                    <button 
-                        onClick={handleLogout} 
+                    <button
+                        onClick={handleLogout}
                         className="logout-button"
                         style={{ marginTop: '1rem' }}
                     >
@@ -294,19 +401,59 @@ const Profile = () => {
 
     return (
         <div className="profile-container">
-            {/* Banner Header */}
+            {/* Banner Image with Edit */}
+            <div className="profile-banner">
+                <img
+                    src={bannerImagePreview || getImageUrl(profileData?.user.bannerImage) || "https://images.unsplash.com/photo-1495195134817-aeb325a55b65?w=1200&h=300&fit=crop"}
+                    alt="Profile Banner"
+                    className="banner-image"
+                />
+                <div className="banner-overlay">
+                    <label htmlFor="banner-upload" className="banner-edit-btn">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                        </svg>
+                        Change Banner
+                    </label>
+                    <input
+                        type="file"
+                        id="banner-upload"
+                        accept="image/*"
+                        onChange={handleBannerImageChange}
+                        style={{ display: 'none' }}
+                    />
+                </div>
+            </div>
+
+            {/* Profile Info Card */}
             <div className="profile-info-card">
                 <div className="profile-header-content">
-                    <div className="profile-avatar">
-                        {profileData?.user.photo ? (
-                            <img
-                                src={profileData.user.photo}
-                                alt={profileData.user.name}
-                                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
-                            />
-                        ) : (
-                            profileData?.user.name.charAt(0).toUpperCase()
-                        )}
+                    <div className="profile-avatar-wrapper">
+                        <div className="profile-avatar">
+                            {profileImagePreview || getImageUrl(profileData?.user.photo) ? (
+                                <img
+                                    src={profileImagePreview || getImageUrl(profileData.user.photo)}
+                                    alt={profileData.user.name}
+                                    className="avatar-image"
+                                />
+                            ) : (
+                                <div className="avatar-placeholder">
+                                    {profileData?.user.name.charAt(0).toUpperCase()}
+                                </div>
+                            )}
+                        </div>
+                        <label htmlFor="profile-upload" className="avatar-edit-btn">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                            </svg>
+                        </label>
+                        <input
+                            type="file"
+                            id="profile-upload"
+                            accept="image/*"
+                            onChange={handleProfileImageChange}
+                            style={{ display: 'none' }}
+                        />
                     </div>
                     <div className="profile-details">
                         <div className="profile-name-row">
@@ -317,16 +464,18 @@ const Profile = () => {
                         <div className="profile-stats">
                             <div className="stat-item">
                                 <span className="stat-number">
-                                    {profileData?.recipeCount || 0} <span className="stat-icon">🍳</span>
+                                    {profileData?.recipeCount || 0}
                                 </span>
-                                <span className="stat-label">Recipes Shared</span>
+                                <span className="stat-label">Recipes</span>
                             </div>
+                            <div className="stat-divider"></div>
                             <div className="stat-item">
                                 <span className="stat-number">
-                                    {profileData?.user.favorites?.length || 0} <span className="stat-icon">♡</span>
+                                    {profileData?.user.favorites?.length || 0}
                                 </span>
                                 <span className="stat-label">Favorites</span>
                             </div>
+                            <div className="stat-divider"></div>
                             <div className="stat-item">
                                 <span className="stat-number">
                                     {profileData?.user.createdAt ?
@@ -336,7 +485,7 @@ const Profile = () => {
                                         })
                                         : 'N/A'}
                                 </span>
-                                <span className="stat-label">Member Since</span>
+                                <span className="stat-label">Joined</span>
                             </div>
                         </div>
                     </div>
@@ -345,8 +494,7 @@ const Profile = () => {
                 <div className="profile-actions">
                     <button
                         onClick={() => setShowPasswordModal(true)}
-                        className="password-button"
-                    >
+                        className="password-button">
                         {passwordStatus.hasPassword ? '🔒 Change Password' : '🔐 Set Password'}
                     </button>
                     <button onClick={handleLogout} className="logout-button">
@@ -488,21 +636,8 @@ const Profile = () => {
                 )}
             </div>
 
-            {/* Draggable Floating Recommendations */}
-            <motion.div
-                className="floating-recommendations"
-                drag
-                dragMomentum={false}
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-            >
-                <div className="floating-header">
-                    <span>Recommended For You</span>
-                    <span className="drag-handle">✥</span>
-                </div>
-                <SuggestionsWidget />
-            </motion.div>
+            {/* Draggable Recommendations Widget */}
+            <DraggableRecommendations />
         </div>
     );
 };

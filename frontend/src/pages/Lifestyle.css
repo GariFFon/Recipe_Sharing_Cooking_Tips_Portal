@@ -7,6 +7,10 @@
     color: #1a1a1a;
     overflow-x: hidden;
     font-family: 'Lato', sans-serif;
+
+    /* CSS Variables for Dynamic Components */
+    --life-hero-text: #1a1a1a;
+    --life-dots-color: #1a1a1a;
 }
 
 /* --- Hero Section Refined --- */
@@ -21,9 +25,10 @@
     background: #fdfaf3;
     position: relative;
     padding-top: 0;
-    padding-bottom: 120px;
-    /* Space for scroll indicator */
-    margin-bottom: 4rem;
+    padding-bottom: 0;
+    /* Removed padding to move scroll indicator up */
+    margin-bottom: 0;
+    color: var(--life-dots-color);
 }
 
 .life-hero-content {
@@ -43,24 +48,24 @@
 /* "Living" - Solid, Huge, Serif */
 .life-mega-title span:first-child {
     font-family: 'Playfair Display', serif;
-    font-size: clamp(5rem, 12vw, 12rem);
+    font-size: clamp(4.25rem, 12vw, 10rem);
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: -0.05em;
     color: #1a1a1a;
     position: relative;
     z-index: 1;
-    text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.1);
+    text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.1);
 }
 
 /* "Intentionally" - Script/Italic Overlay */
 .life-mega-title em {
     font-family: 'Playfair Display', serif;
-    font-size: clamp(4rem, 10vw, 10rem);
+    font-size: clamp(3.5rem, 10vw, 8.5rem);
     font-weight: 400;
     font-style: italic;
     color: #d4a373;
-    margin-top: -20px;
+    margin-top: -18px;
     /* Overlap effect */
     position: relative;
     z-index: 2;
@@ -74,12 +79,13 @@
 /* Standalone Scroll Indicator Section */
 .scroll-indicator-section {
     width: 100%;
-    padding: 0 0 5rem 0;
-    /* Zero top padding, Massive bottom spacing */
+    padding: 0;
+    /* Removed all padding to move indicator up */
     display: flex;
     justify-content: center;
     align-items: center;
     background: #fdfaf3;
+    margin-bottom: 4rem;
 }
 
 /* Scroll Indicator - Now in normal flow */
@@ -167,9 +173,9 @@
 
 /* POLAROID STYLE IMAGES */
 .life-img-wrapper {
-    height: 600px;
+    height: 520px;
     position: relative;
-    padding: 2rem;
+    padding: 1.75rem;
     /* Give space for shadow */
 }
 
@@ -182,15 +188,15 @@
 
     /* Polaroid Frame */
     border: 4px solid #1a1a1a;
-    border-radius: 12px;
-    box-shadow: 12px 12px 0 #1a1a1a;
+    border-radius: 10px;
+    box-shadow: 10px 10px 0 #1a1a1a;
     /* Hard Shadow */
     transform: rotate(-1deg);
 }
 
 .life-section:hover .life-img {
     transform: rotate(1deg) scale(1.02) translate(-2px, -2px);
-    box-shadow: 16px 16px 0 #ffd93d;
+    box-shadow: 14px 14px 0 #ffd93d;
     /* Yellow shadow on hover */
 }
 
@@ -219,11 +225,11 @@
 
 .life-section-title {
     font-family: 'Playfair Display', serif;
-    font-size: 3.5rem;
+    font-size: 3rem;
     line-height: 1.1;
     font-weight: 800;
     font-style: italic;
-    margin-bottom: 2rem;
+    margin-bottom: 1.75rem;
     color: #1a1a1a;
 
     /* Gradient Text */
@@ -234,11 +240,11 @@
 }
 
 .life-section-desc {
-    font-size: 1.2rem;
+    font-size: 1.05rem;
     line-height: 1.8;
     color: #444;
-    margin-bottom: 3rem;
-    max-width: 500px;
+    margin-bottom: 2.6rem;
+    max-width: 450px;
     font-weight: 400;
 }
 
@@ -299,28 +305,79 @@
     padding: 2rem;
     max-width: 900px;
     transform: skewY(1deg);
-    /* Counter-skew text */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
 }
 
-.quote-content p {
+/* Counter-skew text */
+
+.quote-attribution {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 5rem;
+    /* Increased spacing to prevent overlap */
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}
+
+.quote-attribution:hover {
+    opacity: 1;
+}
+
+.attribution-text {
     font-family: 'Playfair Display', serif;
-    font-size: 3.5rem;
-    font-weight: 900;
+    font-weight: 400;
     font-style: italic;
-    margin-bottom: 2rem;
-    line-height: 1.2;
-    text-shadow: 3px 3px 0 #fff;
+    font-size: 1.1rem;
+    letter-spacing: 0.1em;
+    color: #1a1a1a;
+    position: relative;
+    padding: 0.5rem 1rem;
 }
 
-.quote-content span {
-    font-weight: 800;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    font-size: 0.9rem;
-    color: #1a1a1a;
-    background: #fff;
-    padding: 6px 12px;
-    box-shadow: 3px 3px 0 #000;
+/* Creative bracket/frame effect */
+.attribution-text::before,
+.attribution-text::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border: 1px solid #d4a373;
+    /* Gold accent */
+    transition: all 0.3s ease;
+}
+
+.attribution-text::before {
+    top: 0;
+    left: 0;
+    border-right: none;
+    border-bottom: none;
+}
+
+.attribution-text::after {
+    bottom: 0;
+    right: 0;
+    border-left: none;
+    border-top: none;
+}
+
+.quote-attribution:hover .attribution-text::before,
+.quote-attribution:hover .attribution-text::after {
+    width: 100%;
+    height: 100%;
+}
+
+.attribution-line {
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #1a1a1a, transparent);
+    /* Faded ends */
+    display: block;
+    opacity: 0.5;
 }
 
 /* --- Footer --- */
@@ -332,9 +389,9 @@
 
 .footer-heading {
     font-family: 'Playfair Display', serif;
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     font-weight: 800;
-    margin-bottom: 3rem;
+    margin-bottom: 2.6rem;
     color: #1a1a1a;
 }
 
@@ -422,7 +479,15 @@
     }
 }
 
-/* ========== DARK MODE - FUNKY BLUEPRINT ========== */
+/* ========== DARK MODE - PLATINUM & GOLD REVIVAL ========== */
+
+.dark-mode .lifestyle-page {
+    /* CSS Variables for Dark Mode */
+    --life-hero-text: #e0e0e0;
+    /* Platinum */
+    --life-dots-color: #e0e0e0;
+    /* Platinum Dots */
+}
 
 .dark-mode .lifestyle-page,
 .dark-mode .life-hero-fullscreen,
@@ -433,29 +498,28 @@
 }
 
 .dark-mode .life-mega-title {
-    /* Premium Pearl/Gold Gradient */
-    background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 40%, #ffd93d 100%);
+    /* Platinum & Gold Gradient */
+    background: linear-gradient(135deg, #e0e0e0 0%, #ffffff 40%, #d4af37 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0px 2px 8px rgba(255, 255, 255, 0.15));
+    filter: drop-shadow(0px 2px 8px rgba(212, 175, 55, 0.2));
 }
 
-/* Fix Living Text in Dark Mode - FORCED VISIBILITY */
+/* Fix Living Text in Dark Mode */
 .dark-mode .life-mega-title span:first-child {
-    background: linear-gradient(135deg, #ffffff 30%, #cccccc 100%) !important;
+    background: linear-gradient(135deg, #ffffff 30%, #e0e0e0 100%) !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
     color: transparent !important;
     text-shadow: none !important;
-    filter: drop-shadow(0px 2px 15px rgba(255, 255, 255, 0.4)) !important;
+    filter: drop-shadow(0px 2px 15px rgba(255, 255, 255, 0.2)) !important;
     opacity: 1 !important;
     border: none !important;
-    /* REMOVED BOX */
 }
 
 .dark-mode .life-section-title {
-    /* Pearl Gradient */
-    background: linear-gradient(135deg, #ffffff 0%, #eeeeee 100%);
+    /* Platinum Gradient */
+    background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     filter: drop-shadow(0px 2px 8px rgba(255, 255, 255, 0.1));
@@ -463,29 +527,38 @@
 
 .dark-mode .life-section-subtitle,
 .dark-mode .scroll-text {
-    background: #ffd93d;
+    background: #d4af37;
+    /* Gold Background */
     color: #000;
+    box-shadow: 3px 3px 0 #e0e0e0;
+    /* Platinum Shadow */
 }
 
 .dark-mode .mouse-icon {
-    border-color: #fff;
-    box-shadow: 4px 4px 0 #fff;
+    border-color: #e0e0e0;
+    /* Platinum Border */
+    box-shadow: 4px 4px 0 #e0e0e0;
+    /* Platinum Shadow */
 }
 
 .dark-mode .wheel {
-    background-color: #ffd93d;
+    background-color: #d4af37;
+    /* Gold Wheel */
     border-color: #000;
 }
 
 .dark-mode .life-img {
-    border-color: #fff;
-    box-shadow: 12px 12px 0 rgba(255, 255, 255, 0.15);
-    /* Ghost shadow */
+    border: 4px solid #e0e0e0;
+    /* Platinum Frame */
+    box-shadow: 12px 12px 0 rgba(212, 175, 55, 0.15);
+    /* Subtle Gold Shadow */
 }
 
 .dark-mode .life-section:hover .life-img {
-    box-shadow: 16px 16px 0 #ffd93d;
-    /* Yellow shadow pops */
+    box-shadow: 16px 16px 0 #d4af37;
+    /* Deep Gold Pop */
+    border-color: #d4af37;
+    /* Gold Frame on Hover */
 }
 
 .dark-mode .life-section-desc {
@@ -493,33 +566,52 @@
 }
 
 .dark-mode .life-btn-underline {
-    background: #000;
-    border-color: #fff;
-    color: #fff;
-    box-shadow: 4px 4px 0 #fff;
+    background: #1a1a1a;
+    border-color: #e0e0e0;
+    /* Platinum Border */
+    color: #e0e0e0;
+    box-shadow: 4px 4px 0 #e0e0e0;
+    /* Platinum Shadow */
 }
 
 .dark-mode .life-btn-underline:hover {
-    background: #ffd93d;
+    background: #d4af37;
+    /* Gold Background */
     color: #000;
-    border-color: #ffd93d;
-    box-shadow: 6px 6px 0 #fff;
+    border-color: #d4af37;
+    box-shadow: 6px 6px 0 #e0e0e0;
+    /* Platinum Shadow */
 }
 
 .dark-mode .life-quote-fullscreen {
-    background: #2a2a2a;
-    border-color: #d4a373;
+    background: #121212;
+    /* Matte Black */
+    border-top: 3px solid #d4af37;
+    /* Gold Top/Bottom */
+    border-bottom: 3px solid #d4af37;
+}
+
+.dark-mode .quote-content {
+    color: #ffffff;
 }
 
 .dark-mode .quote-content p {
-    color: #fff;
-    text-shadow: 3px 3px 0 #000;
+    color: #ffffff !important;
+    text-shadow: 2px 2px 0 #000;
 }
 
-.dark-mode .quote-content span {
-    background: #000;
-    color: #fff;
-    box-shadow: 3px 3px 0 #fff;
+.dark-mode .attribution-line {
+    background: linear-gradient(to right, transparent, #e0e0e0, transparent);
+}
+
+.dark-mode .attribution-text::before,
+.dark-mode .attribution-text::after {
+    border-color: #d4af37;
+    /* Gold Brackets */
+}
+
+.dark-mode .attribution-text {
+    color: #e0e0e0;
 }
 
 /* --- Mobile Responsiveness --- */

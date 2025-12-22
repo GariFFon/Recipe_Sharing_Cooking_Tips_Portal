@@ -1,28 +1,81 @@
 import React, { useState } from "react";
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import { motion, useMotionValue, useTransform, useAnimation } from "framer-motion";
 import './SwipeCards.css';
 
 const SwipeCards = () => {
   const [cards, setCards] = useState(cardData);
 
   return (
-    <div className="swipe-cards-container">
-      {cards.map((card) => {
-        return (
-          <Card key={card.id} cards={cards} setCards={setCards} {...card} />
-        );
-      })}
+    <div className="swipe-section-wrapper">
+      {/* Section Header */}
+      <div className="swipe-section-header">
+        <span className="script-sub">Explore & Discover</span>
+        <h2 className="section-title">Swipe Through Deliciousness</h2>
+      </div>
+
+      {/* Cards Container with Visual Indicators */}
+      <div className="swipe-cards-wrapper">
+        {/* Left Visual Indicator (non-interactive) */}
+        {cards.length > 0 && (
+          <div className="swipe-indicator swipe-indicator-left">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </div>
+        )}
+
+        {/* Cards */}
+        <div className="swipe-cards-container">
+          {cards.length === 0 ? (
+            <div className="swipe-empty-state">
+              <button
+                className="swipe-reset-btn"
+                onClick={() => setCards(cardData)}
+              >
+                Reset
+              </button>
+            </div>
+          ) : (
+            <>
+              {cards.map((card, index) => {
+                return (
+                  <Card
+                    key={card.id}
+                    cards={cards}
+                    setCards={setCards}
+                    isFront={index === cards.length - 1}
+                    {...card}
+                  />
+                );
+              })}
+              {/* Hover Hint - Only show on front card */}
+              <div className="swipe-hint">
+                <span className="swipe-hint-text">← Swipe Me →</span>
+                <span className="swipe-hint-subtext">Drag to discover more</span>
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Right Visual Indicator (non-interactive) */}
+        {cards.length > 0 && (
+          <div className="swipe-indicator swipe-indicator-right">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
 
-const Card = ({ id, url, setCards, cards }) => {
+const Card = ({ id, url, setCards, cards, isFront }) => {
   const x = useMotionValue(0);
+  const [isHovered, setIsHovered] = useState(false);
 
   const rotateRaw = useTransform(x, [-150, 150], [-18, 18]);
   const opacity = useTransform(x, [-150, 0, 150], [0, 1, 0]);
-
-  const isFront = id === cards[cards.length - 1].id;
 
   const rotate = useTransform(() => {
     const offset = isFront ? 0 : id % 2 ? 6 : -6;
@@ -58,6 +111,8 @@ const Card = ({ id, url, setCards, cards }) => {
       dragElastic={1}
       whileDrag={{ cursor: "grabbing" }}
       onDragEnd={handleDragEnd}
+      onMouseEnter={() => isFront && setIsHovered(true)}
+      onMouseLeave={() => isFront && setIsHovered(false)}
     />
   );
 };

@@ -3,11 +3,48 @@ const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const { body, validationResult } = require('express-validator');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 const User = require('../models/User');
 const Recipe = require('../models/Recipe');
 const { auth, JWT_SECRET } = require('../middleware/auth');
 
 const router = express.Router();
+
+// Create uploads directory if it doesn't exist
+const uploadsDir = path.join(__dirname, '../uploads/profiles');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, uploadsDir);
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const fileFilter = (req, file, cb) => {
+  // Accept images only
+  if (file.mimetype.startsWith('image/')) {
+    cb(null, true);
+  } else {
+    cb(new Error('Only image files are allowed!'), false);
+  }
+};
+
+const upload = multer({
+  storage: storage,
+  fileFilter: fileFilter,
+  limits: {
+    fileSize: 10 * 1024 * 1024 // 10MB limit
+  }
+});
 
 // Helper function to normalize email addresses (especially for Gmail)
 const normalizeEmail = (email) => {
@@ -44,9 +81,13 @@ passport.use(new GoogleStrategy({
       let user = await User.findOne({ googleId: profile.id });
 
       if (user) {
-        // Update photo if available
+        // Only update photo from Google if user doesn't have a custom uploaded photo
+        // Custom uploaded photos start with /uploads/, Google photos start with http
         if (profile.photos && profile.photos.length > 0) {
-          user.photo = profile.photos[0].value;
+          if (!user.photo || user.photo.startsWith('http')) {
+            // Only overwrite if no photo exists or if it's a Google photo
+            user.photo = profile.photos[0].value;
+          }
         }
         // Ensure passwordSet field exists (for existing users created before this feature)
         if (user.passwordSet === undefined || user.passwordSet === null) {
@@ -67,8 +108,11 @@ passport.use(new GoogleStrategy({
       if (user) {
         // Link Google account to existing user
         user.googleId = profile.id;
+        // Only update photo from Google if user doesn't have a custom uploaded photo
         if (profile.photos && profile.photos.length > 0) {
-          user.photo = profile.photos[0].value;
+          if (!user.photo || user.photo.startsWith('http')) {
+            user.photo = profile.photos[0].value;
+          }
         }
         // For existing email users, check if they have password set
         if (user.passwordSet === undefined || user.passwordSet === null) {
@@ -262,7 +306,8 @@ router.get('/profile', auth, async (req, res) => {
         email: user.email,
         createdAt: user.createdAt,
         favorites: user.favorites || [],
-        photo: user.photo
+        photo: user.photo,
+        bannerImage: user.bannerImage
       },
       recipes,
       recipeCount: recipes.length
@@ -437,9 +482,9 @@ router.post('/set-password', [
     // Validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ 
-        message: 'Validation error', 
-        errors: errors.array() 
+      return res.status(400).json({
+        message: 'Validation error',
+        errors: errors.array()
       });
     }
 
@@ -476,7 +521,7 @@ router.post('/set-password', [
       },
       { new: true, runValidators: false }
     );
-    
+
     console.log('✅ After update:');
     console.log('  passwordSet:', user.passwordSet);
     console.log('  hasPassword:', !!user.password);
@@ -494,6 +539,76 @@ router.post('/set-password', [
   } catch (error) {
     console.error('Set password error:', error);
     res.status(500).json({ message: 'Error setting password' });
+  }
+});
+
+// Upload Profile Picture
+router.post('/upload-profile-picture', auth, upload.single('profileImage'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded' });
+    }
+
+    const user = await User.findById(req.userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Delete old profile picture if it exists and is not a Google photo
+    if (user.photo && !user.photo.startsWith('http')) {
+      const oldPhotoPath = path.join(__dirname, '../', user.photo);
+      if (fs.existsSync(oldPhotoPath)) {
+        fs.unlinkSync(oldPhotoPath);
+      }
+    }
+
+    // Save new photo path
+    const photoUrl = `/uploads/profiles/${req.file.filename}`;
+    user.photo = photoUrl;
+    await user.save();
+
+    res.json({
+      message: 'Profile picture uploaded successfully',
+      photoUrl: photoUrl
+    });
+  } catch (error) {
+    console.error('Upload profile picture error:', error);
+    res.status(500).json({ message: 'Error uploading profile picture' });
+  }
+});
+
+// Upload Banner Image
+router.post('/upload-banner', auth, upload.single('bannerImage'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded' });
+    }
+
+    const user = await User.findById(req.userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Delete old banner if it exists
+    if (user.bannerImage) {
+      const oldBannerPath = path.join(__dirname, '../', user.bannerImage);
+      if (fs.existsSync(oldBannerPath)) {
+        fs.unlinkSync(oldBannerPath);
+      }
+    }
+
+    // Save new banner path
+    const bannerUrl = `/uploads/profiles/${req.file.filename}`;
+    user.bannerImage = bannerUrl;
+    await user.save();
+
+    res.json({
+      message: 'Banner image uploaded successfully',
+      bannerUrl: bannerUrl
+    });
+  } catch (error) {
+    console.error('Upload banner error:', error);
+    res.status(500).json({ message: 'Error uploading banner image' });
   }
 });
 
@@ -520,7 +635,7 @@ router.get('/google/callback',
 
     // Determine redirect based on password status
     const redirectTo = !req.user.passwordSet ? '/set-password' : '/';
-    
+
     // Debug logging
     console.log('🔐 Google OAuth Callback Debug:');
     console.log('User:', req.user.email);

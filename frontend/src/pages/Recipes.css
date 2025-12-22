@@ -4,7 +4,7 @@
 }
 
 .recipes-hero {
-    padding: 8rem 0 4rem;
+    padding: 8.5rem 0 3.5rem;
     text-align: center;
     background-color: var(--color-cream);
     position: relative;
@@ -22,11 +22,11 @@
 
 .hero-title {
     font-family: var(--font-heading);
-    font-size: 5rem;
+    font-size: 4.25rem;
     font-weight: 900;
     line-height: 1;
     color: var(--color-dark);
-    margin-bottom: 2.5rem;
+    margin-bottom: 2.25rem;
     letter-spacing: -0.03em;
 }
 
@@ -52,11 +52,11 @@
 
 .hero-search input {
     width: 100%;
-    padding: 1.5rem 2.5rem;
-    padding-right: 4.5rem;
+    padding: 1.25rem 2.25rem;
+    padding-right: 4rem;
     border: 2px solid transparent;
     border-radius: 50px;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-family: var(--font-body);
     outline: none;
     transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -102,9 +102,9 @@
 .filter-btn {
     background: #ffffff;
     border: 2px solid transparent;
-    padding: 0.9rem 2rem;
+    padding: 0.8rem 1.75rem;
     border-radius: 50px;
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 700;
     color: var(--color-dark);
     cursor: pointer;
@@ -144,7 +144,7 @@
 
 .section-title {
     font-family: var(--font-heading);
-    font-size: 3.5rem;
+    font-size: 3rem;
     font-weight: 900;
     line-height: 1;
     color: var(--color-dark);
@@ -287,11 +287,11 @@
     }
 
     .section-title {
-        font-size: 1.2rem;
+        font-size: 2rem;
     }
 }
 
-/* ========== DARK MODE STYLES FOR RECIPES PAGE ========== */
+/* ========== DARK MODE STYLES FOR RECIPES PAGE (Platinum & Gold) ========== */
 
 .dark-mode .recipes-page {
     background-color: #1a1a1a;
@@ -302,17 +302,20 @@
 }
 
 .dark-mode .hero-sub {
-    color: #a0a0a0;
+    color: #d4af37;
+    /* Gold Subheader */
 }
 
 .dark-mode .hero-title {
-    color: #e8e8e8;
+    color: #ffffff;
 }
 
 .dark-mode .hero-search input {
-    background-color: #2d2d2d;
-    border-color: #3d3d3d;
-    color: #e8e8e8;
+    background-color: #1a1a1a;
+    border: 2px solid #e0e0e0;
+    /* Platinum Border */
+    color: #d4af37;
+    /* Gold Text */
 }
 
 .dark-mode .hero-search input::placeholder {
@@ -320,85 +323,93 @@
 }
 
 .dark-mode .hero-search:hover input {
-    border-color: #666;
-    background-color: #3d3d3d;
+    border-color: #d4af37;
+    /* Gold Hover */
+    background-color: #1a1a1a;
+    box-shadow: 0 10px 20px -5px rgba(212, 175, 55, 0.1);
 }
 
 .dark-mode .search-btn {
-    color: #a0a0a0;
+    color: #e0e0e0;
 }
 
 .dark-mode .hero-search:hover .search-btn {
-    color: #e8e8e8;
+    color: #d4af37;
 }
 
 .dark-mode .filter-btn {
     background: transparent;
-    border-color: rgba(232, 232, 232, 0.1);
-    color: #a0a0a0;
+    border: 2px solid #e0e0e0;
+    /* Platinum Border */
+    color: #e0e0e0;
 }
 
 .dark-mode .filter-btn:hover {
-    border-color: #e8e8e8;
-    color: #e8e8e8;
+    border-color: #d4af37;
+    color: #d4af37;
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
 }
 
 .dark-mode .filter-btn.active {
-    background: #e8e8e8;
-    color: #1a1a1a;
-    border-color: #e8e8e8;
+    background: #d4af37;
+    /* Gold Background */
+    color: #000;
+    border-color: #d4af37;
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
 }
 
 .dark-mode .section-title {
-    color: #e8e8e8;
+    color: #ffffff;
 }
 
 .dark-mode .section-divider {
-    background-color: #e8e8e8;
+    background-color: #d4af37;
 }
 
 .dark-mode .results-count {
-    color: #666;
+    color: #888;
 }
 
 .dark-mode .loading,
 .dark-mode .empty-state {
-    color: #666;
+    color: #888;
 }
 
 .dark-mode .empty-state button {
-    background: #2d2d2d;
-    border-color: #e8e8e8;
-    color: #e8e8e8;
+    background: #1a1a1a;
+    border: 2px solid #e0e0e0;
+    color: #e0e0e0;
 }
 
 .dark-mode .empty-state button:hover {
-    background: #e8e8e8;
+    background: #e0e0e0;
     color: #1a1a1a;
 }
 
 .dark-mode .page-nav-btn,
 .dark-mode .page-num-btn {
-    background: #2d2d2d;
-    border-color: #3d3d3d;
-    color: #e8e8e8;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #e0e0e0;
 }
 
 .dark-mode .page-nav-btn:hover:not(:disabled),
 .dark-mode .page-num-btn:hover:not(.active) {
-    background: #3d3d3d;
-    border-color: #666;
+    background: #2d2d2d;
+    border-color: #e0e0e0;
 }
 
 .dark-mode .page-nav-btn:disabled {
     background: #1a1a1a;
     opacity: 0.4;
+    border-color: #333;
 }
 
 .dark-mode .page-num-btn.active {
-    background: #e8e8e8;
-    color: #1a1a1a;
-    border-color: #e8e8e8;
+    background: #d4af37;
+    /* Gold Active */
+    color: #000;
+    border-color: #d4af37;
 }
 
 .dark-mode .page-dots {

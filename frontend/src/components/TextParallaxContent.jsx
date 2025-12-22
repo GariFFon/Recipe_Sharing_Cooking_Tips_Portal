@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { Link } from "react-router-dom";
 import { FiArrowUpRight } from "react-icons/fi";
 import "./TextParallaxContent.css";
 
@@ -134,9 +135,9 @@ const QualityContent = () => (
             <p className="tpc-paragraph">
                 From quick weeknight dinners to elaborate holiday feasts, access a library of recipes that inspire and delight.
             </p>
-            <button className="tpc-btn">
+            <Link to="/recipes" className="tpc-btn">
                 Browse Recipes <FiArrowUpRight />
-            </button>
+            </Link>
         </div>
     </div>
 );

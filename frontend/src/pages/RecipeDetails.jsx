@@ -151,14 +151,16 @@ const RecipeDetails = () => {
                     <div className="instructions-section">
                         <h3>Instructions</h3>
                         <div className="instructions-list">
-                            {recipe.instructions.map((inst, index) => (
-                                <div key={index} className="step">
-                                    <span className="step-num">{index + 1}</span>
-                                    <div className="step-content">
-                                        <p>{inst.replace(/^\d+\.\s*|^Step\s+\d+[:.]\s*/i, '')}</p>
+                            {recipe.instructions
+                                .filter(inst => !/^step\s+\d+$/i.test(inst.trim())) // Remove standalone "step 1", "step 2" entries
+                                .map((inst, index) => (
+                                    <div key={index} className="step">
+                                        <span className="step-num">{index + 1}</span>
+                                        <div className="step-content">
+                                            <p>{inst.replace(/^(step\s+\d+[:.]\s*|\d+\.\s*|Step\s+\d+[:.]\s*)/i, '').trim()}</p>
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))}
                         </div>
                     </div>
                 </div>

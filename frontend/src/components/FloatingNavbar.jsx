@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { FiMenu, FiX } from "react-icons/fi";
+import "@theme-toggles/react/css/Within.css";
+import { Within } from "@theme-toggles/react";
 import "./FloatingNavbar.css";
 
 export const FloatingNavbar = () => {
@@ -12,7 +14,7 @@ export const FloatingNavbar = () => {
     return (
         <>
             <div className="floating-nav-container">
-                <Link to="/" className="nav-logo">
+                <Link to="/" className="nav-logo" style={{ position: 'absolute', left: '5%', top: '2rem' }}>
                     <span className="logo-text">The</span>
                     <span className="logo-accent">Every</span>
                     <span className="logo-text">Kitchen</span>
@@ -24,11 +26,17 @@ export const FloatingNavbar = () => {
                 </div>
             </div>
 
+            {/* Theme Toggle and Auth Buttons - Outside desktop-menu for mobile visibility */}
+            <div style={{ position: 'fixed', right: '5%', top: '2rem', zIndex: 2050 }}>
+                <NavActions />
+            </div>
+
             {/* Mobile Toggle (Hamburger morphs to X) */}
             <button
                 className={`mobile-toggle-btn ${isMobileMenuOpen ? 'active' : ''}`}
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 aria-label="Toggle menu"
+                style={{ position: 'fixed', right: '5%', top: '2.35rem', zIndex: 2200 }}
             >
                 <div className="hamburger-box">
                     <span className="hamburger-line"></span>
@@ -105,24 +113,28 @@ const SlideTabs = () => {
 
                 <Cursor position={position} />
             </ul>
+        </>
+    );
+};
 
-            {/* Auth Buttons on Right */}
+const NavActions = () => {
+    const { user } = useAuth();
+    const { isDarkMode, toggleTheme } = useTheme();
+
+    return (
+        <div className="nav-actions">
+            {/* Theme Toggle */}
+            <div className="theme-toggle-wrapper">
+                <Within
+                    duration={750}
+                    toggled={isDarkMode}
+                    toggle={toggleTheme}
+                    className="theme-toggle"
+                />
+            </div>
+
+            {/* Auth Buttons (Hidden on Mobile) */}
             <div className="nav-auth-buttons">
-                {/* Dark Mode Toggle */}
-                <button
-                    onClick={toggleTheme}
-                    className={`theme-toggle-fancy ${isDarkMode ? 'dark' : 'light'}`}
-                    aria-label="Toggle dark mode"
-                >
-                    <div className="toggle-track">
-                        <div className="toggle-thumb">
-                            <span className="toggle-icon">
-                                {isDarkMode ? '☀️' : '🌙'}
-                            </span>
-                        </div>
-                    </div>
-                </button>
-
                 {user ? (
                     <Link to="/profile" className="nav-profile-btn">
                         {user.name ? user.name.split(' ')[0] : 'Profile'}
@@ -134,7 +146,7 @@ const SlideTabs = () => {
                     </>
                 )}
             </div>
-        </>
+        </div>
     );
 };
 
@@ -191,15 +203,44 @@ const Cursor = ({ position }) => {
 const MobileMenu = ({ onClose }) => {
     const { user } = useAuth();
 
-    // Staggered animation for container
+    // Enhanced animation variants for the overlay
     const menuVariants = {
         closed: {
             opacity: 0,
-            transition: { duration: 0.3, ease: "easeInOut" }
+            scale: 0.95,
+            transition: {
+                duration: 0.3,
+                ease: "easeInOut",
+                when: "afterChildren"
+            }
         },
         open: {
             opacity: 1,
-            transition: { duration: 0.4, ease: "easeInOut" }
+            scale: 1,
+            transition: {
+                duration: 0.4,
+                ease: [0.43, 0.13, 0.23, 0.96],
+                when: "beforeChildren",
+                staggerChildren: 0.08
+            }
+        }
+    };
+
+    // Animation variants for each menu item
+    const itemVariants = {
+        closed: {
+            opacity: 0,
+            x: -50,
+            scale: 0.9
+        },
+        open: {
+            opacity: 1,
+            x: 0,
+            scale: 1,
+            transition: {
+                duration: 0.5,
+                ease: [0.43, 0.13, 0.23, 0.96]
+            }
         }
     };
 
@@ -233,9 +274,20 @@ const MobileMenu = ({ onClose }) => {
             {/* Close Button Removed - Handled by Main Toggle */}
 
             {/* --- Main Navigation --- */}
-            <nav className="mm-nav-container">
+            <motion.nav
+                className="mm-nav-container"
+                variants={{
+                    open: {
+                        transition: { staggerChildren: 0.08, delayChildren: 0.1 }
+                    }
+                }}
+            >
                 {links.map((link, index) => (
-                    <div key={link.path} className="mm-link-wrapper">
+                    <motion.div
+                        key={link.path}
+                        className="mm-link-wrapper"
+                        variants={itemVariants}
+                    >
                         <Link
                             to={link.path}
                             onClick={onClose}
@@ -250,16 +302,12 @@ const MobileMenu = ({ onClose }) => {
                             {/* Dot Reveal */}
                             <span className="mm-dot"></span>
                         </Link>
-                    </div>
+                    </motion.div>
                 ))}
-            </nav>
+            </motion.nav>
 
             {/* --- Footer --- */}
             <div className="mm-footer">
-                <div className="mm-footer-actions">
-                    <Link to="/contact" onClick={onClose} className="mm-btn-outline">Contact</Link>
-                    <Link to="/submit" onClick={onClose} className="mm-btn-solid">Submit Recipe</Link>
-                </div>
                 <div className="mm-socials">
                     <a href="#" className="mm-social-link">Instagram</a>
                     <a href="#" className="mm-social-link">Twitter</a>

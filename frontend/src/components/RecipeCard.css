@@ -235,15 +235,18 @@
     stroke-width: 2px;
 }
 
-/* Dark Mode */
+/* Dark Mode (Platinum & Gold Revival) */
 .dark-mode .recipe-card {
     background: #1a1a1a;
     box-shadow: none;
-    border: 1px solid #333;
+    border: 2px solid #e0e0e0;
+    /* Platinum Border */
 }
 
 .dark-mode .recipe-card:hover {
-    box-shadow: 0 0 0 4px rgba(212, 163, 115, 0.4);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5), 0 0 0 4px rgba(212, 175, 55, 0.4);
+    /* Gold Glow */
+    border-color: #d4af37;
 }
 
 .dark-mode .card-content {
@@ -257,6 +260,11 @@
 
 .dark-mode .card-title {
     color: #ffffff;
+}
+
+.dark-mode .recipe-card:hover .card-title {
+    color: #d4a373;
+    /* Gold Title Hover */
 }
 
 .dark-mode .card-meta {
@@ -274,18 +282,32 @@
 }
 
 .dark-mode .time-tag {
-    box-shadow: 4px 4px 0px #ffffff;
-    /* Inverted brutalist shadow */
+    box-shadow: 4px 4px 0px #e0e0e0;
+    /* Platinum Shadow */
+    background: #d4af37;
+    /* Gold Background */
+    color: #000;
 }
 
 .dark-mode .favorite-btn {
-    border-color: #ffffff;
-    box-shadow: 4px 4px 0px #ffffff;
+    border-color: #e0e0e0;
+    /* Platinum Border */
+    box-shadow: 4px 4px 0px #e0e0e0;
+    /* Platinum Shadow */
     background: #1a1a1a;
+    color: #e0e0e0;
+}
+
+.dark-mode .favorite-btn:hover {
+    box-shadow: 6px 6px 0px #d4af37;
+    /* Gold Hover Shadow */
+    border-color: #d4af37;
+    color: #d4af37;
 }
 
 .dark-mode .favorite-btn.active {
     background: #ff6b6b;
-    box-shadow: 4px 4px 0px #ffffff;
+    box-shadow: 4px 4px 0px #e0e0e0;
     border-color: #ff6b6b;
+    color: #fff;
 }
