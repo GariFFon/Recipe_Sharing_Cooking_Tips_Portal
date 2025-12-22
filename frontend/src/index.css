@@ -21,12 +21,54 @@
 
   --radius: 0px;
   /* Sharp corners for elegance */
+
+  /* Light mode colors */
+  --color-cream: #fdfaf3;
+  --color-dark: #1a1a1a;
+  --color-accent-gold: #d4a373;
+  --color-green: #2d4a3e;
+}
+
+/* Dark Mode Variables */
+.dark-mode {
+  --color-bg: #1a1a1a;
+  --color-text: #e8e8e8;
+  --color-text-light: #a0a0a0;
+  --color-accent: #7c8fa3;
+  --color-border: #2d2d2d;
+
+  --color-cream: #1a1a1a;
+  --color-dark: #e8e8e8;
+  --color-accent-gold: #d4a373;
+  --color-green: #5a7a6e;
+}
+
+.dark-mode body {
+  background-color: #1a1a1a;
+  color: #e8e8e8;
+}
+
+.dark-mode h1,
+.dark-mode h2,
+.dark-mode h3,
+.dark-mode h4,
+.dark-mode h5,
+.dark-mode h6 {
+  color: #e8e8e8;
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+*:focus {
+  outline: none;
+}
+
+html {
+  overflow-y: scroll;
 }
 
 body {
@@ -110,6 +152,7 @@ button {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 4rem 2rem;
+  min-height: 400px;
 }
 
 @media (max-width: 900px) {

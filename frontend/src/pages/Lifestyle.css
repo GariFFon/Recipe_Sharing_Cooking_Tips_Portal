@@ -1,115 +1,89 @@
-/* Lifestyle.css */
+/* Lifestyle.css - Funky Premium Overhaul */
 
 /* Global Reset for this page */
 .lifestyle-page {
     background-color: #fdfaf3;
-    /* MATCHED with Navbar (was #f8f5f2) */
-    color: #111;
+    /* Creamy base */
+    color: #1a1a1a;
     overflow-x: hidden;
     font-family: 'Lato', sans-serif;
 }
 
-/* --- Hero Section --- */
+/* --- Hero Section Refined --- */
 .life-hero-fullscreen {
-    height: 60vh;
+    height: 100vh;
+    /* Full viewport for proper spacing */
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     background: #fdfaf3;
-    /* MATCHED with Navbar */
     position: relative;
     padding-top: 0;
+    padding-bottom: 120px;
+    /* Space for scroll indicator */
     margin-bottom: 4rem;
 }
 
-/* ... (skipping unchanged classes) ... */
-
-/* --- Content Sections (ZigZag) --- */
-.life-content-wrapper {
-    padding: 0;
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.life-section {
-    display: flex;
-    min-height: 90vh;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.life-img-wrapper,
-.life-text-content {
-    flex: 1;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 6rem;
-}
-
-.life-img-wrapper {
-    padding: 0;
-    /* REVERTED: Removed the 6rem inset */
-    height: 90vh;
-    overflow: hidden;
+.life-hero-content {
+    z-index: 2;
     position: relative;
 }
 
-.life-img {
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    transition: transform 0.7s ease;
-    /* REVERTED: Removed outline/frame properties */
-}
-
-.life-section:hover .life-img {
-    /* REVERTED: Removed hover outline */
-    transform: scale(1.02);
-}
-
-.life-supertitle {
-    font-size: 1rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    margin-bottom: 2rem;
-    color: #888;
-    animation: fadeUp 1s ease forwards;
-    opacity: 0;
-}
-
 .life-mega-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(3rem, 6vw, 6rem);
-    /* Reduced from 10rem to be more elegant */
-    line-height: 1.1;
-    font-weight: 400;
-    color: #1a1a1a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 0.9;
     margin-bottom: 2rem;
-    /* Reduced margin */
-    animation: fadeUp 1s ease 0.2s forwards;
-    opacity: 0;
+    /* Reduced to save space */
 }
 
+/* "Living" - Solid, Huge, Serif */
+.life-mega-title span:first-child {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(5rem, 12vw, 12rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.05em;
+    color: #1a1a1a;
+    position: relative;
+    z-index: 1;
+    text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* "Intentionally" - Script/Italic Overlay */
 .life-mega-title em {
     font-family: 'Playfair Display', serif;
+    font-size: clamp(4rem, 10vw, 10rem);
+    font-weight: 400;
     font-style: italic;
     color: #d4a373;
-    font-weight: 400;
+    margin-top: -20px;
+    /* Overlap effect */
+    position: relative;
+    z-index: 2;
+    transform: rotate(-2deg);
+    text-shadow: none;
+    /* Clean gradient or solid color */
+    background: none;
+    -webkit-text-fill-color: #d4a373;
 }
 
-.scroll-indicator {
-    position: absolute;
-    bottom: -80px;
-    /* Push it down */
-    left: 0;
+/* Standalone Scroll Indicator Section */
+.scroll-indicator-section {
     width: 100%;
-    /* Centering method without transform */
+    padding: 0 0 5rem 0;
+    /* Zero top padding, Massive bottom spacing */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fdfaf3;
+}
+
+/* Scroll Indicator - Now in normal flow */
+.scroll-indicator {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -119,86 +93,84 @@
 }
 
 .scroll-text {
-    font-family: 'Lato', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.3em;
+    font-size: 0.8rem;
+    font-weight: 900;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     color: #1a1a1a;
-    margin-bottom: 5px;
+    background: #ffd93d;
+    padding: 4px 8px;
+    box-shadow: 3px 3px 0 #000;
 }
 
 .mouse-icon {
-    width: 26px;
-    height: 42px;
-    border: 1px solid #1a1a1a;
+    width: 30px;
+    height: 50px;
+    border: 3px solid #1a1a1a;
     border-radius: 20px;
     position: relative;
     display: flex;
     justify-content: center;
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.1);
 }
 
 .wheel {
     position: absolute;
-    top: 8px;
-    width: 3px;
+    top: 10px;
+    width: 6px;
     height: 6px;
-    background-color: #1a1a1a;
-    border-radius: 2px;
+    background-color: #ffd93d;
+    /* Yellow dot */
+    border-radius: 50%;
     animation: scrollWheel 2s infinite;
-}
-
-.scroll-line {
-    width: 1px;
-    height: 30px;
-    background-color: rgba(26, 26, 26, 0.3);
-}
-
-@keyframes scrollWheel {
-    0% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    100% {
-        opacity: 0;
-        transform: translateY(15px);
-    }
+    border: 1px solid #000;
 }
 
 /* --- Content Sections (ZigZag) --- */
 .life-content-wrapper {
     padding: 0;
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
-    /* Top separator */
+    border-top: none;
 }
 
 .life-section {
     display: flex;
-    min-height: 90vh;
+    min-height: 85vh;
+    /* Reduced slightly to keep content fuller */
     align-items: center;
     justify-content: center;
     width: 100%;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    /* Subtle section dividers */
-}
-
-.life-img-wrapper,
-.life-text-content {
-    flex: 1;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 6rem;
+    padding: 2rem 0;
+    /* Reduced padding gaps */
+    border-bottom: none;
 }
 
 .life-img-wrapper {
-    padding: 0;
-    /* REVERTED FROM 6rem */
-    height: 90vh;
-    overflow: hidden;
+    flex: 1.5;
+    /* Images take more space (60%) */
+    height: 700px;
+    /* Explicit taller height */
     position: relative;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.life-text-content {
+    flex: 1;
+    /* Text takes less space (40%) */
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* POLAROID STYLE IMAGES */
+.life-img-wrapper {
+    height: 600px;
+    position: relative;
+    padding: 2rem;
+    /* Give space for shadow */
 }
 
 .life-img {
@@ -206,12 +178,93 @@
     height: 100%;
     background-size: cover;
     background-position: center;
-    transition: transform 0.5s ease;
-    /* Removed outline properties */
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    /* Polaroid Frame */
+    border: 4px solid #1a1a1a;
+    border-radius: 12px;
+    box-shadow: 12px 12px 0 #1a1a1a;
+    /* Hard Shadow */
+    transform: rotate(-1deg);
 }
 
 .life-section:hover .life-img {
-    transform: scale(1.05);
+    transform: rotate(1deg) scale(1.02) translate(-2px, -2px);
+    box-shadow: 16px 16px 0 #ffd93d;
+    /* Yellow shadow on hover */
+}
+
+/* Typography in Sections */
+.life-section-subtitle {
+    font-size: 0.9rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #1a1a1a;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    display: inline-block;
+    background: #ffd93d;
+    /* Highlight marker */
+    padding: 4px 10px;
+    width: fit-content;
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.1);
+    transform: rotate(-1deg);
+}
+
+.life-section-subtitle::before {
+    display: none;
+}
+
+/* Remove old line */
+
+.life-section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    line-height: 1.1;
+    font-weight: 800;
+    font-style: italic;
+    margin-bottom: 2rem;
+    color: #1a1a1a;
+
+    /* Gradient Text */
+    background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.life-section-desc {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #444;
+    margin-bottom: 3rem;
+    max-width: 500px;
+    font-weight: 400;
+}
+
+/* Funky Pill Button */
+.life-btn-underline {
+    background: #fff;
+    border: 3px solid #1a1a1a;
+    border-radius: 50px;
+    padding: 12px 28px;
+    font-size: 0.9rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    align-self: flex-start;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    color: #1a1a1a;
+    box-shadow: 4px 4px 0 #1a1a1a;
+}
+
+.life-btn-underline:hover {
+    background: #ffd93d;
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 #1a1a1a;
+    padding-right: 28px;
+    /* Reset padding slide */
 }
 
 /* Alignment Logic */
@@ -223,87 +276,19 @@
     flex-direction: row-reverse;
 }
 
-/* Typography in Sections */
-.life-section-subtitle {
-    font-size: 0.85rem;
-    letter-spacing: 0.25em;
-    /* Wider tracking = more premium */
-    text-transform: uppercase;
-    color: #d4a373;
-    margin-bottom: 2rem;
-    display: block;
-    position: relative;
-    padding-left: 50px;
-    /* Line decoration */
-}
-
-.life-section-subtitle::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    width: 30px;
-    height: 1px;
-    background-color: #d4a373;
-}
-
-.life-section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 4rem;
-    line-height: 1.1;
-    margin-bottom: 2rem;
-    color: #1a1a1a;
-}
-
-.life-section-desc {
-    font-size: 1.15rem;
-    line-height: 1.9;
-    /* More air */
-    color: #555;
-    margin-bottom: 3.5rem;
-    max-width: 500px;
-    font-weight: 300;
-}
-
-.life-btn-underline {
-    background: none;
-    border: none;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-    /* Thinner initial line */
-    padding: 0 0 10px 0;
-    font-size: 0.8rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    cursor: pointer;
-    align-self: flex-start;
-    transition: all 0.4s ease;
-    color: #1a1a1a;
-}
-
-.life-btn-underline:hover {
-    color: #d4a373;
-    border-color: #d4a373;
-    padding-right: 20px;
-    /* Slide effect */
-}
-
-/* --- Simple Elegant Quote --- */
+/* --- Quote Section - Sticky Note Style --- */
 .life-quote-fullscreen {
-    height: 50vh;
-    /* Reduced height */
-    background: transparent;
-    /* No heavy image */
+    height: 60vh;
+    background: #fff9db;
+    /* Sticky Note Yellow */
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
-    /* Subtle separator */
-}
-
-.quote-overlay {
-    display: none;
-    /* Hide overlay */
+    border-top: 3px solid #1a1a1a;
+    border-bottom: 3px solid #1a1a1a;
+    transform: skewY(-1deg);
+    margin: 4rem 0;
 }
 
 .quote-content {
@@ -311,68 +296,66 @@
     z-index: 1;
     text-align: center;
     color: #1a1a1a;
-    /* Dark text */
     padding: 2rem;
-    max-width: 800px;
+    max-width: 900px;
+    transform: skewY(1deg);
+    /* Counter-skew text */
 }
 
 .quote-content p {
     font-family: 'Playfair Display', serif;
-    font-size: 3rem;
-    /* Slightly smaller, more refined */
+    font-size: 3.5rem;
+    font-weight: 900;
     font-style: italic;
     margin-bottom: 2rem;
-    line-height: 1.3;
+    line-height: 1.2;
+    text-shadow: 3px 3px 0 #fff;
 }
 
 .quote-content span {
+    font-weight: 800;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    font-size: 0.8rem;
-    color: #888;
+    font-size: 0.9rem;
+    color: #1a1a1a;
+    background: #fff;
+    padding: 6px 12px;
+    box-shadow: 3px 3px 0 #000;
 }
 
-/* --- Lighter Footer --- */
+/* --- Footer --- */
 .life-footer-simple {
     padding: 6rem 0;
     text-align: center;
     background: #fdfaf3;
-    /* MATCHED with Navbar */
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .footer-heading {
     font-family: 'Playfair Display', serif;
-    font-size: 2rem;
-    margin-bottom: 2rem;
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 3rem;
     color: #1a1a1a;
-    font-style: italic;
-}
-
-.footer-links {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1.5rem;
 }
 
 .footer-link {
     font-family: 'Lato', sans-serif;
-    font-size: 0.9rem;
+    font-size: 1rem;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.1em;
     cursor: pointer;
-    color: #555;
-    transition: color 0.3s;
+    color: #1a1a1a;
+    padding: 8px 16px;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+    border-radius: 20px;
 }
 
 .footer-link:hover {
-    color: #d4a373;
-}
-
-.separator {
-    color: #ccc;
-    font-weight: 300;
+    background: #1a1a1a;
+    color: #ffd93d;
+    transform: rotate(-2deg);
 }
 
 /* --- Mobile Responsiveness --- */
@@ -382,38 +365,56 @@
     }
 
     .life-section {
-        flex-direction: column-reverse !important;
-        /* Image on top? No, usually column creates Img then Text. Wait, DOM order is Img then Text. So column puts Img on top. */
         flex-direction: column !important;
-        min-height: auto;
-        padding-bottom: 2rem;
+        padding: 2rem 0;
     }
 
-    /* Override any specific alignment classes */
     .align-left,
     .align-right {
         flex-direction: column !important;
     }
 
     .life-img-wrapper {
-        width: 100%;
+        width: 100% !important;
         height: 400px;
-        /* Fixed robust height for mobile */
+        min-height: 400px;
+        /* Force height */
+        padding: 1rem;
+        margin-bottom: 2rem;
         flex: none;
-        /* Don't shrink/grow */
+        /* Don't let flex shrink it */
+        display: block;
+        /* Ensure block layout */
+        overflow: visible;
+        /* Show shadows/rotations */
+    }
+
+    .life-img {
+        transform: rotate(0deg);
+        box-shadow: 8px 8px 0 #1a1a1a;
     }
 
     .life-text-content {
         width: 100%;
-        padding: 3rem 1.5rem;
-        height: auto;
-        flex: none;
+        padding: 1rem;
         text-align: center;
-        /* Center text on mobile for better balance */
+        align-items: center;
     }
 
     .life-section-title {
         font-size: 2.5rem;
+    }
+
+    .life-btn-underline {
+        align-self: center;
+    }
+
+    .life-quote-fullscreen {
+        transform: skewY(0deg);
+    }
+
+    .quote-content {
+        transform: skewY(0deg);
     }
 
     .quote-content p {
@@ -421,10 +422,122 @@
     }
 }
 
-/* Animations */
+/* ========== DARK MODE - FUNKY BLUEPRINT ========== */
+
+.dark-mode .lifestyle-page,
+.dark-mode .life-hero-fullscreen,
+.dark-mode .life-footer-simple,
+.dark-mode .scroll-indicator-section {
+    background-color: #1a1a1a;
+    color: #e8e8e8;
+}
+
+.dark-mode .life-mega-title {
+    /* Premium Pearl/Gold Gradient */
+    background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 40%, #ffd93d 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0px 2px 8px rgba(255, 255, 255, 0.15));
+}
+
+/* Fix Living Text in Dark Mode - FORCED VISIBILITY */
+.dark-mode .life-mega-title span:first-child {
+    background: linear-gradient(135deg, #ffffff 30%, #cccccc 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    color: transparent !important;
+    text-shadow: none !important;
+    filter: drop-shadow(0px 2px 15px rgba(255, 255, 255, 0.4)) !important;
+    opacity: 1 !important;
+    border: none !important;
+    /* REMOVED BOX */
+}
+
+.dark-mode .life-section-title {
+    /* Pearl Gradient */
+    background: linear-gradient(135deg, #ffffff 0%, #eeeeee 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0px 2px 8px rgba(255, 255, 255, 0.1));
+}
+
+.dark-mode .life-section-subtitle,
+.dark-mode .scroll-text {
+    background: #ffd93d;
+    color: #000;
+}
+
+.dark-mode .mouse-icon {
+    border-color: #fff;
+    box-shadow: 4px 4px 0 #fff;
+}
+
+.dark-mode .wheel {
+    background-color: #ffd93d;
+    border-color: #000;
+}
+
+.dark-mode .life-img {
+    border-color: #fff;
+    box-shadow: 12px 12px 0 rgba(255, 255, 255, 0.15);
+    /* Ghost shadow */
+}
+
+.dark-mode .life-section:hover .life-img {
+    box-shadow: 16px 16px 0 #ffd93d;
+    /* Yellow shadow pops */
+}
+
+.dark-mode .life-section-desc {
+    color: #ccc;
+}
+
+.dark-mode .life-btn-underline {
+    background: #000;
+    border-color: #fff;
+    color: #fff;
+    box-shadow: 4px 4px 0 #fff;
+}
+
+.dark-mode .life-btn-underline:hover {
+    background: #ffd93d;
+    color: #000;
+    border-color: #ffd93d;
+    box-shadow: 6px 6px 0 #fff;
+}
+
+.dark-mode .life-quote-fullscreen {
+    background: #2a2a2a;
+    border-color: #d4a373;
+}
+
+.dark-mode .quote-content p {
+    color: #fff;
+    text-shadow: 3px 3px 0 #000;
+}
+
+.dark-mode .quote-content span {
+    background: #000;
+    color: #fff;
+    box-shadow: 3px 3px 0 #fff;
+}
+
+/* --- Mobile Responsiveness --- */
 @keyframes fadeUp {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+@keyframes scrollWheel {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(15px);
     }
 }

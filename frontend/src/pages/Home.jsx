@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Pagination, Autoplay } from 'swiper/modules';
+import Footer from '../components/Footer';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -13,6 +14,8 @@ import './Home.css';
 const Home = () => {
     const [randomRecipes, setRandomRecipes] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [activeIndex, setActiveIndex] = useState(0);
+    const [isDragging, setIsDragging] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -31,8 +34,17 @@ const Home = () => {
         fetchRandomRecipes();
     }, []);
 
-    const handleCardClick = (recipeId) => {
-        navigate(`/recipes/${recipeId}`);
+    const handleCardClick = (recipeId, slideIndex) => {
+        // Don't navigate if user was dragging
+        if (isDragging) {
+            return;
+        }
+
+        // Only navigate if clicking the centered/active slide
+        if (slideIndex === activeIndex) {
+            navigate(`/recipes/${recipeId}`);
+        }
+        // Otherwise, Swiper's slideToClickedSlide will center it
     };
 
     return (
@@ -60,13 +72,39 @@ const Home = () => {
                         alt="Fresh Vegetables"
                         className="hero-img"
                     />
-                    <div className="floating-badge">
-                        <span>New <br /> Season</span>
-                    </div>
                 </div>
             </header>
 
-            {/* 3D Coverflow Carousel Section */}
+            {/* NEW: Infinite Marquee Stats - Crazy Motion */}
+            <div className="stats-marquee-container">
+                <div className="marquee-content">
+                    {/* Set 1 */}
+                    <div className="stat-item-marquee">1k+ <span className="highlight">Recipes</span></div>
+                    <div className="stat-item-marquee">50k <span className="highlight">Cooks</span></div>
+                    <div className="stat-item-marquee">4.9 <span className="highlight">Rating</span></div>
+                    <div className="stat-item-marquee">100+ <span className="highlight">Tips</span></div>
+
+                    {/* Set 2 */}
+                    <div className="stat-item-marquee">1k+ <span className="highlight">Recipes</span></div>
+                    <div className="stat-item-marquee">50k <span className="highlight">Cooks</span></div>
+                    <div className="stat-item-marquee">4.9 <span className="highlight">Rating</span></div>
+                    <div className="stat-item-marquee">100+ <span className="highlight">Tips</span></div>
+
+                    {/* Set 3 */}
+                    <div className="stat-item-marquee">1k+ <span className="highlight">Recipes</span></div>
+                    <div className="stat-item-marquee">50k <span className="highlight">Cooks</span></div>
+                    <div className="stat-item-marquee">4.9 <span className="highlight">Rating</span></div>
+                    <div className="stat-item-marquee">100+ <span className="highlight">Tips</span></div>
+
+                    {/* Set 4 */}
+                    <div className="stat-item-marquee">1k+ <span className="highlight">Recipes</span></div>
+                    <div className="stat-item-marquee">50k <span className="highlight">Cooks</span></div>
+                    <div className="stat-item-marquee">4.9 <span className="highlight">Rating</span></div>
+                    <div className="stat-item-marquee">100+ <span className="highlight">Tips</span></div>
+                </div>
+            </div>
+
+            {/* 3D Coverflow Carousel Section (PRESERVED) */}
             <section className="section-full-width">
                 <div className="section-header-center">
                     <span className="script-sub">Constant Inspiration</span>
@@ -84,6 +122,9 @@ const Home = () => {
                             loop={true}
                             slidesPerView={'auto'}
                             slideToClickedSlide={true}
+                            allowTouchMove={true}
+                            simulateTouch={true}
+                            touchRatio={1}
                             breakpoints={{
                                 768: {
                                     slidesPerView: 3,
@@ -103,13 +144,17 @@ const Home = () => {
                                 delay: 2500,
                                 disableOnInteraction: false,
                             }}
+                            onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+                            onTouchStart={() => setIsDragging(false)}
+                            onTouchMove={() => setIsDragging(true)}
+                            onTouchEnd={() => setTimeout(() => setIsDragging(false), 50)}
                             modules={[EffectCoverflow, Pagination, Autoplay]}
                             className="mySwiper"
                         >
                             {randomRecipes.map((recipe, index) => (
                                 <SwiperSlide key={`${recipe._id}-${index}`} className="swiper-slide-custom">
                                     <div
-                                        onClick={() => handleCardClick(recipe._id)}
+                                        onClick={() => handleCardClick(recipe._id, index)}
                                         className="marquee-card-premium cursor-pointer"
                                         role="button"
                                         tabIndex={0}
@@ -117,9 +162,6 @@ const Home = () => {
                                         <div className="premium-img-wrapper">
                                             <img src={recipe.image} alt={recipe.title} />
                                             <div className="premium-overlay">
-                                                <div className="overlay-content">
-                                                    <span className="view-recipe-btn">View Recipe</span>
-                                                </div>
                                             </div>
                                         </div>
                                         <div className="premium-card-info">
@@ -137,6 +179,22 @@ const Home = () => {
                             ))}
                         </Swiper>
                     )}
+                </div>
+            </section>
+
+            {/* NEW: Categories Section */}
+            <section className="home-categories">
+                <div className="section-header-center">
+                    <span className="script-sub">What are you craving?</span>
+                    <h2 className="section-title" style={{ color: '#1a1a1a' }}>Curated Collections</h2>
+                </div>
+                <div className="cat-pills-container">
+                    <Link to="/recipes?category=breakfast" className="cat-pill">🥞 Breakfast</Link>
+                    <Link to="/recipes?category=vegan" className="cat-pill">🌿 Vegan Power</Link>
+                    <Link to="/recipes?category=comfort" className="cat-pill">🧀 Comfort Food</Link>
+                    <Link to="/recipes?category=dessert" className="cat-pill">🍫 Guilty Pleasures</Link>
+                    <Link to="/recipes?category=quick" className="cat-pill">⚡ 30-Min Meals</Link>
+                    <Link to="/lifestyle" className="cat-pill">🧘‍♀️ Healthy Living</Link>
                 </div>
             </section>
 
@@ -179,6 +237,8 @@ const Home = () => {
                     </div>
                 </div>
             </section>
+
+            <Footer />
         </div>
     );
 };

@@ -1,6 +1,6 @@
 .profile-container {
     min-height: 80vh;
-    padding: 10rem 2rem 2rem;
+    padding: 6rem 2rem 2rem;
     max-width: 1400px;
     margin: 0 auto;
 }
@@ -453,4 +453,151 @@
         grid-template-columns: 1fr;
         gap: 1.5rem;
     }
+}
+
+/* ========== DARK MODE STYLES FOR PROFILE PAGE ========== */
+
+.dark-mode .profile-container {
+    background-color: #1a1a1a;
+}
+
+.dark-mode .profile-info-card {
+    background: rgba(26, 26, 26, 0.95);
+    border-color: #3d3d3d;
+}
+
+.dark-mode .profile-name {
+    color: #e8e8e8;
+}
+
+.dark-mode .profile-email {
+    color: #a0a0a0;
+}
+
+.dark-mode .stat-number {
+    color: #e8e8e8;
+}
+
+.dark-mode .stat-label {
+    color: #a0a0a0;
+}
+
+.dark-mode .password-button {
+    background-color: #3d3d3d;
+}
+
+.dark-mode .password-button:hover {
+    background-color: #4d4d4d;
+}
+
+.dark-mode .logout-button {
+    background-color: #e8e8e8;
+    color: #1a1a1a;
+}
+
+.dark-mode .logout-button:hover {
+    background-color: #d4d4d4;
+}
+
+.dark-mode .modal-content {
+    background: #2d2d2d;
+    border-color: #3d3d3d;
+}
+
+.dark-mode .modal-header {
+    border-bottom-color: #3d3d3d;
+}
+
+.dark-mode .modal-header h2 {
+    color: #e8e8e8;
+}
+
+.dark-mode .modal-close {
+    color: #a0a0a0;
+}
+
+.dark-mode .modal-close:hover {
+    color: #e8e8e8;
+}
+
+.dark-mode .form-group label {
+    color: #e8e8e8;
+}
+
+.dark-mode .form-group input {
+    background: #1a1a1a;
+    border-color: #3d3d3d;
+    color: #e8e8e8;
+}
+
+.dark-mode .form-group input:focus {
+    border-color: #d4a373;
+    box-shadow: 0 0 0 3px rgba(212, 163, 115, 0.2);
+}
+
+.dark-mode .form-group input:disabled {
+    background-color: #2d2d2d;
+}
+
+.dark-mode .form-hint {
+    color: #a0a0a0;
+}
+
+.dark-mode .password-form .error-message {
+    background-color: #3d1a1a;
+    color: #ff6b6b;
+    border-left-color: #ff6b6b;
+}
+
+.dark-mode .password-form .success-message {
+    background-color: #1a3d1a;
+    color: #4caf50;
+    border-left-color: #4caf50;
+}
+
+.dark-mode .submit-button {
+    background-color: #e8e8e8;
+    color: #1a1a1a;
+}
+
+.dark-mode .submit-button:hover:not(:disabled) {
+    background-color: #d4d4d4;
+}
+
+.dark-mode .submit-button:disabled {
+    background-color: #3d3d3d;
+    color: #666;
+}
+
+.dark-mode .tabs-header {
+    border-bottom-color: #3d3d3d;
+}
+
+.dark-mode .tab-btn {
+    color: #666;
+}
+
+.dark-mode .tab-btn:hover {
+    color: #a0a0a0;
+}
+
+.dark-mode .tab-btn.active {
+    color: #e8e8e8;
+}
+
+.dark-mode .tab-btn.active::after {
+    background-color: #e8e8e8;
+}
+
+.dark-mode .recipes-grid::-webkit-scrollbar-track {
+    background: #2d2d2d;
+}
+
+.dark-mode .recipes-grid::-webkit-scrollbar-thumb {
+    background: #3d3d3d;
+    border-color: #2d2d2d;
+}
+
+.dark-mode .recipes-grid::-webkit-scrollbar-thumb:hover {
+    background: #4d4d4d;
 }

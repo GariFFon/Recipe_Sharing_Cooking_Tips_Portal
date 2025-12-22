@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
 import { FiMenu, FiX } from "react-icons/fi";
 import "./FloatingNavbar.css";
 
@@ -53,6 +54,7 @@ const SlideTabs = () => {
         opacity: 0,
     });
     const { user } = useAuth();
+    const { isDarkMode, toggleTheme } = useTheme();
     const location = useLocation();
 
     // Store refs to tab elements
@@ -76,41 +78,63 @@ const SlideTabs = () => {
     useEffect(() => {
         // Map current path to tab key
         let currentPath = location.pathname;
-        if (currentPath === '/login' && user) currentPath = '/profile';
-
         updatePositionToTab(currentPath);
     }, [location.pathname, user]);
 
     return (
-        <ul
-            onMouseLeave={() => {
-                // Revert to active tab on mouse leave
-                let currentPath = location.pathname;
-                if (currentPath === '/login' && user) currentPath = '/profile';
+        <>
+            <ul
+                onMouseLeave={() => {
+                    // Revert to active tab on mouse leave
+                    let currentPath = location.pathname;
 
-                const el = tabsRef.current[currentPath];
-                if (el) {
-                    updatePositionToTab(currentPath);
-                } else {
-                    setPosition((pv) => ({ ...pv, opacity: 0 }));
-                }
-            }}
-            className="slide-tabs"
-        >
-            <Tab setPosition={setPosition} to="/" tabsRef={tabsRef}>Home</Tab>
-            <Tab setPosition={setPosition} to="/recipes" tabsRef={tabsRef}>Recipes</Tab>
-            <Tab setPosition={setPosition} to="/lifestyle" tabsRef={tabsRef}>Lifestyle</Tab>
-            <Tab setPosition={setPosition} to="/about" tabsRef={tabsRef}>About</Tab>
-            {user ? (
-                <Tab setPosition={setPosition} to="/profile" tabsRef={tabsRef}>
-                    {user.name ? user.name.split(' ')[0] : 'Profile'}
-                </Tab>
-            ) : (
-                <Tab setPosition={setPosition} to="/login" tabsRef={tabsRef}>Login</Tab>
-            )}
+                    const el = tabsRef.current[currentPath];
+                    if (el) {
+                        updatePositionToTab(currentPath);
+                    } else {
+                        setPosition((pv) => ({ ...pv, opacity: 0 }));
+                    }
+                }}
+                className="slide-tabs"
+            >
+                <Tab setPosition={setPosition} to="/" tabsRef={tabsRef}>Home</Tab>
+                <Tab setPosition={setPosition} to="/recipes" tabsRef={tabsRef}>Recipes</Tab>
+                <Tab setPosition={setPosition} to="/lifestyle" tabsRef={tabsRef}>Lifestyle</Tab>
+                <Tab setPosition={setPosition} to="/about" tabsRef={tabsRef}>About</Tab>
+                <Tab setPosition={setPosition} to="/team" tabsRef={tabsRef}>Team</Tab>
 
-            <Cursor position={position} />
-        </ul>
+                <Cursor position={position} />
+            </ul>
+
+            {/* Auth Buttons on Right */}
+            <div className="nav-auth-buttons">
+                {/* Dark Mode Toggle */}
+                <button
+                    onClick={toggleTheme}
+                    className={`theme-toggle-fancy ${isDarkMode ? 'dark' : 'light'}`}
+                    aria-label="Toggle dark mode"
+                >
+                    <div className="toggle-track">
+                        <div className="toggle-thumb">
+                            <span className="toggle-icon">
+                                {isDarkMode ? '☀️' : '🌙'}
+                            </span>
+                        </div>
+                    </div>
+                </button>
+
+                {user ? (
+                    <Link to="/profile" className="nav-profile-btn">
+                        {user.name ? user.name.split(' ')[0] : 'Profile'}
+                    </Link>
+                ) : (
+                    <>
+                        <Link to="/login" className="nav-login-btn">Login</Link>
+                        <Link to="/signup" className="nav-signup-btn">Sign Up</Link>
+                    </>
+                )}
+            </div>
+        </>
     );
 };
 
@@ -184,6 +208,7 @@ const MobileMenu = ({ onClose }) => {
         { path: "/recipes", label: "Recipes" },
         { path: "/lifestyle", label: "Lifestyle" },
         { path: "/about", label: "About" },
+        { path: "/team", label: "Team" },
         { path: user ? "/profile" : "/login", label: user ? "Profile" : "Login" }
     ];
 

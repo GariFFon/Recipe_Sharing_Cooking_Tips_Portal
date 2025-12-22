@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Recipes from './pages/Recipes';
@@ -14,27 +15,32 @@ import ComingSoon from './pages/ComingSoon';
 import AuthCallback from './pages/AuthCallback';
 import Lifestyle from './pages/Lifestyle';
 
+import ScrollToTop from './components/ScrollToTop';
+
 function App() {
   return (
     <Router>
-      <AuthProvider>
-        <div className="app">
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/recipes" element={<Recipes />} />
-            <Route path="/add" element={<AddRecipe />} />
-            <Route path="/recipes/:id" element={<RecipeDetails />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/lifestyle" element={<Lifestyle />} />
-            <Route path="/coming-soon" element={<ComingSoon />} />
-            <Route path="/auth/callback" element={<AuthCallback />} />
-          </Routes>
-        </div>
-      </AuthProvider>
+      <ScrollToTop />
+      <ThemeProvider>
+        <AuthProvider>
+          <div className="app">
+            <Navbar />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/recipes" element={<Recipes />} />
+              <Route path="/add" element={<AddRecipe />} />
+              <Route path="/recipes/:id" element={<RecipeDetails />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/lifestyle" element={<Lifestyle />} />
+              <Route path="/coming-soon" element={<ComingSoon />} />
+              <Route path="/auth/callback" element={<AuthCallback />} />
+            </Routes>
+          </div>
+        </AuthProvider>
+      </ThemeProvider>
     </Router>
   );
 }

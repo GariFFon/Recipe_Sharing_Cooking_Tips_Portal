@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import Footer from '../components/Footer';
 import './Lifestyle.css';
 
 const sections = [
@@ -63,17 +64,22 @@ const Lifestyle = () => {
             <header className="life-hero-fullscreen">
                 <div className="life-hero-content">
                     <h1 className="life-mega-title">
-                        Living <br /> <em>Intentionally</em>
+                        <span>Living</span>
+                        <em>Intentionally</em>
                     </h1>
-                    <div className="scroll-indicator">
-                        <span className="scroll-text">SCROLL</span>
-                        <div className="mouse-icon">
-                            <div className="wheel"></div>
-                        </div>
-                        <div className="scroll-line"></div>
-                    </div>
                 </div>
             </header>
+
+            {/* Standalone Scroll Indicator Section */}
+            <div className="scroll-indicator-section">
+                <div className="scroll-indicator">
+                    <span className="scroll-text">SCROLL</span>
+                    <div className="mouse-icon">
+                        <div className="wheel"></div>
+                    </div>
+                    <div className="scroll-line"></div>
+                </div>
+            </div>
 
             <div className="life-content-wrapper">
                 {sections.map(section => (
@@ -102,20 +108,8 @@ const Lifestyle = () => {
                 </div>
             </section>
 
-            <section className="life-footer-simple">
-                <div className="container">
-                    <h3 className="footer-heading">Continue the Journey</h3>
-                    <div className="footer-links">
-                        <span className="footer-link">Wellness</span>
-                        <span className="separator">/</span>
-                        <span className="footer-link">Design</span>
-                        <span className="separator">/</span>
-                        <span className="footer-link">Travel</span>
-                        <span className="separator">/</span>
-                        <span className="footer-link">Shop</span>
-                    </div>
-                </div>
-            </section>
+            {/* Removed Simple Footer Section as requested */}
+            <Footer />
         </div>
     );
 };

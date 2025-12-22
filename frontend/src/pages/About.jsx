@@ -8,6 +8,7 @@ import {
 } from 'framer-motion';
 import { FiArrowRight, FiMapPin, FiCoffee } from 'react-icons/fi'; // Swapped Icon
 import JourneyParallax from '../components/TextParallaxContent';
+import Footer from '../components/Footer';
 import './About.css';
 
 const SECTION_HEIGHT = 1500;
@@ -27,6 +28,8 @@ export const About = () => {
                 <div style={{ marginTop: '50vh', position: 'relative', zIndex: 10 }}>
                     <JourneyParallax />
                 </div>
+
+                <Footer />
             </ReactLenis >
         </div >
     );

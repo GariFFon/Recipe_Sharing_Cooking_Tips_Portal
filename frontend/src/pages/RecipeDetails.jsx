@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import Footer from '../components/Footer';
 import './RecipeDetails.css';
 
 const RecipeDetails = () => {
@@ -109,7 +110,7 @@ const RecipeDetails = () => {
             </div>
 
             <div className="details-content">
-                <p className="details-desc">{recipe.description}</p>
+                {/* Description removed as it duplicates instructions */}
 
                 <div className="recipe-grid">
                     <div className="ingredients-section sticky-section">
@@ -154,7 +155,7 @@ const RecipeDetails = () => {
                                 <div key={index} className="step">
                                     <span className="step-num">{index + 1}</span>
                                     <div className="step-content">
-                                        <p>{inst}</p>
+                                        <p>{inst.replace(/^\d+\.\s*|^Step\s+\d+[:.]\s*/i, '')}</p>
                                     </div>
                                 </div>
                             ))}
@@ -169,6 +170,8 @@ const RecipeDetails = () => {
                     </div>
                 )}
             </div>
+
+            <Footer />
         </div>
     );
 };

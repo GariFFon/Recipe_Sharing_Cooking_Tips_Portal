@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import RecipeCard from '../components/RecipeCard';
 import SearchModal from '../components/SearchModal';
+import Footer from '../components/Footer';
 import './Recipes.css';
 
 const Recipes = () => {
@@ -22,7 +23,6 @@ const Recipes = () => {
     const fetchRecipes = async () => {
         try {
             setLoading(true);
-            window.scrollTo({ top: 400, behavior: 'smooth' });
 
             const response = await fetch(`http://localhost:5001/api/recipes?page=${currentPage}&limit=12&type=${filterType}`);
             const data = await response.json();
@@ -139,18 +139,18 @@ const Recipes = () => {
                     )}
                 </div>
 
-                {loading ? (
-                    <div className="loading">Loading...</div>
-                ) : (
-                    <>
-                        <div className="grid-recipes">
-                            {filteredRecipes.map(recipe => (
-                                <RecipeCard key={recipe._id} recipe={recipe} />
-                            ))}
-                        </div>
+                <div className="grid-recipes">
+                    {loading ? (
+                        <div className="loading">Loading...</div>
+                    ) : (
+                        filteredRecipes.map(recipe => (
+                            <RecipeCard key={recipe._id} recipe={recipe} />
+                        ))
+                    )}
+                </div>
 
-                        {/* Pagination UI */}
-                        {!searchTerm && totalPages > 1 && (
+                {/* Pagination UI */}
+                {!searchTerm && !loading && totalPages > 1 && (
                             <div className="pagination-container">
                                 <button
                                     className="page-nav-btn"
@@ -214,9 +214,6 @@ const Recipes = () => {
                                 </button>
 
                             </div>
-                        )}
-
-                    </>
                 )}
 
                 {!loading && filteredRecipes.length === 0 && (
@@ -226,6 +223,8 @@ const Recipes = () => {
                     </div>
                 )}
             </section>
+
+            <Footer />
         </div>
     );
 };
