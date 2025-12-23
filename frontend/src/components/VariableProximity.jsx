@@ -100,10 +100,35 @@ const VariableProximity = forwardRef((props, ref) => {
         }
     };
 
+    const letterPositions = useRef([]);
+
+    // Cache letter positions to avoid layout thrashing
+    useEffect(() => {
+        const calculatePositions = () => {
+            if (!containerRef?.current) return;
+            const containerRect = containerRef.current.getBoundingClientRect();
+
+            letterPositions.current = letterRefs.current.map(letterRef => {
+                if (!letterRef) return null;
+                const rect = letterRef.getBoundingClientRect();
+                return {
+                    x: rect.left + rect.width / 2 - containerRect.left,
+                    y: rect.top + rect.height / 2 - containerRect.top
+                };
+            });
+        };
+
+        calculatePositions();
+        window.addEventListener('resize', calculatePositions);
+        return () => window.removeEventListener('resize', calculatePositions);
+    }, [containerRef, label]);
+
     useAnimationFrame(() => {
         if (!containerRef?.current) return;
-        const containerRect = containerRef.current.getBoundingClientRect();
+        // Use cached positions instead of reading DOM on every frame
         const { x, y } = mousePositionRef.current;
+
+        // Optimization: Don't update if mouse hasn't moved
         if (lastPositionRef.current.x === x && lastPositionRef.current.y === y) {
             return;
         }
@@ -112,19 +137,21 @@ const VariableProximity = forwardRef((props, ref) => {
         letterRefs.current.forEach((letterRef, index) => {
             if (!letterRef) return;
 
-            const rect = letterRef.getBoundingClientRect();
-            const letterCenterX = rect.left + rect.width / 2 - containerRect.left;
-            const letterCenterY = rect.top + rect.height / 2 - containerRect.top;
+            const position = letterPositions.current[index];
+            if (!position) return;
 
             const distance = calculateDistance(
-                mousePositionRef.current.x,
-                mousePositionRef.current.y,
-                letterCenterX,
-                letterCenterY
+                x,
+                y,
+                position.x,
+                position.y
             );
 
             if (distance >= radius) {
-                letterRef.style.fontVariationSettings = fromFontVariationSettings;
+                // Only update if not already set to base settings (optimization)
+                if (letterRef.style.fontVariationSettings !== fromFontVariationSettings) {
+                    letterRef.style.fontVariationSettings = fromFontVariationSettings;
+                }
                 return;
             }
 

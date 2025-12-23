@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
-import Navbar from './components/Navbar';
+import FloatingNavbar from './components/FloatingNavbar';
 import Home from './pages/Home';
 import Recipes from './pages/Recipes';
 import AddRecipe from './pages/AddRecipe';
@@ -32,7 +32,7 @@ const MainLayout = () => {
   return (
     <NavigationGuard>
       <div className="app">
-        {showNavbar && <Navbar />}
+        {showNavbar && <FloatingNavbar />}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/recipes" element={<Recipes />} />

@@ -143,7 +143,9 @@ const DraggableRecommendations = ({ recommendations = [] }) => {
                 animate={{
                     // Mobile: auto height / calculated width. Desktop: strict dimensions
                     height: isMobile ? (isExpanded ? 'auto' : 65) : (isExpanded ? 480 : 66),
-                    width: isMobile ? 'calc(100vw - 32px)' : (isExpanded ? 380 : 250)
+                    width: isMobile ? 'calc(100vw - 32px)' : (isExpanded ? 380 : 250),
+                    borderRadius: 24, // Consistent border radius
+                    boxShadow: isExpanded ? "0px 20px 50px rgba(0,0,0,0.15)" : "0px 8px 20px rgba(0,0,0,0.08)"
                 }}
                 transition={{
                     type: 'spring',
