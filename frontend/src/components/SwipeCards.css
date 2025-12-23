@@ -185,22 +185,34 @@
         font-size: 2rem;
     }
 
+    .swipe-section-header {
+        margin-bottom: 4rem;
+        /* Keep flexible spacing */
+    }
+
     .swipe-cards-wrapper {
-        gap: 1rem;
+        gap: 2rem;
+        /* Keep gap */
+        padding: 3rem 0;
+        /* Add even MORE vertical padding to separate from other sections */
     }
 
     .swipe-cards-container {
         height: 400px;
-        max-width: 240px;
+        /* Revert to original container height (was 450) */
+        max-width: 260px;
+        /* Slightly wider than original (240) but smaller than last try (280) */
     }
 
     .swipe-card {
-        height: 320px;
-        width: 240px;
-    }
-
-    .swipe-hint-text {
-        font-size: 1rem;
+        height: 380px;
+        /* Slightly taller to help coverage */
+        width: 100%;
+        /* Fill container width */
+        object-fit: cover;
+        /* ESSENTIAL: Zoom/crop image to fill vertical space without black bars */
+        min-height: 100%;
+        /* Force full height usage */
     }
 
     .swipe-hint-subtext {

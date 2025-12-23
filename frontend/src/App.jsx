@@ -18,29 +18,47 @@ import Lifestyle from './pages/Lifestyle';
 
 import ScrollToTop from './components/ScrollToTop';
 
+import { useAuth } from './context/AuthContext';
+import NavigationGuard from './components/NavigationGuard';
+
+// Helper component to access AuthContext for conditional rendering
+const MainLayout = () => {
+  const { user, loading } = useAuth();
+
+  // Don't show navbar if user is logged in but hasn't set password
+  // Also wait for loading to finish to prevent flickering
+  const showNavbar = !loading && (!user || user.passwordSet !== false);
+
+  return (
+    <NavigationGuard>
+      <div className="app">
+        {showNavbar && <Navbar />}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/recipes" element={<Recipes />} />
+          <Route path="/add" element={<AddRecipe />} />
+          <Route path="/recipes/:id" element={<RecipeDetails />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/lifestyle" element={<Lifestyle />} />
+          <Route path="/coming-soon" element={<ComingSoon />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
+          <Route path="/set-password" element={<SetPassword />} />
+        </Routes>
+      </div>
+    </NavigationGuard>
+  );
+};
+
 function App() {
   return (
     <Router>
       <ScrollToTop />
       <ThemeProvider>
         <AuthProvider>
-          <div className="app">
-            <Navbar />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/recipes" element={<Recipes />} />
-              <Route path="/add" element={<AddRecipe />} />
-              <Route path="/recipes/:id" element={<RecipeDetails />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/lifestyle" element={<Lifestyle />} />
-              <Route path="/coming-soon" element={<ComingSoon />} />
-              <Route path="/auth/callback" element={<AuthCallback />} />
-              <Route path="/set-password" element={<SetPassword />} />
-            </Routes>
-          </div>
+          <MainLayout />
         </AuthProvider>
       </ThemeProvider>
     </Router>

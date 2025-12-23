@@ -3,6 +3,7 @@ import { motion, useMotionValue, AnimatePresence, useDragControls } from 'framer
 import { FiChevronUp, FiChevronDown, FiMove, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import './DraggableRecommendations.css';
+import { API_BASE_URL } from '../config';
 
 const DraggableRecommendations = ({ recommendations = [] }) => {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -14,12 +15,24 @@ const DraggableRecommendations = ({ recommendations = [] }) => {
 
     const [fetchedRecommendations, setFetchedRecommendations] = useState([]);
 
+    // Check for mobile device to disable drag
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
     // Fetch random recipes if no recommendations provided
     useEffect(() => {
         if (recommendations.length === 0 && fetchedRecommendations.length === 0) {
             const fetchRandomRecipes = async () => {
                 try {
-                    const response = await fetch('http://localhost:5001/api/recipes/random');
+                    const response = await fetch(`${API_BASE_URL}/recipes/random`);
                     if (response.ok) {
                         const data = await response.json();
                         if (Array.isArray(data) && data.length > 0) {
@@ -115,40 +128,42 @@ const DraggableRecommendations = ({ recommendations = [] }) => {
 
     return (
         <>
-            {/* Drag constraints container */}
-            <div ref={constraintsRef} className="drag-constraints" />
+            {/* Drag constraints container (only for desktop) */}
+            {!isMobile && <div ref={constraintsRef} className="drag-constraints" />}
 
             <motion.div
-                className={`draggable-recommendations ${isExpanded ? 'expanded' : 'collapsed'}`}
-                drag
-                dragListener={false}
+                className={`draggable-recommendations ${isExpanded ? 'expanded' : 'collapsed'} ${isMobile ? 'mobile-mode' : ''}`}
+                drag={true} // Enable drag everywhere
+                dragListener={true}
                 dragControls={dragControls}
-                dragMomentum={false}
-                dragConstraints={constraintsRef}
+                dragMomentum={true}
+                dragConstraints={isMobile ? undefined : constraintsRef} // Free drag on mobile
                 dragElastic={0.1}
                 onDragEnd={handleDragEndRecommendations}
                 animate={{
-                    height: isExpanded ? 480 : 66,
-                    width: isExpanded ? 380 : 250
+                    // Mobile: auto height / calculated width. Desktop: strict dimensions
+                    height: isMobile ? (isExpanded ? 'auto' : 65) : (isExpanded ? 480 : 66),
+                    width: isMobile ? 'calc(100vw - 32px)' : (isExpanded ? 380 : 250)
                 }}
                 transition={{
                     type: 'spring',
                     stiffness: 300,
                     damping: 30
                 }}
-                style={{ y }}
+                // Remove style={{ y }} on mobile so it flows naturally
+                style={{ y }} // Apply motion value (x is handled automatically by drag)
             >
                 {/* Drag Handle / Tab */}
                 <div
                     className="drag-handle"
-                    onPointerDown={(e) => dragControls.start(e)}
+                    onPointerDown={(e) => !isMobile && dragControls.start(e)}
                     onClick={(e) => {
-                        // Only toggle if it wasn't a drag operation (simple check)
-                        if (!isExpanded) toggleExpand();
+                        // Toggle if not dragging (or always on mobile)
+                        if (isMobile || !isExpanded) toggleExpand();
                     }}
-                    style={{ touchAction: "none" }}
+                    style={{ touchAction: isMobile ? "auto" : "none" }}
                 >
-                    <span className="drag-text">CHEF'S PICKS</span>
+                    <span className="drag-text">CHEF'S CHOICE</span>
                     {isExpanded && (
                         <button className="collapse-btn-inline" onClick={(e) => {
                             e.stopPropagation();

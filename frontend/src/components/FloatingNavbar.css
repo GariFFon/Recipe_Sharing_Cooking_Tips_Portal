@@ -1,24 +1,29 @@
 /* FloatingNavbar.css */
 .floating-nav-container {
     padding: 2rem 5%;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    /* Left, Center, Right */
+    align-items: center;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 2100;
-    /* Increased to sit above MobileMenu (2000) */
     pointer-events: none;
+    box-sizing: border-box;
 }
 
 /* --- Logo Styling --- */
 /* --- Logo Styling --- */
 .nav-logo {
-    position: absolute;
-    left: 5%;
-    top: 2rem;
+    position: relative;
+    /* No longer absolute */
+    left: auto;
+    top: auto;
+    justify-self: start;
+    /* Grid alignment */
+
     display: flex;
     align-items: center;
     gap: 0.4rem;
@@ -136,17 +141,7 @@
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-/* --- Right Side Actions --- */
-.nav-actions {
-    position: fixed;
-    right: 5%;
-    top: 2rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    pointer-events: auto;
-    z-index: 2050;
-}
+
 
 /* Children are now relative to flex container */
 .nav-auth-buttons {
@@ -256,15 +251,40 @@
 }
 
 
-/* --- Mobile Toggle Button --- */
+/* --- Slide Tabs (Desktop) --- */
 .desktop-menu {
+    justify-self: center;
+    /* Grid alignment */
     display: block;
     pointer-events: auto;
+}
+
+/* --- Right Side Group (Grid Item) --- */
+.nav-right-group {
+    justify-self: end;
+    /* Grid alignment */
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    pointer-events: auto;
+}
+
+/* --- Actions Container (Inside Right Group) --- */
+.nav-actions {
+    position: relative;
+    /* No longer fixed */
+    right: auto;
+    top: auto;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    z-index: auto;
 }
 
 /* --- Animated Mobile Toggle --- */
 .mobile-toggle-btn {
     display: none;
+    /* Hidden on Desktop */
     pointer-events: auto;
 
     /* Glassmorphic Effect */
@@ -275,11 +295,12 @@
 
     padding: 0;
     cursor: pointer;
-    position: fixed;
-    right: 5%;
-    top: 2rem;
-    /* Aligned with Logo top: 2rem */
-    z-index: 2100;
+
+    position: relative;
+    /* Part of the flow now */
+    right: auto;
+    top: auto;
+    z-index: 10;
     width: 54px;
     /* Fixed Width matching 54px height */
     height: 54px;
@@ -592,58 +613,62 @@
 /* Responsive Adjustments */
 @media (max-width: 1024px) {
     .floating-nav-container {
+        /* Switch from Grid to Flex for simpler mobile layout */
+        display: flex;
         justify-content: space-between;
         align-items: center;
-        flex-direction: row;
-        padding-top: 2rem;
+        grid-template-columns: none;
+        padding-right: 5%;
+        /* Restore normal padding */
     }
 
     .desktop-menu {
-        display: none;
+        display: none !important;
+        /* Hide tabs */
     }
 
+    .mobile-toggle-btn {
+        display: flex;
+        /* Show toggle */
+    }
+
+    /* Hide Desktop Auth buttons on Tablet/Mobile to clutter */
     .nav-auth-buttons {
         display: none;
     }
 
-    /* Move Actions Container to left of Hamburger on Mobile */
+    /* Ensure right group aligns correctly */
+    .nav-right-group {
+        justify-self: auto;
+    }
+
+    /* Reset specific styles just in case */
     .nav-actions {
-        position: fixed !important;
-        right: 100px !important;
-        top: 2rem !important;
-        z-index: 2200 !important;
         display: flex !important;
-        opacity: 1 !important;
-        visibility: visible !important;
+        position: relative !important;
+        top: 0 !important;
+        right: 0 !important;
     }
 
     /* Enhanced Mobile Logo */
     .nav-logo {
-        position: relative;
-        left: auto;
-        top: auto;
         margin-bottom: 0;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1),
             0 2px 8px rgba(0, 0, 0, 0.06),
             inset 0 1px 2px rgba(255, 255, 255, 0.8);
     }
 
-    /* Enhanced Mobile Theme Toggle */
-    .theme-toggle {
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12),
-            0 2px 10px rgba(0, 0, 0, 0.08),
-            inset 0 1px 2px rgba(255, 255, 255, 0.6) !important;
+    /* Reduce logo size on mobile */
+    .nav-logo {
+        padding: 0 0.8rem;
     }
 
-    /* Enhanced Mobile Menu Button */
-    .mobile-toggle-btn {
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12),
-            0 2px 10px rgba(0, 0, 0, 0.08),
-            inset 0 1px 2px rgba(255, 255, 255, 0.6);
+    .logo-text {
+        font-size: 1rem;
     }
 
-    .mobile-toggle-btn:active {
-        transform: scale(0.95);
+    .logo-accent {
+        font-size: 1.3rem;
     }
 }
 

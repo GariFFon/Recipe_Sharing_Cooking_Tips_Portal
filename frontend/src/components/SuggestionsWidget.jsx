@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './SuggestionsWidget.css';
+import { API_BASE_URL } from '../config';
 
 const SuggestionsWidget = () => {
     const [suggestions, setSuggestions] = useState([]);
@@ -24,7 +25,7 @@ const SuggestionsWidget = () => {
 
     const fetchSuggestions = async () => {
         try {
-            const response = await fetch('http://localhost:5001/api/recipes/random');
+            const response = await fetch(`${API_BASE_URL}/recipes/random`);
             const data = await response.json();
 
             if (response.ok) {

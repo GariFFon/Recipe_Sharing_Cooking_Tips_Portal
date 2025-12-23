@@ -704,86 +704,215 @@
 
 @media (max-width: 768px) {
     .profile-container {
-        padding: 10rem 1rem 1rem;
+        padding: 8rem 1rem 8rem;
+        /* Increased top for navbar, bottom for fixed widget overlap */
+    }
+
+    /* Reset 3D effects for cleaner mobile view */
+    .profile-banner {
+        margin: 0 0 -50px 0;
+        /* Reduced overlap */
+        width: 100%;
+        border-width: 2px;
+        transform: none !important;
+        /* Force disable rotation */
+        box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.15);
+        height: 180px;
+        /* Smaller banner for mobile */
     }
 
     .profile-info-card {
         flex-direction: column;
         text-align: center;
-        padding: 2rem;
-        transform: rotate(0deg);
+        padding: 2rem 1.5rem;
+        margin: 0 0 2rem;
+        transform: none !important;
+        /* Force disable rotation */
+        box-shadow: 6px 6px 0 #1a1a1a;
+        border-width: 2px;
+        gap: 1.5rem;
+        z-index: 20;
+        /* Ensure it stays above banner */
+    }
+
+    .profile-header-content {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+        width: 100%;
+    }
+
+    .profile-avatar-wrapper {
+        margin-top: -60px;
+        /* Pull avatar up into banner area */
     }
 
     .profile-avatar {
-        width: 100px;
-        height: 100px;
-        font-size: 2.5rem;
+        width: 120px;
+        height: 120px;
+        border-width: 3px;
+        box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.15);
+    }
+
+    .profile-details {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profile-name-row {
+        justify-content: center;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
     }
 
     .profile-name {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
+        margin: 0;
+        text-align: center;
     }
 
+    .pro-badge {
+        font-size: 0.6rem;
+        padding: 0.3rem 0.8rem;
+        transform: rotate(0deg);
+        /* Reset rotation */
+    }
+
+    .profile-email {
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Stack stats vertically or in a unified row */
     .profile-stats {
+        flex-direction: row;
         justify-content: center;
+        width: 100%;
         gap: 1rem;
+        margin-top: 1rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        /* Separator */
+        padding-top: 1.5rem;
     }
 
     .stat-item {
-        transform: rotate(0deg) !important;
-        min-width: 120px;
+        min-width: auto;
+        flex: 1;
+    }
+
+    .stat-divider {
+        height: 30px;
+        /* Smaller dividers */
+    }
+
+    .stat-number {
+        font-size: 1.5rem;
     }
 
     .profile-actions {
         position: static;
-        margin-top: 1.5rem;
+        /* Stack naturally */
         width: 100%;
+        margin-top: 1rem;
+        flex-direction: column;
+        gap: 1rem;
     }
 
     .password-button,
     .logout-button {
         width: 100%;
+        justify-content: center;
+        /* Ensure text center */
+        padding: 1rem;
     }
 
     .tabs-header {
         flex-direction: column;
         gap: 1rem;
+        margin-bottom: 2rem;
     }
 
     .tab-btn {
         width: 100%;
-        padding: 0.8rem 1.5rem;
-        font-size: 1.1rem;
+        padding: 0.8rem;
+        font-size: 1rem;
     }
 
+    /* Modal Mobile Fixes */
     .modal-content {
-        width: 95%;
+        width: 90%;
         margin: 1rem;
+        max-height: 90vh;
+        overflow-y: auto;
+        /* Allow scrolling if keyboard pops up */
     }
 
-    .modal-header {
-        padding: 1rem 1.5rem;
-    }
-
-    .password-form {
-        padding: 1.5rem;
-    }
-
-    .add-recipe-link {
-        text-align: center;
-    }
-
-    .floating-recommendations {
-        width: calc(100% - 2rem);
-        left: 1rem;
-        right: 1rem;
-        bottom: 1rem;
-    }
-
+    /* Recipes Grid */
     .recipes-grid {
-        grid-template-columns: 1fr;
         gap: 1.5rem;
+        padding-bottom: 1rem;
     }
+
+    .add-new-card,
+    .recipes-grid>* {
+        min-width: 280px;
+        /* Slightly smaller cards */
+    }
+
+    /* Floating Widget: Static on Mobile */
+    .floating-recommendations {
+        position: static;
+        width: 100%;
+        margin-top: 3rem;
+        transform: none !important;
+        box-shadow: 4px 4px 0 #1a1a1a;
+        z-index: 1;
+    }
+
+    .floating-recommendations:hover {
+        transform: none;
+        box-shadow: 4px 4px 0 #1a1a1a;
+    }
+
+    .drag-handle {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        padding: 1rem;
+        cursor: pointer;
+        background: #1a1a1a;
+        color: #fff;
+    }
+
+    .drag-text {
+        font-size: 1rem;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+    }
+
+    .collapse-btn-inline {
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 1.2rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+    }
+
+    /* Ensure content is visible within the static container */
+    .recommendations-content {
+        position: relative;
+        width: 100%;
+    }
+
+    .carousel-container {
+        height: 380px;
+        /* Specific height for mobile carousel */
+    }
+
 }
 
 /* ========== DARK MODE STYLES FOR PROFILE PAGE ========== */

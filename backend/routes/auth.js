@@ -70,7 +70,9 @@ const normalizeEmail = (email) => {
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: 'http://localhost:5001/api/auth/google/callback'
+  callbackURL: 'http://localhost:5001/api/auth/google/callback',
+  userProfileURL: 'https://www.googleapis.com/oauth2/v3/userinfo',
+  proxy: true
 },
   async (accessToken, refreshToken, profile, done) => {
     try {
@@ -636,14 +638,20 @@ router.get('/google/callback',
     // Determine redirect based on password status
     const redirectTo = !req.user.passwordSet ? '/set-password' : '/';
 
+    // Dynamic frontend URL construction
+    const host = req.get('host'); // e.g., 192.168.1.5:5001 or localhost:5001
+    const frontendHost = host.replace('5001', '5173'); // Assume frontend is on 5173
+    const frontendBaseUrl = `http://${frontendHost}`;
+
     // Debug logging
     console.log('🔐 Google OAuth Callback Debug:');
     console.log('User:', req.user.email);
     console.log('passwordSet:', req.user.passwordSet);
     console.log('redirectTo:', redirectTo);
+    console.log('Redirecting to frontend:', frontendBaseUrl);
 
     // Redirect to frontend with token and redirectTo
-    res.redirect(`http://localhost:5173/auth/callback?token=${token}&redirectTo=${redirectTo}&user=${encodeURIComponent(JSON.stringify({
+    res.redirect(`${frontendBaseUrl}/auth/callback?token=${token}&redirectTo=${redirectTo}&user=${encodeURIComponent(JSON.stringify({
       id: req.user._id,
       name: req.user.name,
       email: req.user.email,

@@ -7,7 +7,7 @@ const { body, validationResult } = require('express-validator');
 
 const app = express();
 const PORT = process.env.PORT || 5001;
-
+// Force restart
 // Middleware
 app.use(express.json());
 app.use(cors());
@@ -228,4 +228,4 @@ app.post('/api/recipes', [
 });
 
 // Start Server
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, '0.0.0.0', () => console.log(`Server running on port ${PORT}`));

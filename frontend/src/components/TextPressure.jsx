@@ -109,10 +109,9 @@ const TextPressure = ({
     }, [chars.length, minFontSize, scale]);
 
     useEffect(() => {
-        const debouncedSetSize = debounce(setSize, 100);
-        debouncedSetSize();
-        window.addEventListener('resize', debouncedSetSize);
-        return () => window.removeEventListener('resize', debouncedSetSize);
+        setSize();
+        window.addEventListener('resize', setSize);
+        return () => window.removeEventListener('resize', setSize);
     }, [setSize]);
 
     useEffect(() => {

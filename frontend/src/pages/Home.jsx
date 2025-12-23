@@ -10,6 +10,7 @@ import SupremeCategory from '../components/SupremeCategory';
 
 import SupremeNewsletter from '../components/SupremeNewsletter';
 import OurStoryLink from '../components/OurStoryLink';
+import { API_BASE_URL } from '../config';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -21,6 +22,7 @@ import './Home.css';
 const Home = () => {
     const [randomRecipes, setRandomRecipes] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null); // New error state for debugging
     const [activeIndex, setActiveIndex] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
     const navigate = useNavigate();
@@ -29,12 +31,32 @@ const Home = () => {
     useEffect(() => {
         const fetchRandomRecipes = async () => {
             try {
-                const response = await fetch('http://localhost:5001/api/recipes/random');
+                setLoading(true);
+                setError(null);
+
+                // Add 10s timeout
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+                const response = await fetch(`${API_BASE_URL}/recipes/random`, {
+                    signal: controller.signal
+                });
+
+                clearTimeout(timeoutId);
+
+                if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+
                 const data = await response.json();
-                setRandomRecipes(data);
-                setLoading(false);
+
+                if (Array.isArray(data)) {
+                    setRandomRecipes(data);
+                } else {
+                    throw new Error('Data format error: Expected array');
+                }
             } catch (error) {
                 console.error('Error fetching random recipes:', error);
+                setError(error.message); // Set visible error
+            } finally {
                 setLoading(false);
             }
         };
@@ -131,7 +153,17 @@ const Home = () => {
 
                 <div className="carousel-container">
                     {loading ? (
-                        <div className="loading-spinner">Loading delicious ideas...</div>
+                        <div className="loading-spinner">
+                            Loading ideas... <br />
+                            <small style={{ fontSize: '0.6rem', color: '#666' }}>({API_BASE_URL})</small>
+                        </div>
+                    ) : error ? (
+                        <div className="loading-error" style={{ textAlign: 'center', padding: '2rem', color: 'red' }}>
+                            <p>Failed to load recipes.</p>
+                            <small>{error}</small>
+                            <br />
+                            <small>{API_BASE_URL}</small>
+                        </div>
                     ) : (
                         <Swiper
                             effect={'coverflow'}

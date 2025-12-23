@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
-//this file is used to mange authentication state across the app
-//Basically it provides login, logout functionalities and stores user info and token in localStorage
+import { API_BASE_URL } from '../config';
+
 const AuthContext = createContext();
 
 export const useAuth = () => {
@@ -17,17 +17,52 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Check if user is logged in on mount
-        const storedUser = localStorage.getItem('user');
-        const storedToken = localStorage.getItem('token');
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
+        // 1. Sync Init
+        try {
+            const storedUser = localStorage.getItem('user');
+            const storedToken = localStorage.getItem('token');
+            if (storedUser) setUser(JSON.parse(storedUser));
+            if (storedToken) setToken(storedToken);
+        } catch (error) {
+            console.error('Auth init error', error);
+            localStorage.clear();
+        } finally {
+            setLoading(false);
         }
-        if (storedToken) {
-            setToken(storedToken);
-        }
-        setLoading(false);
-    }, []);
+
+        // 2. Interval Check (Background Verification)
+        const checkSession = async () => {
+            const currentToken = localStorage.getItem('token');
+            if (!currentToken) return;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/verify`, {
+                    headers: { 'Authorization': `Bearer ${currentToken}` }
+                });
+
+                // If explicitly denied (401/404), logout.
+                // We do NOT check 200 OK here to avoid re-parsing user data constantly.
+                // We only care if the user is DELETED or token Invalid.
+                if (response.status === 404 || response.status === 401) {
+                    console.warn("Background check: User deleted or token expired. Logging out.");
+                    logout();
+                }
+            } catch (error) {
+                // Ignore network errors, etc.
+                console.error("Background check error", error);
+            }
+        };
+
+        const intervalId = setInterval(checkSession, 5000);
+
+        // Also run once after 2 seconds to catch immediate invalid sessions without blocking mount
+        const initialCheck = setTimeout(checkSession, 2000);
+
+        return () => {
+            clearInterval(intervalId);
+            clearTimeout(initialCheck);
+        };
+    }, []); // Removed logout dependency to avoid any re-subscription issues, logout is stable via useCallback anyway
 
     const login = useCallback((userData, authToken) => {
         localStorage.setItem('token', authToken);
@@ -36,6 +71,7 @@ export const AuthProvider = ({ children }) => {
         setToken(authToken);
     }, []);
 
+    // Defined BEFORE useEffect, but used inside it. Ref is stable.
     const logout = useCallback(() => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
@@ -44,10 +80,8 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const updateUser = useCallback((u) => {
-        console.log('🔄 Updating user in context:', u);
         setUser(u);
         localStorage.setItem('user', JSON.stringify(u));
-        console.log('✅ User saved to localStorage');
     }, []);
 
     const value = {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './SearchModal.css';
+import { API_BASE_URL } from '../config';
 
 const SearchModal = ({ isOpen, onClose }) => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -17,7 +18,7 @@ const SearchModal = ({ isOpen, onClose }) => {
                 inputRef.current?.focus();
             }, 100);
         }
-        
+
         // Reset state when modal opens
         if (isOpen) {
             setSearchQuery('');
@@ -33,7 +34,7 @@ const SearchModal = ({ isOpen, onClose }) => {
         } else {
             document.body.style.overflow = 'unset';
         }
-        
+
         return () => {
             document.body.style.overflow = 'unset';
         };
@@ -41,7 +42,7 @@ const SearchModal = ({ isOpen, onClose }) => {
 
     const performSearch = async () => {
         const query = searchQuery.trim();
-        
+
         if (query === '') {
             setSearchResults([]);
             setHasSearched(false);
@@ -52,7 +53,7 @@ const SearchModal = ({ isOpen, onClose }) => {
         setHasSearched(true);
 
         try {
-            const response = await fetch(`http://localhost:5001/api/recipes/search?q=${encodeURIComponent(query)}`);
+            const response = await fetch(`${API_BASE_URL}/recipes/search?q=${encodeURIComponent(query)}`);
             const data = await response.json();
             setSearchResults(data.recipes || []);
         } catch (error) {
@@ -96,8 +97,8 @@ const SearchModal = ({ isOpen, onClose }) => {
                         className="spotlight-search-input"
                     />
                     {searchQuery && !loading && (
-                        <button 
-                            className="spotlight-search-btn" 
+                        <button
+                            className="spotlight-search-btn"
                             onClick={performSearch}
                             aria-label="Search"
                         >
@@ -127,8 +128,8 @@ const SearchModal = ({ isOpen, onClose }) => {
                     {!loading && searchResults.length > 0 && (
                         <div className="spotlight-results-list">
                             {searchResults.map((recipe, index) => (
-                                <div 
-                                    key={recipe._id} 
+                                <div
+                                    key={recipe._id}
                                     className="spotlight-result-item"
                                     onClick={() => handleRecipeClick(recipe._id)}
                                 >

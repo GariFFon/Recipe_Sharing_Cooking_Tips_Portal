@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import RecipeCard from '../components/RecipeCard';
 import SearchModal from '../components/SearchModal';
 import Footer from '../components/Footer';
+import { API_BASE_URL } from '../config';
 import './Recipes.css';
 
 const Recipes = () => {
@@ -24,7 +25,7 @@ const Recipes = () => {
         try {
             setLoading(true);
 
-            const response = await fetch(`http://localhost:5001/api/recipes?page=${currentPage}&limit=12&type=${filterType}`);
+            const response = await fetch(`${API_BASE_URL}/recipes?page=${currentPage}&limit=12&type=${filterType}`);
             const data = await response.json();
 
             setRecipes(data.recipes);
@@ -151,69 +152,69 @@ const Recipes = () => {
 
                 {/* Pagination UI */}
                 {!searchTerm && !loading && totalPages > 1 && (
-                            <div className="pagination-container">
-                                <button
-                                    className="page-nav-btn"
-                                    onClick={() => setCurrentPage(1)}
-                                    disabled={currentPage === 1}
-                                >
-                                    First
-                                </button>
-                                <button
-                                    className="page-nav-btn"
-                                    onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                                    disabled={currentPage === 1}
-                                >
-                                    Prev
-                                </button>
+                    <div className="pagination-container">
+                        <button
+                            className="page-nav-btn"
+                            onClick={() => setCurrentPage(1)}
+                            disabled={currentPage === 1}
+                        >
+                            First
+                        </button>
+                        <button
+                            className="page-nav-btn"
+                            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                            disabled={currentPage === 1}
+                        >
+                            Prev
+                        </button>
 
 
-                                <div className="page-numbers">
-                                    {[...Array(totalPages)].map((_, index) => {
-                                        const pageNum = index + 1;
-                                        // Show only a few pages around current page if total pages is large
-                                        if (
-                                            totalPages <= 5 ||
-                                            pageNum === 1 ||
-                                            pageNum === totalPages ||
-                                            (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
-                                        ) {
-                                            return (
-                                                <button
-                                                    key={pageNum}
-                                                    className={`page-num-btn ${currentPage === pageNum ? 'active' : ''}`}
-                                                    onClick={() => setCurrentPage(pageNum)}
-                                                >
-                                                    {pageNum}
-                                                </button>
+                        <div className="page-numbers">
+                            {[...Array(totalPages)].map((_, index) => {
+                                const pageNum = index + 1;
+                                // Show only a few pages around current page if total pages is large
+                                if (
+                                    totalPages <= 5 ||
+                                    pageNum === 1 ||
+                                    pageNum === totalPages ||
+                                    (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
+                                ) {
+                                    return (
+                                        <button
+                                            key={pageNum}
+                                            className={`page-num-btn ${currentPage === pageNum ? 'active' : ''}`}
+                                            onClick={() => setCurrentPage(pageNum)}
+                                        >
+                                            {pageNum}
+                                        </button>
 
-                                            );
-                                        } else if (
-                                            (pageNum === currentPage - 2 && pageNum > 1) ||
-                                            (pageNum === currentPage + 2 && pageNum < totalPages)
-                                        ) {
-                                            return <span key={pageNum} className="page-dots">...</span>;
-                                        }
-                                        return null;
-                                    })}
-                                </div>
+                                    );
+                                } else if (
+                                    (pageNum === currentPage - 2 && pageNum > 1) ||
+                                    (pageNum === currentPage + 2 && pageNum < totalPages)
+                                ) {
+                                    return <span key={pageNum} className="page-dots">...</span>;
+                                }
+                                return null;
+                            })}
+                        </div>
 
-                                <button
-                                    className="page-nav-btn"
-                                    onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                                    disabled={currentPage === totalPages}
-                                >
-                                    Next
-                                </button>
-                                <button
-                                    className="page-nav-btn"
-                                    onClick={() => setCurrentPage(totalPages)}
-                                    disabled={currentPage === totalPages}
-                                >
-                                    Last
-                                </button>
+                        <button
+                            className="page-nav-btn"
+                            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                            disabled={currentPage === totalPages}
+                        >
+                            Next
+                        </button>
+                        <button
+                            className="page-nav-btn"
+                            onClick={() => setCurrentPage(totalPages)}
+                            disabled={currentPage === totalPages}
+                        >
+                            Last
+                        </button>
 
-                            </div>
+                    </div>
                 )}
 
                 {!loading && filteredRecipes.length === 0 && (

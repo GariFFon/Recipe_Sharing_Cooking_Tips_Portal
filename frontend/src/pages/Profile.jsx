@@ -4,13 +4,14 @@ import { useAuth } from '../context/AuthContext';
 import RecipeCard from '../components/RecipeCard';
 import DraggableRecommendations from '../components/DraggableRecommendations';
 import { motion, AnimatePresence } from 'framer-motion';
+import { BACKEND_URL, API_BASE_URL } from '../config';
 import './Profile.css';
 
 // Helper function to get full image URL
 const getImageUrl = (path) => {
     if (!path) return '';
     if (path.startsWith('http')) return path; // Already a full URL (e.g., Google photos)
-    return `http://localhost:5001${path}`; // Prepend backend URL for uploaded images
+    return `${BACKEND_URL}${path}`; // Prepend backend URL for uploaded images
 };
 
 /**
@@ -83,7 +84,7 @@ const Profile = () => {
         }
 
         try {
-            const response = await fetch('http://localhost:5001/api/auth/profile', {
+            const response = await fetch(`${API_BASE_URL}/auth/profile`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -123,7 +124,7 @@ const Profile = () => {
         if (!token) return;
 
         try {
-            const response = await fetch('http://localhost:5001/api/auth/password-status', {
+            const response = await fetch(`${API_BASE_URL}/auth/password-status`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -178,7 +179,7 @@ const Profile = () => {
             }
 
             try {
-                const response = await fetch('http://localhost:5001/api/auth/set-password', {
+                const response = await fetch(`${API_BASE_URL}/auth/set-password`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -235,7 +236,7 @@ const Profile = () => {
             }
 
             try {
-                const response = await fetch('http://localhost:5001/api/auth/change-password', {
+                const response = await fetch(`${API_BASE_URL}/auth/change-password`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -298,7 +299,7 @@ const Profile = () => {
 
             try {
                 const token = localStorage.getItem('token');
-                const response = await fetch('http://localhost:5001/api/auth/upload-profile-picture', {
+                const response = await fetch(`${API_BASE_URL}/auth/upload-profile-picture`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -346,7 +347,7 @@ const Profile = () => {
 
             try {
                 const token = localStorage.getItem('token');
-                const response = await fetch('http://localhost:5001/api/auth/upload-banner', {
+                const response = await fetch(`${API_BASE_URL}/auth/upload-banner`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`

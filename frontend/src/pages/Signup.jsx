@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Footer from '../components/Footer';
+import { API_BASE_URL } from '../config';
 import './Login.css';
 
 const Signup = () => {
@@ -42,7 +43,7 @@ const Signup = () => {
         setLoading(true);
 
         try {
-            const response = await fetch('http://localhost:5001/api/auth/signup', {
+            const response = await fetch(`${API_BASE_URL}/auth/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -145,7 +146,7 @@ const Signup = () => {
                     </div>
 
                     <button
-                        onClick={() => window.location.href = 'http://localhost:5001/api/auth/google'}
+                        onClick={() => window.location.href = `${API_BASE_URL}/auth/google`}
                         className="google-button"
                         type="button"
                     >

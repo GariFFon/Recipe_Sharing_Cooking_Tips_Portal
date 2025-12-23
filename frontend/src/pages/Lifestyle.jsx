@@ -92,7 +92,7 @@ const Lifestyle = () => {
                                 weight={true}
                                 italic={true}
                                 textColor="var(--life-hero-text)"
-                                minFontSize={80}
+                                minFontSize={24}
                                 scale={false}
                             />
                         </div>

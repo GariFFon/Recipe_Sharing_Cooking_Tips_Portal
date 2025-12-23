@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Footer from '../components/Footer';
+import { API_BASE_URL } from '../config';
 import './RecipeDetails.css';
 
 const RecipeDetails = () => {
@@ -14,7 +15,7 @@ const RecipeDetails = () => {
     const [currentServings, setCurrentServings] = useState(4);
 
     useEffect(() => {
-        fetch(`http://localhost:5001/api/recipes/${id}`)
+        fetch(`${API_BASE_URL}/recipes/${id}`)
             .then(res => {
                 if (!res.ok) {
                     throw new Error('Network response was not ok');

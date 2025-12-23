@@ -34,6 +34,9 @@
 .life-hero-content {
     z-index: 2;
     position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 .life-mega-title {

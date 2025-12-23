@@ -754,6 +754,25 @@ h3 {
     opacity: 0.3;
 }
 
+@media (max-width: 768px) {
+    .section-narrative {
+        padding: 4rem 5%;
+        margin-bottom: 4rem;
+        /* Ensure enough height for swipe cards on mobile */
+        min-height: 500px;
+    }
+
+    .narrative-container-centered {
+        flex-direction: column;
+        /* prevent horizontal overflow/cutoff */
+    }
+
+    .narrative-visual-centered {
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
 .carousel-container {
     width: 100%;
     padding: 3rem 0;
@@ -927,6 +946,33 @@ h3 {
 }
 
 /* ------------------------------------------- */
+
+/* --- Pagination Styles --- */
+.swiper-pagination-bullet {
+    width: 10px !important;
+    height: 10px !important;
+    background: #1a1a1a !important;
+    opacity: 0.3 !important;
+    margin: 0 6px !important;
+    transition: all 0.3s ease;
+}
+
+.swiper-pagination-bullet-active {
+    opacity: 1 !important;
+    background: #1a1a1a !important;
+    width: 24px !important;
+    /* Elongated active dot */
+    border-radius: 5px !important;
+}
+
+.dark-mode .swiper-pagination-bullet {
+    background: #fff !important;
+}
+
+.dark-mode .swiper-pagination-bullet-active {
+    background: #ffd93d !important;
+    /* Gold in dark mode */
+}
 
 /* --- Dark Mode (Consistent) --- */
 .dark-mode .home-container {
@@ -1260,6 +1306,69 @@ h3 {
     .cta-form input,
     .btn-organic-dark {
         width: 100%;
+    }
+}
+
+/* Mobile Carousel Adjustments */
+@media (max-width: 768px) {
+    .section-full-width {
+        padding: 4rem 0 6rem 0;
+        /* Adjusted section padding */
+        min-height: 600px;
+    }
+
+    /* Restore dashed lines on mobile as requested */
+    .section-full-width::before,
+    .section-full-width::after {
+        display: block;
+        opacity: 0.2;
+        /* Subtler on mobile */
+    }
+
+    .swiper-slide-custom {
+        width: 260px;
+        /* Slightly narrower to show side cards better */
+        height: 380px;
+        /* Further reduced height */
+    }
+
+    .mySwiper {
+        padding-top: 20px;
+        padding-bottom: 80px;
+        /* Extra space for pagination */
+    }
+
+    .swiper-pagination {
+        bottom: 5px !important;
+        /* Move closer to bottom edge */
+        left: 0;
+        right: 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        z-index: 50 !important;
+        pointer-events: none;
+        /* Let clicks pass through if needed, but dots are clickable usually */
+    }
+
+    .swiper-pagination-bullet {
+        pointer-events: auto;
+        /* Re-enable for bullets */
+    }
+
+    .premium-card-info h4 {
+        font-size: 1.5rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .premium-card-info {
+        padding: 1.2rem;
+    }
+
+    .premium-difficulty,
+    .premium-time {
+        font-size: 0.65rem;
+        padding: 4px 8px;
     }
 }
 

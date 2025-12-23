@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { API_BASE_URL } from '../config';
 import './RecipeCard.css';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -47,7 +48,7 @@ const RecipeCard = ({ recipe, onToggle }) => {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:5001/api/auth/favorites/${recipe._id}`, {
+            const response = await fetch(`${API_BASE_URL}/auth/favorites/${recipe._id}`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`

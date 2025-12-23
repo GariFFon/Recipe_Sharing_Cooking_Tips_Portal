@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { API_BASE_URL } from '../config';
 import './SetPassword.css';
 
 const SetPassword = () => {
@@ -17,13 +18,13 @@ const SetPassword = () => {
     useEffect(() => {
         console.log('SetPassword - User data:', user);
         console.log('SetPassword - passwordSet:', user?.passwordSet);
-        
+
         if (!user) {
             // No user logged in, redirect to login
             navigate('/login', { replace: true });
             return;
         }
-        
+
         if (user.passwordSet === true) {
             // Password already set, redirect to home
             console.log('Password already set, redirecting to home');
@@ -68,8 +69,9 @@ const SetPassword = () => {
         try {
             console.log('Setting password for user:', user?.email);
             console.log('Using token:', token ? 'present' : 'missing');
-            
-            const response = await fetch('http://localhost:5001/api/auth/set-password', {
+
+
+            const response = await fetch(`${API_BASE_URL}/auth/set-password`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -102,7 +104,7 @@ const SetPassword = () => {
 
     const getPasswordStrength = () => {
         if (!password) return null;
-        
+
         let strength = 0;
         if (password.length >= 6) strength++;
         if (password.length >= 10) strength++;
@@ -195,8 +197,8 @@ const SetPassword = () => {
                         </ul>
                     </div>
 
-                    <button 
-                        type="submit" 
+                    <button
+                        type="submit"
                         className="submit-button"
                         disabled={loading}
                     >

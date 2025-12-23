@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
+import { API_BASE_URL } from '../config';
 import './AddRecipe.css';
 
 /**
@@ -95,7 +96,7 @@ const AddRecipe = () => {
         };
 
         try {
-            const res = await fetch('http://localhost:5001/api/recipes', {
+            const res = await fetch(`${API_BASE_URL}/recipes`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

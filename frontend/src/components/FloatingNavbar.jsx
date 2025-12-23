@@ -14,36 +14,34 @@ export const FloatingNavbar = () => {
     return (
         <>
             <div className="floating-nav-container">
-                <Link to="/" className="nav-logo" style={{ position: 'absolute', left: '5%', top: '2rem' }}>
+                <Link to="/" className="nav-logo">
                     <span className="logo-text">The</span>
                     <span className="logo-accent">Every</span>
                     <span className="logo-text">Kitchen</span>
                 </Link>
 
-                {/* Desktop Tabs */}
+                {/* Desktop Tabs - Centered */}
                 <div className="desktop-menu">
                     <SlideTabs />
                 </div>
-            </div>
 
-            {/* Theme Toggle and Auth Buttons - Outside desktop-menu for mobile visibility */}
-            <div style={{ position: 'fixed', right: '5%', top: '2rem', zIndex: 2050 }}>
-                <NavActions />
-            </div>
-
-            {/* Mobile Toggle (Hamburger morphs to X) */}
-            <button
-                className={`mobile-toggle-btn ${isMobileMenuOpen ? 'active' : ''}`}
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                aria-label="Toggle menu"
-                style={{ position: 'fixed', right: '5%', top: '2.35rem', zIndex: 2200 }}
-            >
-                <div className="hamburger-box">
-                    <span className="hamburger-line"></span>
-                    <span className="hamburger-line"></span>
-                    <span className="hamburger-line"></span>
+                {/* Right Side Actions Group */}
+                <div className="nav-right-group">
+                    <NavActions />
+                    {/* Mobile Toggle */}
+                    <button
+                        className={`mobile-toggle-btn ${isMobileMenuOpen ? 'active' : ''}`}
+                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                        aria-label="Toggle menu"
+                    >
+                        <div className="hamburger-box">
+                            <span className="hamburger-line"></span>
+                            <span className="hamburger-line"></span>
+                            <span className="hamburger-line"></span>
+                        </div>
+                    </button>
                 </div>
-            </button>
+            </div>
 
             {/* Mobile Fullscreen Menu */}
             <AnimatePresence>
