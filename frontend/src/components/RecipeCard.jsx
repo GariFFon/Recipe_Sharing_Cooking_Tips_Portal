@@ -1,25 +1,46 @@
 import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import {
+    motion,
+    useMotionTemplate,
+    useMotionValue,
+    useSpring,
+} from 'framer-motion';
 import { API_BASE_URL } from '../config';
 import './RecipeCard.css';
 
-gsap.registerPlugin(ScrollTrigger, useGSAP);
-
 const RecipeCard = ({ recipe, onToggle }) => {
-    const { user, loading, updateUser } = useAuth(); // Get user from context
+    const { user, loading, updateUser } = useAuth();
     const [liked, setLiked] = useState(false);
+
+    // Tilt Motion Values
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
+
+    const xSpring = useSpring(x);
+    const ySpring = useSpring(y);
+
+    const transform = useMotionTemplate`rotateX(${xSpring}deg) rotateY(${ySpring}deg)`;
+
+    // Shine Motion Values
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+
+    const mouseXSpring = useSpring(mouseX);
+    const mouseYSpring = useSpring(mouseY);
+
+    const background = useMotionTemplate`radial-gradient(
+        250px circle at ${mouseXSpring}px ${mouseYSpring}px,
+        rgba(255,255,255,0.25),
+        transparent 80%
+    )`;
+
     const cardRef = useRef(null);
-    const imageRef = useRef(null);
-    const titleRef = useRef(null);
 
     // Check if recipe is in user's favorites
     React.useEffect(() => {
         if (user && user.favorites && recipe) {
-            // Need to handle if favorites are objects (populated) or IDs
             const isFav = user.favorites.some(fav =>
                 (typeof fav === 'string' ? fav : fav._id) === recipe._id
             );
@@ -30,20 +51,17 @@ const RecipeCard = ({ recipe, onToggle }) => {
     }, [user, recipe]);
 
     const toggleLike = async (e) => {
-        e.preventDefault(); // Prevent navigation
+        e.preventDefault();
+        e.stopPropagation(); // Prevent navigation when clicking like
         if (loading) return;
 
         if (!user) {
-            // Optional: Redirect to login or show toast
             alert('Please login to save favorites');
             return;
         }
 
-        // Optimistic UI update
         const previousState = liked;
         const newState = !liked;
-        // setLiked(newState); // user effect will handle this if we update context fast enough? 
-        // No, better to set local too for potential lag.
         setLiked(newState);
 
         try {
@@ -55,100 +73,109 @@ const RecipeCard = ({ recipe, onToggle }) => {
                 }
             });
 
-            if (!response.ok) {
-                throw new Error('Failed to update favorite');
-            }
+            if (!response.ok) throw new Error('Failed to update favorite');
 
             const data = await response.json();
-
-            // Update Context
             if (data.favorites) {
                 updateUser({ ...user, favorites: data.favorites });
             }
-
-            // Success - Notify parent
-            if (onToggle) {
-                onToggle(recipe, newState);
-            }
+            if (onToggle) onToggle(recipe, newState);
         } catch (error) {
             console.error('Error toggling favorite:', error);
-            // Revert on error
             setLiked(previousState);
         }
     };
 
-    const handleMouseEnter = () => {
-        gsap.to(imageRef.current, {
-            scale: 1.1,
-            duration: 0.6,
-            ease: 'power2.out'
-        });
-        gsap.to(titleRef.current, {
-            y: -5,
-            duration: 0.4,
-            ease: 'power2.out'
-        });
+    const handleMouseMove = (e) => {
+        if (!cardRef.current) return;
+
+        const rect = cardRef.current.getBoundingClientRect();
+        const width = rect.width;
+        const height = rect.height;
+
+        const mouseXPos = e.clientX - rect.left;
+        const mouseYPos = e.clientY - rect.top;
+
+        // Tilt Calculation (Range of ~20 degrees)
+        const rX = (mouseYPos / height - 0.5) * -20;
+        const rY = (mouseXPos / width - 0.5) * 20;
+
+        x.set(rX);
+        y.set(rY);
+
+        // Shine position
+        mouseX.set(mouseXPos);
+        mouseY.set(mouseYPos);
     };
 
     const handleMouseLeave = () => {
-        gsap.to(imageRef.current, {
-            scale: 1,
-            duration: 0.6,
-            ease: 'power2.inOut'
-        });
-        gsap.to(titleRef.current, {
-            y: 0,
-            duration: 0.4,
-            ease: 'power2.inOut'
-        });
+        x.set(0);
+        y.set(0);
+        mouseX.set(0);
+        mouseY.set(0);
     };
 
     return (
         <div className="recipe-card-wrapper">
-            <Link
-                to={`/recipes/${recipe._id}`}
-                className="recipe-card"
+            <motion.div
                 ref={cardRef}
-                onMouseEnter={handleMouseEnter}
+                onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
+                style={{
+                    transformStyle: "preserve-3d",
+                    transform,
+                }}
+                className="recipe-card-container"
             >
-                <div className="card-image-outer-wrapper">
-                    <div className="card-image-wrapper">
-                        <img
-                            src={recipe.image}
-                            alt={recipe.title}
-                            className="card-image"
-                            loading="lazy"
-                            ref={imageRef}
-                        />
-                    </div>
-                    {/* Prep Time Tag */}
-                    <div className="time-tag">
-                        {recipe.prepTime || '20 mins'}
-                    </div>
-                </div>
+                <Link
+                    to={`/recipes/${recipe._id}`}
+                    className="recipe-card"
+                >
+                    {/* Shine Overlay */}
+                    <motion.div
+                        className="shine-overlay"
+                        style={{ background }}
+                    />
 
-                <div className="card-content">
-                    <h3 className="card-title" ref={titleRef}>{recipe.title}</h3>
-
-                    <div className="card-meta">
-                        <span className="card-cuisine">{recipe.cuisine || 'CUISINE'}</span>
-                        <span className="card-dot">•</span>
-                        <span className={`diet-text ${recipe.dietaryType === 'Non-Veg' ? 'non-veg' : 'veg'}`}>
-                            {recipe.dietaryType?.toUpperCase() || 'VEG'}
-                        </span>
+                    <div className="card-image-outer-wrapper">
+                        <div className="card-image-wrapper">
+                            <img
+                                src={recipe.image}
+                                alt={recipe.title}
+                                className="card-image"
+                                loading="lazy"
+                            />
+                        </div>
+                        {/* Prep Time Tag */}
+                        <div className="time-tag">
+                            {recipe.prepTime || '20 mins'}
+                        </div>
                     </div>
-                </div>
-            </Link>
-            <button
-                className={`favorite-btn ${liked ? 'active' : ''}`}
-                onClick={toggleLike}
-                aria-label="Toggle Favorite"
-            >
-                <svg viewBox="0 0 24 24" width="24" height="24" fill={liked ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2">
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                </svg>
-            </button>
+
+                    <div className="card-content">
+                        <h3 className="card-title">{recipe.title}</h3>
+
+                        <div className="card-meta">
+                            <span className="card-cuisine">{recipe.cuisine || 'CUISINE'}</span>
+                            <span className="card-dot">•</span>
+                            <span className={`diet-text ${recipe.dietaryType === 'Non-Veg' ? 'non-veg' : 'veg'}`}>
+                                {recipe.dietaryType?.toUpperCase() || 'VEG'}
+                            </span>
+                        </div>
+                    </div>
+                </Link>
+
+                <button
+                    className={`favorite-btn ${liked ? 'active' : ''}`}
+                    onClick={toggleLike}
+                    aria-label="Toggle Favorite"
+                    style={{ transform: "translateZ(60px)" }}
+                >
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill={liked ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                </button>
+            </motion.div>
         </div>
     );
 };

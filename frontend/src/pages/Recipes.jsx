@@ -1,38 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import RecipeCard from '../components/RecipeCard';
+import RecipeCarousel from '../components/RecipeCarousel';
 import SearchModal from '../components/SearchModal';
 import Footer from '../components/Footer';
 import { API_BASE_URL } from '../config';
 import './Recipes.css';
 
 const Recipes = () => {
-    const [recipes, setRecipes] = useState([]);
-    const [filteredRecipes, setFilteredRecipes] = useState([]);
+    const [groupedRecipes, setGroupedRecipes] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [loadingMore, setLoadingMore] = useState(false);
-    const [searchTerm, setSearchTerm] = useState('');
     const [filterType, setFilterType] = useState('All'); // All, Veg, Non-Veg
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
     const [totalRecipes, setTotalRecipes] = useState(0);
-    const [totalVeg, setTotalVeg] = useState(0);
-    const [totalNonVeg, setTotalNonVeg] = useState(0);
     const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
-
-
-    const fetchRecipes = async () => {
+    const fetchGroupedRecipes = async () => {
         try {
             setLoading(true);
-
-            const response = await fetch(`${API_BASE_URL}/recipes?page=${currentPage}&limit=12&type=${filterType}`);
+            const response = await fetch(`${API_BASE_URL}/recipes/grouped?type=${filterType}`);
             const data = await response.json();
+            setGroupedRecipes(data);
 
-            setRecipes(data.recipes);
-            setTotalPages(data.totalPages);
-            setTotalRecipes(data.totalRecipes);
-            setTotalVeg(data.totalVeg);
-            setTotalNonVeg(data.totalNonVeg);
+            // Calculate total recipes across all groups
+            const total = data.reduce((acc, group) => acc + group.recipes.length, 0);
+            setTotalRecipes(total);
         } catch (err) {
             console.error("Failed to fetch recipes", err);
         } finally {
@@ -40,30 +30,9 @@ const Recipes = () => {
         }
     };
 
-
-
-
     useEffect(() => {
-        fetchRecipes();
-    }, [filterType, currentPage]);
-
-
-
-    // Handle search local filter
-    useEffect(() => {
-        let results = recipes;
-
-        // Filter by Search (still local for performance on current page results, 
-        // but backend search exists in SearchModal)
-        if (searchTerm) {
-            results = results.filter(recipe =>
-                recipe.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                recipe.ingredients.some(ing => ing.toLowerCase().includes(searchTerm.toLowerCase()))
-            );
-        }
-
-        setFilteredRecipes(results);
-    }, [searchTerm, recipes]);
+        fetchGroupedRecipes();
+    }, [filterType]);
 
 
     return (
@@ -100,129 +69,57 @@ const Recipes = () => {
                     <div className="filter-panel">
                         <button
                             className={`filter-btn ${filterType === 'All' ? 'active' : ''}`}
-                            onClick={() => { setFilterType('All'); setCurrentPage(1); }}
+                            onClick={() => setFilterType('All')}
                         >
                             All Recipes
                         </button>
                         <button
                             className={`filter-btn ${filterType === 'Veg' ? 'active' : ''}`}
-                            onClick={() => { setFilterType('Veg'); setCurrentPage(1); }}
+                            onClick={() => setFilterType('Veg')}
                         >
                             Vegetarian
                         </button>
                         <button
                             className={`filter-btn ${filterType === 'Non-Veg' ? 'active' : ''}`}
-                            onClick={() => { setFilterType('Non-Veg'); setCurrentPage(1); }}
+                            onClick={() => setFilterType('Non-Veg')}
                         >
                             Non-Veg
                         </button>
-
-
                     </div>
                 </div>
             </header>
 
             <section className="recipes-section container">
                 <div className="section-header">
-                    <h2 className="section-title">
-                        {searchTerm ? `Results for "${searchTerm}"` : 'Latest From The Kitchen'}
-                    </h2>
+                    <h2 className="section-title">Latest From The Kitchen</h2>
                     <div className="section-divider"></div>
                     {!loading && (
                         <p className="results-count">
-                            {searchTerm
-                                ? `${filteredRecipes.length} ${filteredRecipes.length === 1 ? 'RECIPE' : 'RECIPES'} FOUND`
-                                : `${filterType === 'All' ? totalRecipes : filterType === 'Veg' ? totalVeg : totalNonVeg} ${(filterType === 'All' ? totalRecipes : filterType === 'Veg' ? totalVeg : totalNonVeg) === 1 ? 'RECIPE' : 'RECIPES'
-                                }`}
-
-
+                            {`${totalRecipes} ${totalRecipes === 1 ? 'RECIPE' : 'RECIPES'} FOUND`}
                         </p>
                     )}
                 </div>
 
-                <div className="grid-recipes">
-                    {loading ? (
-                        <div className="loading">Loading...</div>
-                    ) : (
-                        filteredRecipes.map(recipe => (
-                            <RecipeCard key={recipe._id} recipe={recipe} />
-                        ))
-                    )}
-                </div>
-
-                {/* Pagination UI */}
-                {!searchTerm && !loading && totalPages > 1 && (
-                    <div className="pagination-container">
-                        <button
-                            className="page-nav-btn"
-                            onClick={() => setCurrentPage(1)}
-                            disabled={currentPage === 1}
-                        >
-                            First
-                        </button>
-                        <button
-                            className="page-nav-btn"
-                            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                            disabled={currentPage === 1}
-                        >
-                            Prev
-                        </button>
-
-
-                        <div className="page-numbers">
-                            {[...Array(totalPages)].map((_, index) => {
-                                const pageNum = index + 1;
-                                // Show only a few pages around current page if total pages is large
-                                if (
-                                    totalPages <= 5 ||
-                                    pageNum === 1 ||
-                                    pageNum === totalPages ||
-                                    (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
-                                ) {
-                                    return (
-                                        <button
-                                            key={pageNum}
-                                            className={`page-num-btn ${currentPage === pageNum ? 'active' : ''}`}
-                                            onClick={() => setCurrentPage(pageNum)}
-                                        >
-                                            {pageNum}
-                                        </button>
-
-                                    );
-                                } else if (
-                                    (pageNum === currentPage - 2 && pageNum > 1) ||
-                                    (pageNum === currentPage + 2 && pageNum < totalPages)
-                                ) {
-                                    return <span key={pageNum} className="page-dots">...</span>;
-                                }
-                                return null;
-                            })}
-                        </div>
-
-                        <button
-                            className="page-nav-btn"
-                            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                            disabled={currentPage === totalPages}
-                        >
-                            Next
-                        </button>
-                        <button
-                            className="page-nav-btn"
-                            onClick={() => setCurrentPage(totalPages)}
-                            disabled={currentPage === totalPages}
-                        >
-                            Last
-                        </button>
-
+                {loading ? (
+                    <div className="loading">Loading...</div>
+                ) : (
+                    <div className="carousels-container">
+                        {groupedRecipes.length > 0 ? (
+                            groupedRecipes.map((group) => (
+                                <RecipeCarousel
+                                    key={group.category}
+                                    title={group.category}
+                                    recipes={group.recipes}
+                                />
+                            ))
+                        ) : (
+                            <div className="empty-state">
+                                <p>No recipes found.</p>
+                            </div>
+                        )}
                     </div>
                 )}
 
-                {!loading && filteredRecipes.length === 0 && (
-                    <div className="empty-state">
-                        <p>No recipes found matching "{searchTerm}".</p>
-                        <button className="btn-text" onClick={() => setSearchTerm('')} style={{ marginTop: '1rem', background: '#ccc' }}>Clear Search</button>
-                    </div>
-                )}
             </section>
 
             <Footer />

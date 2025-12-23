@@ -63,9 +63,6 @@ app.get('/api/recipes', async (req, res) => {
       query.dietaryType = type;
     }
 
-
-
-
     const recipes = await Recipe.find(query)
       .sort({ createdAt: -1 })
       .skip(skip)
@@ -86,6 +83,40 @@ app.get('/api/recipes', async (req, res) => {
       totalNonVeg,
       hasMore: skip + recipes.length < totalFiltered
     });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// GET grouped recipes for Netflix-style carousels
+app.get('/api/recipes/grouped', async (req, res) => {
+  try {
+    const type = req.query.type; // Veg, Non-Veg, or All
+    let query = {};
+    if (type && type !== 'All') {
+      query.dietaryType = type;
+    }
+
+    const recipes = await Recipe.find(query).sort({ cuisine: 1, createdAt: -1 });
+
+    const grouped = recipes.reduce((acc, recipe) => {
+      const category = recipe.cuisine || 'Global';
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+      acc[category].push(recipe);
+      return acc;
+    }, {});
+
+    // Sort categories alphabetically but keep 'Global' or others if needed
+    const sortedCategories = Object.keys(grouped).sort();
+
+    const result = sortedCategories.map(category => ({
+      category,
+      recipes: grouped[category]
+    }));
+
+    res.json(result);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
