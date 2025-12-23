@@ -299,6 +299,11 @@ const Profile = () => {
 
             try {
                 const token = localStorage.getItem('token');
+                if (!token) {
+                    alert('Please login to upload images');
+                    return;
+                }
+
                 const response = await fetch(`${API_BASE_URL}/auth/upload-profile-picture`, {
                     method: 'POST',
                     headers: {
@@ -313,11 +318,14 @@ const Profile = () => {
                     setProfileImagePreview(null);
                     await fetchProfile();
                 } else {
+                    console.error('Upload failed:', data);
                     alert(data.message || 'Failed to upload image');
+                    setProfileImagePreview(null); // Reset preview on error
                 }
             } catch (error) {
                 console.error('Upload error:', error);
-                alert('Failed to upload image');
+                alert('Failed to upload image. Please check your connection and try again.');
+                setProfileImagePreview(null); // Reset preview on error
             }
         }
     };
@@ -347,6 +355,11 @@ const Profile = () => {
 
             try {
                 const token = localStorage.getItem('token');
+                if (!token) {
+                    alert('Please login to upload images');
+                    return;
+                }
+
                 const response = await fetch(`${API_BASE_URL}/auth/upload-banner`, {
                     method: 'POST',
                     headers: {
@@ -361,11 +374,14 @@ const Profile = () => {
                     setBannerImagePreview(null);
                     await fetchProfile();
                 } else {
+                    console.error('Upload failed:', data);
                     alert(data.message || 'Failed to upload image');
+                    setBannerImagePreview(null); // Reset preview on error
                 }
             } catch (error) {
                 console.error('Upload error:', error);
-                alert('Failed to upload image');
+                alert('Failed to upload image. Please check your connection and try again.');
+                setBannerImagePreview(null); // Reset preview on error
             }
         }
     };

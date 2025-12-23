@@ -545,73 +545,109 @@ router.post('/set-password', [
 });
 
 // Upload Profile Picture
-router.post('/upload-profile-picture', auth, upload.single('profileImage'), async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ message: 'No file uploaded' });
-    }
-
-    const user = await User.findById(req.userId);
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    // Delete old profile picture if it exists and is not a Google photo
-    if (user.photo && !user.photo.startsWith('http')) {
-      const oldPhotoPath = path.join(__dirname, '../', user.photo);
-      if (fs.existsSync(oldPhotoPath)) {
-        fs.unlinkSync(oldPhotoPath);
+router.post('/upload-profile-picture', auth, (req, res) => {
+  upload.single('profileImage')(req, res, async (err) => {
+    try {
+      // Handle multer errors
+      if (err instanceof multer.MulterError) {
+        console.error('Multer error:', err);
+        if (err.code === 'LIMIT_FILE_SIZE') {
+          return res.status(400).json({ message: 'File size is too large. Maximum size is 10MB.' });
+        }
+        return res.status(400).json({ message: 'File upload error: ' + err.message });
+      } else if (err) {
+        console.error('Upload error:', err);
+        return res.status(400).json({ message: err.message || 'File upload failed' });
       }
+
+      if (!req.file) {
+        return res.status(400).json({ message: 'No file uploaded' });
+      }
+
+      const user = await User.findById(req.userId);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      // Delete old profile picture if it exists and is not a Google photo
+      if (user.photo && !user.photo.startsWith('http')) {
+        const oldPhotoPath = path.join(__dirname, '../', user.photo);
+        if (fs.existsSync(oldPhotoPath)) {
+          fs.unlinkSync(oldPhotoPath);
+        }
+      }
+
+      // Save new photo path
+      const photoUrl = `/uploads/profiles/${req.file.filename}`;
+      user.photo = photoUrl;
+      await user.save();
+
+      res.json({
+        message: 'Profile picture uploaded successfully',
+        photoUrl: photoUrl
+      });
+    } catch (error) {
+      console.error('Upload profile picture error:', error);
+      res.status(500).json({ message: 'Error uploading profile picture: ' + error.message });
     }
-
-    // Save new photo path
-    const photoUrl = `/uploads/profiles/${req.file.filename}`;
-    user.photo = photoUrl;
-    await user.save();
-
-    res.json({
-      message: 'Profile picture uploaded successfully',
-      photoUrl: photoUrl
-    });
-  } catch (error) {
-    console.error('Upload profile picture error:', error);
-    res.status(500).json({ message: 'Error uploading profile picture' });
-  }
+  });
 });
 
 // Upload Banner Image
-router.post('/upload-banner', auth, upload.single('bannerImage'), async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ message: 'No file uploaded' });
-    }
-
-    const user = await User.findById(req.userId);
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    // Delete old banner if it exists
-    if (user.bannerImage) {
-      const oldBannerPath = path.join(__dirname, '../', user.bannerImage);
-      if (fs.existsSync(oldBannerPath)) {
-        fs.unlinkSync(oldBannerPath);
+router.post('/upload-banner', auth, (req, res) => {
+  console.log('Banner upload request received from user:', req.userId);
+  upload.single('bannerImage')(req, res, async (err) => {
+    try {
+      // Handle multer errors
+      if (err instanceof multer.MulterError) {
+        console.error('Multer error:', err);
+        if (err.code === 'LIMIT_FILE_SIZE') {
+          return res.status(400).json({ message: 'File size is too large. Maximum size is 10MB.' });
+        }
+        return res.status(400).json({ message: 'File upload error: ' + err.message });
+      } else if (err) {
+        console.error('Upload error:', err);
+        return res.status(400).json({ message: err.message || 'File upload failed' });
       }
+
+      if (!req.file) {
+        console.log('No file in request');
+        return res.status(400).json({ message: 'No file uploaded' });
+      }
+
+      console.log('File received:', req.file.filename);
+
+      const user = await User.findById(req.userId);
+      if (!user) {
+        console.log('User not found:', req.userId);
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      // Delete old banner if it exists
+      if (user.bannerImage) {
+        const oldBannerPath = path.join(__dirname, '../', user.bannerImage);
+        if (fs.existsSync(oldBannerPath)) {
+          fs.unlinkSync(oldBannerPath);
+          console.log('Deleted old banner:', oldBannerPath);
+        }
+      }
+
+      // Save new banner path
+      const bannerUrl = `/uploads/profiles/${req.file.filename}`;
+      user.bannerImage = bannerUrl;
+      await user.save();
+
+      console.log('Banner uploaded successfully:', bannerUrl);
+
+      res.json({
+        message: 'Banner image uploaded successfully',
+        bannerUrl: bannerUrl
+      });
+    } catch (error) {
+      console.error('Upload banner error:', error);
+      res.status(500).json({ message: 'Error uploading banner image: ' + error.message });
     }
-
-    // Save new banner path
-    const bannerUrl = `/uploads/profiles/${req.file.filename}`;
-    user.bannerImage = bannerUrl;
-    await user.save();
-
-    res.json({
-      message: 'Banner image uploaded successfully',
-      bannerUrl: bannerUrl
-    });
-  } catch (error) {
-    console.error('Upload banner error:', error);
-    res.status(500).json({ message: 'Error uploading banner image' });
-  }
+  });
 });
 
 // Google OAuth Routes
