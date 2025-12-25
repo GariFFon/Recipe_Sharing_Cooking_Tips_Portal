@@ -1,0 +1,236 @@
+/* Driver.js Theme Customization for "Supreme / Funky" Look */
+
+/* Main Popover Card */
+.driverjs-theme {
+    background-color: #ffffff;
+    color: #1a1a1a;
+    border: 4px solid #1a1a1a;
+    border-radius: 32px;
+    box-shadow: 12px 12px 0px #1a1a1a !important;
+    /* HARD SHADOW */
+    padding: 0;
+    max-width: 380px !important;
+    overflow: visible;
+}
+
+/* Funky Title */
+.driverjs-theme .driver-popover-title {
+    font-size: 1.8rem;
+    font-weight: 900;
+    font-style: italic;
+    color: #1a1a1a;
+    margin: 0;
+    padding: 24px 24px 12px 24px;
+    font-family: 'Playfair Display', serif;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+}
+
+/* Body Text */
+.driverjs-theme .driver-popover-description {
+    font-size: 1.05rem;
+    line-height: 1.5;
+    color: #4a4a4a;
+    font-weight: 600;
+    padding: 0 24px 0 24px;
+    font-family: 'Lato', sans-serif;
+}
+
+/* Restore Progress Text "1 of 5" - User wants it back */
+/* Restore Progress Text "1 of 5" - User wants it back */
+.driverjs-theme .driver-popover-progress-text {
+    display: block !important;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #888;
+    position: static !important;
+    /* Make it flow naturally */
+    margin-right: auto;
+    /* Push buttons to the right */
+}
+
+/* Footer Section */
+.driverjs-theme .driver-popover-footer {
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    /* Space out progress and buttons */
+    align-items: center;
+    /* PERFECT VERTICAL ALIGNMENT */
+    background: transparent;
+    margin-top: 0;
+    gap: 12px;
+}
+
+/* Base Button Style - RESET DRIVER DEFAULTS */
+.driverjs-theme .driver-popover-btn {
+    appearance: none;
+    -webkit-appearance: none;
+    background: none;
+    border: none;
+    outline: none;
+    text-shadow: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    text-decoration: none;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* Next / Start Button (Primary) */
+.driverjs-theme .driver-popover-next-btn {
+    background-color: #1a1a1a !important;
+    /* SOLID BLACK */
+    color: #ffffff !important;
+    border: 3px solid #1a1a1a !important;
+    border-radius: 100px;
+    padding: 12px 32px !important;
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    /* Reduced from 900 to fix double-text glitch */
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2) !important;
+    transition: background-color 0.2s, box-shadow 0.2s, color 0.2s;
+    /* Removed transform transition */
+    min-width: 120px;
+    height: 48px;
+    text-indent: 0;
+}
+
+/* Force text rendering method to cleaner style */
+.driverjs-theme .driver-popover-next-btn,
+.driverjs-theme .driver-popover-prev-btn {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.driverjs-theme .driver-popover-next-btn:hover {
+    background-color: #ffd93d !important;
+    /* Yellow */
+    color: #1a1a1a !important;
+    /* transform: translate(-2px, -2px); REMOVED to stop "moving" complaint */
+    box-shadow: 6px 6px 0 rgba(0, 0, 0, 1) !important;
+}
+
+.driverjs-theme .driver-popover-next-btn:active {
+    /* transform: translate(2px, 2px); REMOVED */
+    box-shadow: 2px 2px 0 rgba(0, 0, 0, 1) !important;
+    background-color: #e6c200 !important;
+}
+
+/* Remove any pseudo-elements that might cause text overlap */
+.driverjs-theme .driver-popover-next-btn::after,
+.driverjs-theme .driver-popover-next-btn::before {
+    content: none !important;
+    display: none !important;
+}
+
+/* Prev Button (Secondary) */
+.driverjs-theme .driver-popover-prev-btn {
+    background-color: transparent !important;
+    color: #1a1a1a !important;
+    border: 3px solid transparent !important;
+    font-size: 0.85rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 8px 16px !important;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.driverjs-theme .driver-popover-prev-btn:hover {
+    opacity: 1;
+    text-decoration: none !important;
+    background: transparent !important;
+}
+
+/* Close Button (Floating Charm Style) */
+.driverjs-theme .driver-popover-close-btn {
+    color: #1a1a1a;
+    background: #ffffff;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: -16px;
+    right: -16px;
+    border: 3px solid #1a1a1a;
+    font-size: 20px;
+    z-index: 20;
+    box-shadow: 4px 4px 0 #1a1a1a;
+    transition: all 0.2s ease;
+    padding: 0 !important;
+    /* Fix any padding issues */
+}
+
+.driverjs-theme .driver-popover-close-btn:hover {
+    background: #ff6b6b;
+    color: #fff;
+    transform: rotate(90deg) scale(1.1);
+    box-shadow: 6px 6px 0 #1a1a1a;
+}
+
+/* Highlight Box */
+div#driver-highlighted-element-stage {
+    border: 4px solid #1a1a1a !important;
+    border-radius: 16px;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7) !important;
+    background: transparent !important;
+}
+
+/* =========================================
+   DARK MODE OVERRIDES (Platinum & Gold)
+   ========================================= */
+body.dark-mode .driverjs-theme {
+    background-color: #121212;
+    color: #e0e0e0;
+    border-color: #d4af37;
+    /* Gold Border */
+    box-shadow: 12px 12px 0px #d4af37 !important;
+    /* Gold Shadow */
+}
+
+body.dark-mode .driverjs-theme .driver-popover-title {
+    color: #ffffff;
+    text-shadow: 2px 2px 0 #000;
+}
+
+body.dark-mode .driverjs-theme .driver-popover-description {
+    color: #cccccc;
+}
+
+body.dark-mode .driverjs-theme .driver-popover-next-btn {
+    background-color: #d4af37 !important;
+    color: #121212 !important;
+    border-color: #d4af37 !important;
+}
+
+body.dark-mode .driverjs-theme .driver-popover-next-btn:hover {
+    background-color: #ffffff !important;
+    color: #121212 !important;
+    box-shadow: 6px 6px 0 #ffffff;
+}
+
+body.dark-mode .driverjs-theme .driver-popover-prev-btn {
+    color: #d4af37 !important;
+}
+
+body.dark-mode .driverjs-theme .driver-popover-close-btn {
+    background: #1a1a1a;
+    color: #d4af37;
+    border-color: #d4af37;
+    box-shadow: 4px 4px 0 #d4af37;
+}
+
+body.dark-mode div#driver-highlighted-element-stage {
+    border-color: #d4af37 !important;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.85) !important;
+}

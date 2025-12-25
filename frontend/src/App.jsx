@@ -20,6 +20,7 @@ import ScrollToTop from './components/ScrollToTop';
 
 import { useAuth } from './context/AuthContext';
 import NavigationGuard from './components/NavigationGuard';
+import WebsiteTour from './components/WebsiteTour';
 
 // Helper component to access AuthContext for conditional rendering
 const MainLayout = () => {
@@ -47,6 +48,7 @@ const MainLayout = () => {
           <Route path="/auth/callback" element={<AuthCallback />} />
           <Route path="/set-password" element={<SetPassword />} />
         </Routes>
+        <WebsiteTour />
       </div>
     </NavigationGuard>
   );

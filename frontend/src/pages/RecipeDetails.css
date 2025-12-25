@@ -225,10 +225,30 @@
    Bold personality, Premium execution.
 */
 .funky-timer-section {
-    margin-bottom: 4rem;
+    margin-bottom: 2rem;
     display: flex;
     justify-content: center;
-    padding: 0 1rem;
+    padding: 0;
+    width: 100%;
+}
+
+.left-column-sidebar {
+    position: sticky;
+    top: 2rem;
+    align-self: start;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Remove old sticky logic from ingredients if wrapper handles it */
+.ingredients-section.sticky-section {
+    position: static;
+}
+
+.funky-timer-section>* {
+    pointer-events: auto;
+    /* Re-enable clicks on the timer itself */
 }
 
 .timer-display-wrapper {
@@ -889,6 +909,12 @@
         grid-template-columns: 1fr;
     }
 
+    .left-column-sidebar {
+        position: static;
+        width: 100%;
+        margin-bottom: 2rem;
+    }
+
     .details-title {
         font-size: 2.8rem;
     }
@@ -1065,4 +1091,206 @@
 
 .dark-mode .tips-section::before {
     background: rgba(255, 255, 255, 0.1);
+}
+
+/* ========================================
+   FLOATING TIMER WIDGET
+   ======================================== */
+.floating-timer-widget {
+    position: fixed;
+    z-index: 1000;
+    /* Highest priority */
+    background: transparent;
+    cursor: grab;
+    /* Indicates draggable */
+}
+
+
+
+.floating-timer-widget:active {
+    cursor: grabbing;
+}
+
+/* Drag Constraints Container */
+.drag-constraints {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: -1;
+    /* Ensure it's behind everything */
+}
+
+/* ========================================
+   FLOATING TIMER WIDGET (REFINED)
+   ======================================== */
+.floating-timer-widget {
+    position: fixed;
+    z-index: 1000;
+    /* Highest priority */
+    background: transparent;
+}
+
+/* Base Expanded State */
+.floating-timer-widget .timer-display-wrapper {
+    transform: none;
+    margin: 0;
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 1);
+    background: #fff;
+    /* Ensure background is white */
+    padding: 1.5rem;
+    /* Restore original spacious padding */
+    border-radius: 20px;
+    /* Ensure nice rounded corners */
+}
+
+
+/* OVERLAY CONTROLS (Clean, Transparent, Internal) */
+/* OVERLAY CONTROLS (Corner Badge Style) */
+.overlay-controls {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    z-index: 9999;
+    /* Force top */
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* Minimize Button - "Badge" Look */
+/* Minimize Button - "Badge" Look */
+.minimize-btn {
+    background: #1a1a1a;
+    /* Dark contrast background */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    /* Pop out */
+    border: 2px solid #fff;
+    /* White border for separation */
+    color: #fff;
+    /* White Icon */
+    font-weight: 700;
+    cursor: pointer;
+    line-height: normal;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.minimize-btn:hover {
+    background: #ffd93d;
+    /* Funky Yellow on hover */
+    color: #000;
+    border-color: #1a1a1a;
+    transform: scale(1.1);
+}
+
+/* MINIMIZED PILL STATE */
+.floating-timer-widget.minimized {
+    background: #1a1a1a;
+    border-radius: 50px;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    box-shadow: 4px 4px 0 rgba(255, 255, 255, 0.2);
+    border: 2px solid #fff;
+    width: auto;
+    overflow: visible;
+    /* Allow overlay controls slightly out if needed, but here we keep inside */
+}
+
+/* In minimized state, overlay controls are managed differently or hidden if we want clean pill */
+.floating-timer-widget.minimized .overlay-controls {
+    display: none;
+    /* We use the internal handle in minimized content */
+}
+
+.minimized-content {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 8px 16px;
+    background: #1a1a1a;
+    border-radius: 50px;
+    position: relative;
+    cursor: pointer;
+    /* Click to expand indication */
+}
+
+/* Handle for minimized state - REMOVED per user request */
+.minimized-content::before {
+    content: none;
+    display: none;
+}
+
+.minimized-time {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+    font-family: 'Segoe UI', monospace;
+    letter-spacing: 0.5px;
+    margin-left: 8px;
+}
+
+.mini-toggle-btn {
+    background: #fff;
+    color: #000;
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 12px;
+    transition: transform 0.2s;
+    margin-left: 4px;
+}
+
+.mini-toggle-btn:hover {
+    transform: scale(1.1);
+}
+
+.mini-toggle-btn:active {
+    transform: scale(0.95);
+}
+
+/* Tour Targets - Scroll Offset for Fixed Navbar */
+#tour-ingredients,
+#tour-instructions {
+    scroll-margin-top: 150px;
+    /* Snappy native fix for fixed header overlap */
+}
+
+/* Ensure relative positioning for popovers */
+.ingredients-section,
+.instructions-section {
+    position: relative;
+}
+
+.mini-toggle-btn.running {
+    background: #ffd93d;
+    box-shadow: 0 0 8px #ffd93d;
+}
+
+
+
+/* Dark Mode Adjustments for Widget */
+.dark-mode .floating-timer-widget .timer-display-wrapper {
+    border-color: #fff;
+    box-shadow: 8px 8px 0 #fff;
+}
+
+.dark-mode .floating-timer-widget.minimized {
+    border-color: #ffd93d;
+    box-shadow: 4px 4px 0 #ffd93d;
 }

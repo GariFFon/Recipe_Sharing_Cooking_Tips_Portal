@@ -125,7 +125,7 @@ const Home = () => {
                         />
                     </p>
                     <div className="hero-actions">
-                        <Link to="/recipes" className="btn-organic-primary">Browse Recipes</Link>
+                        <Link to="/recipes" className="btn-organic-primary" id="tour-browse-recipes">Browse Recipes</Link>
                         <OurStoryLink />
                     </div>
                 </div>
@@ -138,6 +138,22 @@ const Home = () => {
                     />
                 </div>
             </header>
+
+            {/* FLOATING TOUR STICKER - Fixed Bottom Right */}
+            <button
+                onClick={() => {
+                    if (window.confirm("Start the site tour?")) {
+                        localStorage.removeItem('hasSeenWebsiteTour');
+                        localStorage.removeItem('tour_phase');
+                        window.location.href = '/';
+                    }
+                }}
+                className="tour-floating-sticker"
+                aria-label="Start Tour"
+            >
+                <span className="sticker-icon">🧭</span>
+                <span className="sticker-text">Take Tour</span>
+            </button>
 
             {/* NEW: Velocity Scroll Marquee - Skew & Speed */}
             <div className="stats-marquee-container-wrapper">

@@ -418,7 +418,7 @@ const Profile = () => {
     return (
         <div className="profile-container">
             {/* Banner Image with Edit */}
-            <div className="profile-banner">
+            <div className="profile-banner" id="tour-profile-banner">
                 <img
                     src={bannerImagePreview || getImageUrl(profileData?.user.bannerImage) || "https://images.unsplash.com/photo-1495195134817-aeb325a55b65?w=1200&h=300&fit=crop"}
                     alt="Profile Banner"
@@ -444,7 +444,7 @@ const Profile = () => {
             {/* Profile Info Card */}
             <div className="profile-info-card">
                 <div className="profile-header-content">
-                    <div className="profile-avatar-wrapper">
+                    <div className="profile-avatar-wrapper" id="tour-profile-avatar">
                         <div className="profile-avatar">
                             {profileImagePreview || getImageUrl(profileData?.user.photo) ? (
                                 <img
@@ -471,7 +471,7 @@ const Profile = () => {
                             style={{ display: 'none' }}
                         />
                     </div>
-                    <div className="profile-details">
+                    <div className="profile-details" id="tour-profile-section">
                         <div className="profile-name-row">
                             <h1 className="profile-name">{profileData?.user.name}</h1>
                             <span className="pro-badge">MEMBER</span>
@@ -509,6 +509,7 @@ const Profile = () => {
 
                 <div className="profile-actions">
                     <button
+                        id="tour-password-btn"
                         onClick={() => setShowPasswordModal(true)}
                         className="password-button">
                         {passwordStatus.hasPassword ? '🔒 Change Password' : '🔐 Set Password'}
@@ -590,16 +591,18 @@ const Profile = () => {
 
             {/* Main Content Area */}
             <div className="profile-content">
-                <div className="tabs-header">
+                <div className="tabs-header" id="tour-tabs">
                     <button
                         className={`tab-btn ${activeTab === 'recipes' ? 'active' : ''}`}
                         onClick={() => setActiveTab('recipes')}
+                        id="tour-tab-recipes"
                     >
                         My Recipes
                     </button>
                     <button
                         className={`tab-btn ${activeTab === 'favorites' ? 'active' : ''}`}
                         onClick={() => setActiveTab('favorites')}
+                        id="tour-tab-favorites"
                     >
                         My Favorites
                     </button>
@@ -607,7 +610,7 @@ const Profile = () => {
 
                 {activeTab === 'recipes' ? (
                     <div className="recipes-grid">
-                        <Link to="/add" className="add-new-card">
+                        <Link to="/add" className="add-new-card" id="tour-add-recipe-card">
                             <span style={{ fontSize: '3rem', marginBottom: '1rem' }}>+</span>
                             <span>Add New Recipe</span>
                         </Link>

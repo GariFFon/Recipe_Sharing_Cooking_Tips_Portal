@@ -166,6 +166,83 @@ h3 {
     border-color: var(--color-secondary);
 }
 
+/* FLOATING TOUR FAB - Sleek & Premium */
+.tour-floating-sticker {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
+    height: 56px;
+    min-width: 56px;
+    padding: 0;
+    background: #1a1a1a;
+    border: none;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    overflow: hidden;
+    color: #fff;
+}
+
+.tour-floating-sticker:hover {
+    padding: 0 24px 0 20px;
+    min-width: 140px;
+    gap: 12px;
+    background: #ffffff;
+    /* Clean White */
+    color: #1a1a1a;
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+    border: 2px solid #1a1a1a;
+    /* Add border for pop */
+}
+
+.sticker-icon {
+    font-size: 1.6rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sticker-text {
+    font-family: var(--font-body);
+    /* Clean Sans-Serif */
+    font-weight: 800;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    /* elegant spacing */
+    white-space: nowrap;
+    opacity: 0;
+    max-width: 0;
+    transform: translateX(10px);
+    transition: all 0.3s ease;
+}
+
+.tour-floating-sticker:hover .sticker-text {
+    opacity: 1;
+    max-width: 100px;
+    transform: translateX(0);
+}
+
+@keyframes floatSticker {
+
+    /* Animation Removed for cleaner look */
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-3px);
+    }
+}
+
 /* -------------------------------------------
    HERO VISUAL - INNER BLOB
 ------------------------------------------- */

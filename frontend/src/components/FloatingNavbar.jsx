@@ -14,14 +14,14 @@ export const FloatingNavbar = () => {
     return (
         <>
             <div className="floating-nav-container">
-                <Link to="/" className="nav-logo">
+                <Link to="/" className="nav-logo" id="tour-logo">
                     <span className="logo-text">The</span>
                     <span className="logo-accent">Every</span>
                     <span className="logo-text">Kitchen</span>
                 </Link>
 
                 {/* Desktop Tabs - Centered */}
-                <div className="desktop-menu">
+                <div className="desktop-menu" id="tour-menu">
                     <SlideTabs />
                 </div>
 
@@ -122,7 +122,7 @@ const NavActions = () => {
     return (
         <div className="nav-actions">
             {/* Theme Toggle */}
-            <div className="theme-toggle-wrapper">
+            <div className="theme-toggle-wrapper" id="tour-theme-toggle">
                 <Within
                     duration={750}
                     toggled={isDarkMode}
@@ -132,7 +132,7 @@ const NavActions = () => {
             </div>
 
             {/* Auth Buttons (Hidden on Mobile) */}
-            <div className="nav-auth-buttons">
+            <div className="nav-auth-buttons" id="tour-auth-profile">
                 {user ? (
                     <Link to="/profile" className="nav-profile-btn">
                         {user.name ? user.name.split(' ')[0] : 'Profile'}
