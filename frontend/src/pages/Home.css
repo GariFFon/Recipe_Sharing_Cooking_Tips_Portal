@@ -175,8 +175,11 @@ h3 {
     height: 56px;
     min-width: 56px;
     padding: 0;
-    background: #1a1a1a;
-    border: none;
+    /* Theme-aware background */
+    background: var(--color-text);
+    /* #2c2c2c (Dark) in Light Mode | #e8e8e8 (Light) in Dark Mode */
+    border: 2px solid var(--color-bg);
+    /* Contrast border */
     border-radius: 30px;
     display: flex;
     align-items: center;
@@ -185,20 +188,21 @@ h3 {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     overflow: hidden;
-    color: #fff;
+    /* Theme-aware text color (Inverse of background) */
+    color: var(--color-bg);
+    /* #fdfaf3 (Light) in Light Mode | #121212 (Dark) in Dark Mode */
 }
 
 .tour-floating-sticker:hover {
     padding: 0 24px 0 20px;
     min-width: 140px;
     gap: 12px;
-    background: #ffffff;
-    /* Clean White */
-    color: #1a1a1a;
+    background: var(--color-accent);
+    /* Accent Color */
+    color: #ffffff;
     transform: translateY(-5px);
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
-    border: 2px solid #1a1a1a;
-    /* Add border for pop */
+    border-color: var(--color-text);
 }
 
 .sticker-icon {

@@ -1286,11 +1286,23 @@
 
 /* Dark Mode Adjustments for Widget */
 .dark-mode .floating-timer-widget .timer-display-wrapper {
+    background: #1a1a1a;
+    /* Dark Card Background */
+    color: #ffffff;
+    /* White Text */
     border-color: #fff;
     box-shadow: 8px 8px 0 #fff;
+}
+
+.dark-mode .floating-timer-widget .timer-display-wrapper h3,
+.dark-mode .floating-timer-widget .timer-display-wrapper .timer-time,
+.dark-mode .floating-timer-widget .timer-display-wrapper .timer-label {
+    color: #ffffff;
+    /* Ensure all inner text is white */
 }
 
 .dark-mode .floating-timer-widget.minimized {
     border-color: #ffd93d;
     box-shadow: 4px 4px 0 #ffd93d;
+    background: #000;
 }
