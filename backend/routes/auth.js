@@ -80,7 +80,7 @@ const normalizeEmail = (email) => {
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: 'http://localhost:5001/api/auth/google/callback',
+  callbackURL: process.env.GOOGLE_CALLBACK_URL || 'http://localhost:5001/api/auth/google/callback',
   userProfileURL: 'https://www.googleapis.com/oauth2/v3/userinfo',
   proxy: true
 },
@@ -775,7 +775,7 @@ router.get('/google',
 
 router.get('/google/callback',
   passport.authenticate('google', {
-    failureRedirect: 'http://localhost:5173/login',
+    failureRedirect: `${process.env.CLIENT_URL || 'http://localhost:5173'}/login`,
     session: false
   }),
   (req, res) => {
@@ -789,10 +789,15 @@ router.get('/google/callback',
     // Determine redirect based on password status
     const redirectTo = !req.user.passwordSet ? '/set-password' : '/';
 
-    // Dynamic frontend URL construction
-    const host = req.get('host'); // e.g., 192.168.1.5:5001 or localhost:5001
-    const frontendHost = host.replace('5001', '5173'); // Assume frontend is on 5173
-    const frontendBaseUrl = `http://${frontendHost}`;
+    // Use CLIENT_URL (Render env var) or fallback to dynamic host for local dev
+    let frontendBaseUrl = process.env.CLIENT_URL;
+
+    if (!frontendBaseUrl) {
+      // Dynamic frontend URL construction for local dev if CLIENT_URL not set
+      const host = req.get('host'); // e.g., 192.168.1.5:5001 or localhost:5001
+      const frontendHost = host.replace('5001', '5173'); // Assume frontend is on 5173
+      frontendBaseUrl = `http://${frontendHost}`;
+    }
 
     // Redirect to frontend with token and redirectTo
     res.redirect(`${frontendBaseUrl}/auth/callback?token=${token}&redirectTo=${redirectTo}&user=${encodeURIComponent(JSON.stringify({
