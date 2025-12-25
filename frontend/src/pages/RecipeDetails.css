@@ -134,6 +134,55 @@
     color: #1a1a1a;
 }
 
+/* Timer Styles */
+.timer-clickable {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: #fff;
+}
+
+.timer-clickable:hover {
+    background: #f8f9fa;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.meta-value-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.timer-active {
+    color: #e74c3c;
+    /* Red text when running */
+    font-variant-numeric: tabular-nums;
+    /* Prevents jitter */
+}
+
+.timer-icon {
+    font-size: 1rem;
+    opacity: 0.6;
+}
+
+.timer-reset-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    color: #888;
+    transition: color 0.2s;
+}
+
+.timer-reset-btn:hover {
+    color: #d63031;
+    transform: rotate(180deg);
+    transition: transform 0.4s ease;
+}
+
 /* Servings Control - Pill */
 .servings-control {
     display: flex;
@@ -170,6 +219,296 @@
     transform: scale(0.9);
     box-shadow: 0 0 0 rgba(0, 0, 0, 1);
 }
+
+/* 
+   POLISHED FUNKY TIMER - THE PERFECT BLEND
+   Bold personality, Premium execution.
+*/
+.funky-timer-section {
+    margin-bottom: 4rem;
+    display: flex;
+    justify-content: center;
+    padding: 0 1rem;
+}
+
+.timer-display-wrapper {
+    background: #ffffff;
+    padding: 2rem 3rem;
+    /* More balanced padding */
+    border-radius: 40px;
+    /* Slightly tighter pill */
+    display: flex;
+    flex-direction: column;
+    /* Stack for perfect centering */
+    align-items: center;
+    gap: 1.5rem;
+
+    /* Neo-Brutalist Premium Shadow */
+    border: 3px solid #1a1a1a;
+    box-shadow: 8px 8px 0 #1a1a1a;
+
+    transform: rotate(-1deg);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    z-index: 5;
+    min-width: 300px;
+}
+
+.timer-display-wrapper:hover {
+    transform: rotate(0deg) scale(1.02) translateY(-2px);
+    box-shadow: 12px 12px 0 #ffd93d;
+    /* Hover reveals Yellow Pop */
+    border-color: #1a1a1a;
+}
+
+.timer-digit-box {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    /* Standard System Sans */
+    font-size: 4.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    background: transparent;
+    padding: 0;
+    border: none;
+    min-width: auto;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    /* Critical for timer stability */
+    line-height: 1;
+    letter-spacing: -1px;
+}
+
+.timer-digit-box.pulse {
+    color: #e74c3c;
+    /* Alert Red when active - STATIC */
+    animation: none;
+    /* User requested removal of breathing effect */
+}
+
+@keyframes urgentPulse {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.05);
+    }
+}
+
+.timer-row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    justify-content: center;
+}
+
+.timer-adjust-btn {
+    background: #f0f0f0;
+    width: 44px;
+    /* Standard touch target */
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    cursor: pointer;
+    box-shadow: 2px 2px 0 #1a1a1a;
+    transition: all 0.2s ease;
+    padding-bottom: 4px;
+    /* Optically center the symbol */
+}
+
+.timer-adjust-btn:hover {
+    background: #ffd93d;
+    transform: translateY(-2px);
+    box-shadow: 4px 4px 0 #1a1a1a;
+}
+
+.timer-adjust-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 0 0 #1a1a1a;
+}
+
+.timer-controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    border-left: none;
+    /* Remove separator for stacked layout */
+    padding-left: 0;
+    border-top: 2px dashed #ddd;
+    /* Horizontal separator */
+    padding-top: 1.5rem;
+    width: 100%;
+    justify-content: center;
+}
+
+.timer-controls button {
+    font-family: var(--font-body);
+    /* Match site body font (Lato) */
+    font-weight: 800;
+    /* Match back-link weight */
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    /* Match back-link spacing */
+    font-size: 0.9rem;
+    /* Match back-link size */
+    padding: 12px 24px;
+    /* Match back-link padding */
+    border-radius: 50px;
+    /* Match back-link pill shape */
+    border: 2px solid #1a1a1a;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 4px 4px 0 #1a1a1a;
+    /* Match back-link shadow depth */
+}
+
+.timer-controls button:active {
+    transform: translate(2px, 2px);
+    box-shadow: 0 0 0 #1a1a1a;
+}
+
+/* Start Button - The Funky Hero */
+.btn-timer-start {
+    background: #ffd93d;
+    /* Electric Yellow */
+    color: #1a1a1a;
+}
+
+.btn-timer-start:hover {
+    background: #ffed4a;
+    transform: translate(-2px, -2px);
+    /* Consistent hover lift */
+    box-shadow: 6px 6px 0 #1a1a1a;
+    /* Deeper shadow on hover */
+}
+
+/* Pause/Resume */
+.btn-timer-toggle {
+    background: #1a1a1a;
+    color: #ffffff;
+    border-color: #1a1a1a;
+}
+
+.btn-timer-toggle:hover {
+    background: #333;
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 #ffd93d;
+    /* Pop of yellow shadow */
+}
+
+.btn-timer-toggle.paused {
+    background: #fff;
+    color: #1a1a1a;
+    border-style: solid;
+    /* Fixed: No more dashes */
+    border-width: 2px;
+}
+
+/* Reset */
+.btn-timer-reset {
+    background: #fff;
+    color: #1a1a1a;
+}
+
+.btn-timer-reset:hover {
+    background: #ffe5e5;
+    border-color: #ef4444;
+    color: #ef4444;
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 #ef4444;
+    /* Red shadow for reset */
+}
+
+/* ========================================
+   DARK MODE ADAPTATIONS
+   ======================================== */
+.dark-mode .timer-display-wrapper {
+    background: #1a1a1a;
+    border-color: #ffffff;
+    box-shadow: 8px 8px 0 #ffffff;
+}
+
+.dark-mode .timer-display-wrapper:hover {
+    box-shadow: 12px 12px 0 #ffd93d;
+    /* Keep signature yellow pop */
+}
+
+.dark-mode .timer-digit-box {
+    color: #ffffff;
+}
+
+.dark-mode .timer-digit-box.pulse {
+    color: #ffd93d;
+    /* Yellow pulse in dark mode */
+}
+
+.dark-mode .timer-controls {
+    border-left-color: #444;
+}
+
+.dark-mode .timer-controls button {
+    border-color: #ffffff;
+    box-shadow: 2px 2px 0 #ffffff;
+}
+
+.dark-mode .timer-controls button:active {
+    box-shadow: 0 0 0 #ffffff;
+}
+
+.dark-mode .btn-timer-start {
+    background: #ffd93d;
+    color: #000;
+    border-color: #ffd93d;
+}
+
+.dark-mode .btn-timer-start:hover {
+    box-shadow: 4px 4px 0 #ffffff;
+}
+
+.dark-mode .btn-timer-toggle {
+    background: #ffffff;
+    color: #000;
+}
+
+.dark-mode .btn-timer-toggle:hover {
+    box-shadow: 4px 4px 0 #ffd93d;
+}
+
+.dark-mode .btn-timer-reset {
+    background: transparent;
+    color: #fff;
+}
+
+/* Mobile Responsiveness for Timer */
+@media (max-width: 768px) {
+    .timer-display-wrapper {
+        flex-direction: column;
+        padding: 1.5rem;
+        gap: 1rem;
+        border-radius: 20px;
+        width: 100%;
+    }
+
+    .timer-controls {
+        border-left: none;
+        padding-left: 0;
+        width: 100%;
+        justify-content: center;
+        border-top: 2px dashed #ddd;
+        padding-top: 1rem;
+    }
+
+    .dark-mode .timer-controls {
+        border-top-color: #444;
+    }
+}
+
 
 /* 
    HERO IMAGE - Polaroid Style

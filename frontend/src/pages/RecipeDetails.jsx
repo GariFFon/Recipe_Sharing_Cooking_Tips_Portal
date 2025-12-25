@@ -62,6 +62,73 @@ const RecipeDetails = () => {
         }
     };
 
+    // --- COOKING TIMER LOGIC ---
+    const [timeLeft, setTimeLeft] = useState(null);
+    const [isTimerRunning, setIsTimerRunning] = useState(false);
+
+    // Parse time string to seconds (e.g., "1 hr 30 mins" -> 5400)
+    const parseDuration = (str) => {
+        if (!str) return 0;
+        let totalSeconds = 0;
+        const hours = str.match(/(\d+)\s*(h|hr|hour)/i);
+        const mins = str.match(/(\d+)\s*(m|min|minute)/i);
+        if (hours) totalSeconds += parseInt(hours[1]) * 3600;
+        if (mins) totalSeconds += parseInt(mins[1]) * 60;
+        return totalSeconds > 0 ? totalSeconds : 0; // Default 0 if parse fails
+    };
+
+    const formatTime = (seconds) => {
+        const h = Math.floor(seconds / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+        const s = seconds % 60;
+        if (h > 0) return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        return `${m}:${s.toString().padStart(2, '0')}`;
+    };
+
+    const toggleTimer = () => {
+        if (timeLeft === null) {
+            // Start for the first time
+            const total = parseDuration(recipe.prepTime || '0 mins');
+            if (total === 0) {
+                alert("No prep time specified for this recipe!");
+                return;
+            }
+            setTimeLeft(total);
+            setIsTimerRunning(true);
+        } else {
+            // Toggle Pause/Resume
+            setIsTimerRunning(!isTimerRunning);
+        }
+    };
+
+    const resetTimer = (e) => {
+        e.stopPropagation();
+        setIsTimerRunning(false);
+        setTimeLeft(null);
+    };
+
+    const adjustTime = (amount) => {
+        const current = timeLeft !== null ? timeLeft : parseDuration(recipe.prepTime || '0 mins');
+        setTimeLeft(Math.max(0, current + amount));
+    };
+
+    useEffect(() => {
+        let interval;
+        if (isTimerRunning && timeLeft > 0) {
+            interval = setInterval(() => {
+                setTimeLeft((prev) => {
+                    if (prev <= 1) {
+                        setIsTimerRunning(false);
+                        // Audio alert could go here
+                        return 0;
+                    }
+                    return prev - 1;
+                });
+            }, 1000);
+        }
+        return () => clearInterval(interval);
+    }, [isTimerRunning, timeLeft]);
+
     useEffect(() => {
         fetch(`${API_BASE_URL}/recipes/${id}`)
             .then(res => {
@@ -153,6 +220,36 @@ const RecipeDetails = () => {
                     <div className="meta-item">
                         <span className="meta-label">Difficulty</span>
                         <span className="meta-value">{recipe.difficulty || 'Medium'}</span>
+                    </div>
+                </div>
+                <div className="funky-timer-section">
+                    <div className="timer-display-wrapper">
+                        <div className="timer-row">
+                            <button className="timer-adjust-btn" onClick={() => adjustTime(-60)} aria-label="Subtract 1 minute">
+                                −
+                            </button>
+                            <div className={`timer-digit-box ${isTimerRunning ? 'pulse' : ''}`}>
+                                {timeLeft !== null
+                                    ? formatTime(timeLeft)
+                                    : formatTime(parseDuration(recipe.prepTime || '15 mins'))}
+                            </div>
+                            <button className="timer-adjust-btn" onClick={() => adjustTime(60)} aria-label="Add 1 minute">
+                                +
+                            </button>
+                        </div>
+                        <div className="timer-controls">
+                            {!isTimerRunning && timeLeft === null && (
+                                <button className="btn-timer-start" onClick={toggleTimer}>Start Timer</button>
+                            )}
+                            {(isTimerRunning || timeLeft !== null) && (
+                                <>
+                                    <button className={`btn-timer-toggle ${isTimerRunning ? 'paused' : ''}`} onClick={toggleTimer}>
+                                        {isTimerRunning ? 'Pause' : 'Resume'}
+                                    </button>
+                                    <button className="btn-timer-reset" onClick={resetTimer}>Reset</button>
+                                </>
+                            )}
+                        </div>
                     </div>
                 </div>
                 <div className="details-image-container">
