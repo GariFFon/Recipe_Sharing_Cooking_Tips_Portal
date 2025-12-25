@@ -296,3 +296,60 @@
         height: 48px;
     }
 }
+
+/* ========== DARK MODE ========== */
+.dark-mode .search-modal.spotlight-style {
+    background: #27272a;
+    border-color: #52525b;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+}
+
+.dark-mode .spotlight-search-container {
+    border-bottom-color: #52525b;
+}
+
+.dark-mode .spotlight-search-input {
+    color: #ffffff;
+}
+
+.dark-mode .spotlight-search-input::placeholder {
+    color: #a1a1aa;
+}
+
+.dark-mode .spotlight-search-btn {
+    border-color: #52525b;
+    color: #fafafa;
+}
+
+.dark-mode .spotlight-search-btn:hover {
+    background: #3f3f46;
+}
+
+.dark-mode .spotlight-result-item {
+    border-bottom-color: #3f3f46;
+}
+
+.dark-mode .spotlight-result-item:hover {
+    background: #3f3f46;
+}
+
+.dark-mode .spotlight-result-icon {
+    border-color: #52525b;
+}
+
+.dark-mode .spotlight-result-title {
+    color: #ffffff;
+}
+
+.dark-mode .spotlight-result-subtitle {
+    color: #d4d4d8;
+}
+
+.dark-mode .spotlight-result-subtitle .dietary-badge {
+    color: #fbbf24;
+    border-bottom-color: #fbbf24;
+}
+
+.dark-mode .spotlight-empty p {
+    color: #a1a1aa;
+}

@@ -16,26 +16,65 @@ const Recipes = () => {
     const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
     const location = useLocation();
 
-    const fetchGroupedRecipes = async () => {
-        try {
-            setLoading(true);
-            const response = await fetch(`${API_BASE_URL}/recipes/grouped?type=${filterType}`);
-            const data = await response.json();
-            setGroupedRecipes(data);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(false);
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-            // Calculate total recipes across all groups
-            const total = data.reduce((acc, group) => acc + group.recipes.length, 0);
-            setTotalRecipes(total);
+    const fetchRecipes = async (pageNum, reset = false) => {
+        try {
+            if (reset) {
+                setLoading(true);
+            } else {
+                setIsLoadingMore(true);
+            }
+
+            // Check if we're navigating to a specific cuisine
+            const params = new URLSearchParams(location.search);
+            const targetCuisine = params.get('cuisine');
+
+            // If targeting a specific cuisine, load ALL categories to ensure it's visible
+            const limit = targetCuisine ? 100 : 4;
+
+            const response = await fetch(`${API_BASE_URL}/recipes/grouped?type=${filterType}&page=${pageNum}&limit=${limit}`);
+            const result = await response.json();
+
+            // Backend now returns { data: [], hasMore: bool }
+            // Fallback for safety if old backend cached
+            const newData = result.data || result;
+            const moreAvailable = result.hasMore || false;
+
+            if (reset) {
+                setGroupedRecipes(newData);
+            } else {
+                setGroupedRecipes(prev => [...prev, ...newData]);
+            }
+
+            setHasMore(moreAvailable);
+
+            // Update total recipes count (True DB Count)
+            if (result.totalRecipesCount !== undefined) {
+                setTotalRecipes(result.totalRecipesCount);
+            }
+
         } catch (err) {
             console.error("Failed to fetch recipes", err);
         } finally {
             setLoading(false);
+            setIsLoadingMore(false);
         }
     };
 
+    // Initial Fetch & Filter Change
     useEffect(() => {
-        fetchGroupedRecipes();
-    }, [filterType]);
+        setPage(1);
+        fetchRecipes(1, true);
+    }, [filterType, location.search]); // Added location.search to re-fetch when URL changes
+
+    const handleLoadMore = () => {
+        const nextPage = page + 1;
+        setPage(nextPage);
+        fetchRecipes(nextPage, false);
+    };
 
     // Scroll to specific cuisine carousel when navigating from Home page
     useEffect(() => {
@@ -43,17 +82,33 @@ const Recipes = () => {
         const cuisine = params.get('cuisine');
 
         if (cuisine && location.hash === '#scroll' && !loading) {
-            // Wait for carousels to render, then scroll
-            setTimeout(() => {
+            // Retry scrolling multiple times to handle layout shifts
+            let attempts = 0;
+            const maxAttempts = 5;
+
+            const attemptScroll = () => {
                 const cuisineId = `cuisine-${cuisine.toLowerCase().replace(/\s+/g, '-')}`;
                 const element = document.getElementById(cuisineId);
 
                 if (element) {
-                    const yOffset = -100; // Offset for fixed header
-                    const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-                    window.scrollTo({ top: y, behavior: 'smooth' });
+                    const headerOffset = 150; // Standard offset
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth"
+                    });
                 }
-            }, 600); // Wait for lazy carousels to load
+
+                attempts++;
+                if (attempts < maxAttempts) {
+                    setTimeout(attemptScroll, 500); // Retry every 500ms
+                }
+            };
+
+            // Start attempting to scroll
+            setTimeout(attemptScroll, 500);
         }
     }, [location, loading]);
 
@@ -145,6 +200,23 @@ const Recipes = () => {
                                 <p>No recipes found.</p>
                             </div>
                         )}
+                    </div>
+                )}
+
+                {/* Load More Button */}
+                {!loading && hasMore && (
+                    <div className="load-more-container">
+                        <button
+                            className="load-more-btn"
+                            onClick={handleLoadMore}
+                            disabled={isLoadingMore}
+                        >
+                            {isLoadingMore ? (
+                                <span className="loader"></span>
+                            ) : (
+                                <span>Load More Cuisines</span>
+                            )}
+                        </button>
                     </div>
                 )}
 

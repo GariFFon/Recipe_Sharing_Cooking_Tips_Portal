@@ -170,121 +170,165 @@
 
 /* --- RESPONSIVE: MOBILE (Max 768px) --- */
 @media (max-width: 768px) {
-    .recipe-carousel-container {
-        padding: 0 0 2rem 0;
-        /* Removing side padding to let offsets control gap */
-        /* Prevent horizontal scroll */
-        overflow-x: hidden;
-    }
 
-    .carousel-wrapper {
+    /* CONTAINER BECOMES THE UNIFIED CARD */
+    .recipe-carousel-container {
+        display: flex !important;
+        flex-direction: column;
+
+        /* The Unified Box Styles */
+        width: calc(100% - 10px);
+        /* Leave room for shadow */
+        margin: 0 0 2rem 2px;
+        background: #fdfaf3;
+        border: 3px solid #1a1a1a;
         border-radius: 16px;
         box-shadow: 6px 6px 0 #1a1a1a;
-        margin: 0;
-        width: 100%;
+        overflow: hidden;
+        /* Clips header corners */
+        padding: 0 !important;
+        box-sizing: border-box;
     }
 
-    /* Force Mobile Width */
-    .recipe-carousel-container .swiper-slide {
-        width: 310px !important;
-        /* Increased from 250px to fill space */
-    }
-
-    /* Tab Header */
+    /* HEADER BECOMES TOP SECTION (No Outer Borders) */
     .recipe-carousel-container .carousel-header {
-        position: relative;
-        top: auto;
-        left: auto;
-        width: 100%;
-        margin: 0;
-        border-radius: 14px 14px 0 0;
-        margin-bottom: -1.5rem !important;
-        /* Forces overlap: Header sits ON TOP of content */
-        transform: none !important;
-        justify-content: space-between;
-        background: #ffd93d;
-        /* Ensure opaque background */
-        z-index: 20;
-
-        /* FORCE FIT ON MOBILE */
+        position: static !important;
         width: 100% !important;
         max-width: 100% !important;
-        box-sizing: border-box !important;
+        margin: 0 !important;
         padding: 0.8rem 1rem;
-        flex-wrap: wrap;
 
-        /* EXTEND SHADOW TO LEFT to cover gap */
-        box-shadow: 6px 6px 0 #1a1a1a, -2px 6px 0 #1a1a1a !important;
+        background: #ffd93d;
+        border: none !important;
+        border-bottom: 3px solid #1a1a1a !important;
+        /* The Divider */
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        transform: none !important;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-sizing: border-box !important;
     }
 
-    .recipe-carousel-container .carousel-title {
-        font-size: 1.4rem;
-        /* Slightly smaller to prevent overflow */
+    /* WRAPPER BECOMES BOTTOM SECTION (Transparent & Borderless) */
+    .carousel-wrapper {
+        position: static !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding-top: 0 !important;
+
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
     }
 
-    /* Show navigation buttons on mobile with smaller size */
+    /* SWIPER ADJUSTMENTS */
+    .recipe-carousel-container .mySwiper {
+        padding: 30px 0 30px !important;
+        /* Balanced vertical spacing */
+        width: 100% !important;
+    }
+
+    /* Slide Logic - Keep 100% Width */
+    .recipe-carousel-container .swiper-slide {
+        width: 100% !important;
+        max-width: 100% !important;
+        display: flex;
+        justify-content: center;
+    }
+
+    /* Nav Buttons */
     .recipe-carousel-container .carousel-nav-btn {
         width: 48px;
         height: 48px;
         box-shadow: 3px 3px 0 #1a1a1a;
+        top: 55% !important;
+        /* Offset header height to visually center on card */
     }
 
     .carousel-nav-btn.left {
-        left: 0.5rem;
+        left: 5px;
     }
 
     .carousel-nav-btn.right {
-        right: 0.5rem;
+        right: 5px;
     }
 
-    .recipe-carousel-container .mySwiper {
-        padding: 40px 0 60px !important;
-        /* Zero side padding, strictly using slidesOffset */
-        /* Adjusted to match visual symmetry while keeping safe area */
+    .recipe-carousel-container .carousel-title {
+        font-size: 1.4rem;
+        padding-top: 4px !important;
+        /* Reset desktop padding, keep slight optical fit */
+    }
+
+    /* Fix internal alignment of icon and title */
+    .cuisine-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
     }
 }
 
 /* --- DARK MODE --- */
 .dark-mode .carousel-wrapper {
-    background: #1a1a1a;
-    background-image:
-        linear-gradient(#2a2a2a 1px, transparent 1px),
-        linear-gradient(90deg, #2a2a2a 1px, transparent 1px);
-    background-size: 20px 20px;
-    border-color: #000;
-    box-shadow: 14px 14px 0 #ffd93d;
+    background: #27272a;
+    border: 2px solid #52525b;
+    box-shadow: 6px 6px 0 rgba(251, 191, 36, 0.3);
 }
 
 .dark-mode .carousel-header {
-    background: #ffd93d;
-    color: #1a1a1a;
-    border-color: #000;
-    box-shadow: 6px 6px 0 #000;
+    background: #fbbf24;
+    color: #18181b;
+    border-bottom: 2px solid #fcd34d;
+    box-shadow: none;
 }
 
 .dark-mode .carousel-title {
-    color: #1a1a1a;
+    color: #18181b;
+    font-weight: 700;
 }
 
 .dark-mode .recipe-count {
-    background: #1a1a1a;
-    color: #ffd93d;
+    background: rgba(24, 24, 27, 0.95);
+    color: #fbbf24;
+    border: 1px solid #fbbf24;
 }
 
 .dark-mode .cuisine-icon {
-    color: #1a1a1a;
+    color: #18181b;
 }
 
 .dark-mode .carousel-nav-btn {
-    background: #1a1a1a;
-    border-color: #ffd93d;
-    color: #ffd93d;
-    box-shadow: 4px 4px 0 #1a1a1a;
+    background: #27272a;
+    border: 2px solid #fbbf24;
+    color: #fbbf24;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+/* Dark Mode Mobile Overrides */
+@media (max-width: 768px) {
+    .dark-mode .recipe-carousel-container {
+        background: #27272a;
+        border: 2px solid #52525b;
+        box-shadow: 6px 6px 0 rgba(251, 191, 36, 0.3) !important;
+    }
+
+    .dark-mode .recipe-carousel-container .carousel-header {
+        background: #fbbf24 !important;
+        color: #18181b !important;
+        border-bottom: 2px solid #fcd34d !important;
+    }
+
+    .dark-mode .carousel-nav-btn {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+    }
 }
 
 .dark-mode .carousel-nav-btn:hover {
-    background: #ffd93d;
-    color: #1a1a1a;
-    border-color: #ffd93d;
-    box-shadow: 6px 6px 0 #000;
+    background: #fbbf24;
+    color: #18181b;
+    border-color: #fcd34d;
+    box-shadow: 0 6px 8px -1px rgba(251, 191, 36, 0.4);
 }

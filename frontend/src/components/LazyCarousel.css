@@ -87,6 +87,7 @@
     animation: shimmer 2s infinite;
 }
 
+/* Skeleton Loading Animation */
 @keyframes shimmer {
     0% {
         background-position: -200% 0;
@@ -95,6 +96,12 @@
     100% {
         background-position: 200% 0;
     }
+}
+
+/* Scroll Offset for Sticky Header */
+.lazy-carousel-wrapper {
+    scroll-margin-top: 300px;
+    /* Increased offset to stop scrolling earlier */
 }
 
 /* Mobile adjustments */

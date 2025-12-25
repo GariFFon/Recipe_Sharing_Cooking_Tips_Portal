@@ -44,11 +44,11 @@ const RecipeCarousel = ({ title, recipes }) => {
                     style={{ padding: '20px 10px 40px 10px' }} // Padding for shadows/hover
                     breakpoints={{
                         320: {
-                            centeredSlides: false, // FORCE Left Align
-                            slidesPerView: 'auto',
-                            spaceBetween: 20, // Standardized Gap
-                            slidesOffsetBefore: 26, // Left gap
-                            slidesOffsetAfter: 20, // Standardized End Offset
+                            centeredSlides: true, // Center the card
+                            slidesPerView: 1, // Single card view
+                            spaceBetween: 16, // Clean gap
+                            slidesOffsetBefore: 0, // No offset needed
+                            slidesOffsetAfter: 0,
                         },
                         768: {
                             centeredSlides: false, // Desktop: Not centered

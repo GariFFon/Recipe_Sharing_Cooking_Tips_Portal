@@ -89,16 +89,61 @@ app.get('/api/recipes', async (req, res) => {
 });
 
 // GET grouped recipes for Netflix-style carousels
+// GET grouped recipes for Netflix-style carousels with Category Pagination
 app.get('/api/recipes/grouped', async (req, res) => {
   try {
     const type = req.query.type; // Veg, Non-Veg, or All
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 4; // Default to 4 countries as requested
+    const skip = (page - 1) * limit;
+
     let query = {};
     if (type && type !== 'All') {
       query.dietaryType = type;
     }
 
-    const recipes = await Recipe.find(query).sort({ cuisine: 1, createdAt: -1 });
+    // 1. Get all unique cuisines matching current filter (Fast operation)
+    const rawCuisines = await Recipe.distinct('cuisine', query);
 
+    // 2. Normalize and Sort Categories
+    // Map missing/empty cuisines to 'Global', deduplicate, and sort alphabetically
+    const uniqueCategories = [...new Set(rawCuisines.map(c => c || 'Global'))].sort();
+
+    // 3. Paginate Categories
+    const totalCategories = uniqueCategories.length;
+    const targetCategories = uniqueCategories.slice(skip, skip + limit);
+
+    if (targetCategories.length === 0) {
+      return res.json({
+        data: [],
+        hasMore: false,
+        totalCategories
+      });
+    }
+
+    // 4. Build Query for specific categories
+    // We need to match recipes that belong to our target categories
+    // "Global" maps back to { $in: [null, ''] }
+    const dbQuery = {
+      ...query,
+      $or: [
+        { cuisine: { $in: targetCategories } }
+      ]
+    };
+
+    if (targetCategories.includes('Global')) {
+      dbQuery.$or.push({ cuisine: null });
+      dbQuery.$or.push({ cuisine: '' });
+    }
+
+    // 5. Fetch Recipes only for the target categories
+    const recipes = await Recipe.find(dbQuery).sort({ cuisine: 1, createdAt: -1 });
+
+    // Calculate Total Recipes Count for the entire filter (Type)
+    // This allows the frontend to show "50 Recipes Found" even if only 10 are loaded.
+    const totalRecipesCount = await Recipe.countDocuments(query);
+
+    // 6. Group by Category
     const grouped = recipes.reduce((acc, recipe) => {
       const category = recipe.cuisine || 'Global';
       if (!acc[category]) {
@@ -108,15 +153,18 @@ app.get('/api/recipes/grouped', async (req, res) => {
       return acc;
     }, {});
 
-    // Sort categories alphabetically but keep 'Global' or others if needed
-    const sortedCategories = Object.keys(grouped).sort();
-
-    const result = sortedCategories.map(category => ({
+    // 7. Format Result ensuring order matches targetCategories
+    const result = targetCategories.map(category => ({
       category,
-      recipes: grouped[category]
-    }));
+      recipes: grouped[category] || []
+    })).filter(group => group.recipes.length > 0);
 
-    res.json(result);
+    res.json({
+      data: result,
+      hasMore: (skip + limit) < totalCategories,
+      totalCategories,
+      totalRecipesCount
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Footer from '../components/Footer';
+import SupremeNewsletter from '../components/SupremeNewsletter';
 import { API_BASE_URL } from '../config';
 import './RecipeDetails.css';
 
@@ -200,215 +201,221 @@ const RecipeDetails = () => {
     if (!recipe) return <div className="loading">Recipe not found.</div>;
 
     return (
-        <div className="container recipe-details-page">
-            <Link to="/recipes" className="back-link">← Back to Recipes</Link>
+        <>
+            <div className="container recipe-details-page">
+                <Link to="/recipes" className="back-link">← Back to Recipes</Link>
 
-            <div className="details-header">
-                <h1 className="details-title">{recipe.title}</h1>
-                <div className="meta-grid">
-                    <div className="meta-item">
-                        <span className="meta-label">Total Time</span>
-                        <span className="meta-value">{recipe.cookTime || '45 mins'}</span>
-                    </div>
-                    <div className="meta-item">
-                        <span className="meta-label">Prep Time</span>
-                        <span className="meta-value">{recipe.prepTime || '15 mins'}</span>
-                    </div>
-                    <div className="meta-item control-item" id="tour-servings">
-                        <span className="meta-label">Servings</span>
-                        <div className="servings-control">
-                            <button onClick={() => updateServings(-1)}>−</button>
-                            <span className="meta-value">{currentServings}</span>
-                            <button onClick={() => updateServings(1)}>+</button>
+                <div className="details-header">
+                    <h1 className="details-title">{recipe.title}</h1>
+                    <div className="meta-grid">
+                        <div className="meta-item">
+                            <span className="meta-label">Total Time</span>
+                            <span className="meta-value">{recipe.cookTime || '45 mins'}</span>
                         </div>
-                    </div>
-                    <div className="meta-item">
-                        <span className="meta-label">Difficulty</span>
-                        <span className="meta-value">{recipe.difficulty || 'Medium'}</span>
-                    </div>
-                </div>
-
-                <div className="details-image-container">
-                    <img src={recipe.image} alt={recipe.title} className="details-image" />
-                    <button
-                        className={`details-like-btn ${liked ? 'active' : ''}`}
-                        onClick={toggleLike}
-                        aria-label="Toggle Favorite"
-                    >
-                        <svg viewBox="0 0 24 24" width="28" height="28" fill={liked ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2">
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            <div className="details-content">
-                {/* Description removed as it duplicates instructions */}
-
-                <div className="recipe-grid">
-                    <div className="left-column-sidebar">
-                        {/* Timer Moved to Floating Widget */}
-
-                        <div className="ingredients-section sticky-section" id="tour-ingredients">
-                            <div className="ingredients-header">
-                                <h3>Ingredients</h3>
-                                <div className="scaling-switch">
-                                    <button
-                                        className={Math.abs(currentServings - baseServings * 0.5) < 0.001 ? 'active' : ''}
-                                        onClick={() => setCurrentServings(baseServings * 0.5)}
-                                    >
-                                        0.5x
-                                    </button>
-                                    <button
-                                        className={Math.abs(currentServings - baseServings) < 0.001 ? 'active' : ''}
-                                        onClick={() => setCurrentServings(baseServings)}
-                                    >
-                                        1x
-                                    </button>
-                                    <button
-                                        className={Math.abs(currentServings - baseServings * 2) < 0.001 ? 'active' : ''}
-                                        onClick={() => setCurrentServings(baseServings * 2)}
-                                    >
-                                        2x
-                                    </button>
-                                </div>
+                        <div className="meta-item">
+                            <span className="meta-label">Prep Time</span>
+                            <span className="meta-value">{recipe.prepTime || '15 mins'}</span>
+                        </div>
+                        <div className="meta-item control-item" id="tour-servings">
+                            <span className="meta-label">Servings</span>
+                            <div className="servings-control">
+                                <button onClick={() => updateServings(-1)}>−</button>
+                                <span className="meta-value">{currentServings}</span>
+                                <button onClick={() => updateServings(1)}>+</button>
                             </div>
-                            <p className="scale-note">Adjusted for {currentServings} servings</p>
-                            <ul>
-                                {recipe.ingredients.map((ing, index) => (
-                                    <li key={index}>
-                                        <input type="checkbox" id={`ing-${index}`} />
-                                        <label htmlFor={`ing-${index}`}>{scaleIngredient(ing)}</label>
-                                    </li>
-                                ))}
-                            </ul>
+                        </div>
+                        <div className="meta-item">
+                            <span className="meta-label">Difficulty</span>
+                            <span className="meta-value">{recipe.difficulty || 'Medium'}</span>
                         </div>
                     </div>
 
-                    <div className="instructions-section" id="tour-instructions">
-                        <h3>Instructions</h3>
-
-                        <div className="instructions-list">
-                            {recipe.instructions
-                                .filter(inst => !/^step\s+\d+$/i.test(inst.trim())) // Remove standalone "step 1", "step 2" entries
-                                .map((inst, index) => (
-                                    <div key={index} className="step">
-                                        <span className="step-num">{index + 1}</span>
-                                        <div className="step-content">
-                                            <p>{inst.replace(/^(step\s+\d+[:.]\s*|\d+\.\s*|Step\s+\d+[:.]\s*)/i, '').trim()}</p>
-                                        </div>
-                                    </div>
-                                ))}
-                        </div>
+                    <div className="details-image-container">
+                        <img src={recipe.image} alt={recipe.title} className="details-image" />
+                        <button
+                            className={`details-like-btn ${liked ? 'active' : ''}`}
+                            onClick={toggleLike}
+                            aria-label="Toggle Favorite"
+                        >
+                            <svg viewBox="0 0 24 24" width="28" height="28" fill={liked ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
                     </div>
                 </div>
 
-                {recipe.tips && (
-                    <div className="tips-section">
-                        <h3>👨‍🍳 Chef's Tips</h3>
-                        <p>{recipe.tips}</p>
+                <div className="details-content">
+                    {/* Description removed as it duplicates instructions */}
+
+                    <div className="recipe-grid">
+                        <div className="left-column-sidebar">
+                            {/* Timer Moved to Floating Widget */}
+
+                            <div className="ingredients-section sticky-section" id="tour-ingredients">
+                                <div className="ingredients-header">
+                                    <h3>Ingredients</h3>
+                                    <div className="scaling-switch">
+                                        <button
+                                            className={Math.abs(currentServings - baseServings * 0.5) < 0.001 ? 'active' : ''}
+                                            onClick={() => setCurrentServings(baseServings * 0.5)}
+                                        >
+                                            0.5x
+                                        </button>
+                                        <button
+                                            className={Math.abs(currentServings - baseServings) < 0.001 ? 'active' : ''}
+                                            onClick={() => setCurrentServings(baseServings)}
+                                        >
+                                            1x
+                                        </button>
+                                        <button
+                                            className={Math.abs(currentServings - baseServings * 2) < 0.001 ? 'active' : ''}
+                                            onClick={() => setCurrentServings(baseServings * 2)}
+                                        >
+                                            2x
+                                        </button>
+                                    </div>
+                                </div>
+                                <p className="scale-note">Adjusted for {currentServings} servings</p>
+                                <ul>
+                                    {recipe.ingredients.map((ing, index) => (
+                                        <li key={index}>
+                                            <input type="checkbox" id={`ing-${index}`} />
+                                            <label htmlFor={`ing-${index}`}>{scaleIngredient(ing)}</label>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div className="instructions-section" id="tour-instructions">
+                            <h3>Instructions</h3>
+
+                            <div className="instructions-list">
+                                {recipe.instructions
+                                    .filter(inst => {
+                                        const trimmed = inst.trim();
+                                        // Remove: "1", "1.", "Step 1", empty strings
+                                        return trimmed.length > 0 && !/^(\d+[:.)]?|Step\s+\d+[:.)]?)$/i.test(trimmed);
+                                    })
+                                    .map((inst, index) => (
+                                        <div key={index} className="step">
+                                            <span className="step-num">{index + 1}</span>
+                                            <div className="step-content">
+                                                <p>{inst.replace(/^((?:Step\s*)?\d+[:.)]?\s+)/i, '').trim()}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                            </div>
+                        </div>
                     </div>
-                )}
-            </div>
 
-            {/* Drag Constraints Container (Invisible Interceptor) */}
-            <div ref={constraintsRef} className="drag-constraints" />
+                    {recipe.tips && (
+                        <div className="tips-section">
+                            <h3>👨‍🍳 Chef's Tips</h3>
+                            <p>{recipe.tips}</p>
+                        </div>
+                    )}
+                </div>
 
-            {/* FLOATING TIMER WIDGET */}
-            <motion.div
-                className={`floating-timer-widget ${isMinimized ? 'minimized' : ''}`}
-                drag
-                dragConstraints={constraintsRef}
-                dragElastic={0.1}
-                dragMomentum={false}
-                layout
-                transition={{ type: "spring", stiffness: 500, damping: 25, mass: 0.5 }}
-                initial={{ bottom: 20, right: 20 }}
-                whileDrag={{ scale: 1.05, cursor: 'grabbing' }}
-                onDoubleClick={() => setIsMinimized(!isMinimized)}
-                onTouchEnd={(e) => {
-                    // Custom Double Tap Logic for Mobile
-                    if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return; // Ignore buttons
+                {/* Drag Constraints Container (Invisible Interceptor) */}
+                <div ref={constraintsRef} className="drag-constraints" />
 
-                    const now = Date.now();
-                    if (now - (window.lastTapTime || 0) < 300) {
-                        setIsMinimized(!isMinimized);
-                    }
-                    window.lastTapTime = now;
-                }}
-            >
+                {/* FLOATING TIMER WIDGET */}
+                <motion.div
+                    className={`floating-timer-widget ${isMinimized ? 'minimized' : ''}`}
+                    drag
+                    dragConstraints={constraintsRef}
+                    dragElastic={0.1}
+                    dragMomentum={false}
+                    layout
+                    transition={{ type: "spring", stiffness: 500, damping: 25, mass: 0.5 }}
+                    initial={{ bottom: 20, right: 20 }}
+                    whileDrag={{ scale: 1.05, cursor: 'grabbing' }}
+                    onDoubleClick={() => setIsMinimized(!isMinimized)}
+                    onTouchEnd={(e) => {
+                        // Custom Double Tap Logic for Mobile
+                        if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return; // Ignore buttons
+
+                        const now = Date.now();
+                        if (now - (window.lastTapTime || 0) < 300) {
+                            setIsMinimized(!isMinimized);
+                        }
+                        window.lastTapTime = now;
+                    }}
+                >
 
 
-                <AnimatePresence mode="popLayout" initial={false}>
-                    {!isMinimized ? (
-                        <motion.div
-                            key="expanded"
-                            className="timer-display-wrapper"
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.9 }}
-                            transition={{ duration: 0.2 }}
-                        >
-                            <div className="timer-row">
-                                <button className="timer-adjust-btn" onClick={() => adjustTime(-60)}>−</button>
-                                <div className={`timer-digit-box ${isTimerRunning ? 'pulse' : ''}`}>
+                    <AnimatePresence mode="popLayout" initial={false}>
+                        {!isMinimized ? (
+                            <motion.div
+                                key="expanded"
+                                className="timer-display-wrapper"
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.9 }}
+                                transition={{ duration: 0.2 }}
+                            >
+                                <div className="timer-row">
+                                    <button className="timer-adjust-btn" onClick={() => adjustTime(-60)}>−</button>
+                                    <div className={`timer-digit-box ${isTimerRunning ? 'pulse' : ''}`}>
+                                        {timeLeft !== null
+                                            ? formatTime(timeLeft)
+                                            : formatTime(parseDuration(recipe.prepTime || '15 mins'))}
+                                    </div>
+                                    <button className="timer-adjust-btn" onClick={() => adjustTime(60)}>+</button>
+                                </div>
+                                <div className="timer-controls">
+                                    {!isTimerRunning && timeLeft === null && (
+                                        <button className="btn-timer-start" onClick={toggleTimer}>Start</button>
+                                    )}
+                                    {(isTimerRunning || timeLeft !== null) && (
+                                        <>
+                                            <button className={`btn-timer-toggle ${isTimerRunning ? 'paused' : ''}`} onClick={toggleTimer}>
+                                                {isTimerRunning ? 'Pause' : 'Resume'}
+                                            </button>
+                                            <button className="btn-timer-reset" onClick={resetTimer}>Reset</button>
+                                        </>
+                                    )}
+                                </div>
+                            </motion.div>
+                        ) : (
+                            <motion.div
+                                key="minimized"
+                                className="minimized-content"
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.9 }}
+                                transition={{ duration: 0.2 }}
+                                onClick={() => setIsMinimized(false)} // Tap to expand (Mobile Friendly)
+                            >
+                                <span className="minimized-time">
                                     {timeLeft !== null
                                         ? formatTime(timeLeft)
                                         : formatTime(parseDuration(recipe.prepTime || '15 mins'))}
-                                </div>
-                                <button className="timer-adjust-btn" onClick={() => adjustTime(60)}>+</button>
-                            </div>
-                            <div className="timer-controls">
-                                {!isTimerRunning && timeLeft === null && (
-                                    <button className="btn-timer-start" onClick={toggleTimer}>Start</button>
-                                )}
-                                {(isTimerRunning || timeLeft !== null) && (
-                                    <>
-                                        <button className={`btn-timer-toggle ${isTimerRunning ? 'paused' : ''}`} onClick={toggleTimer}>
-                                            {isTimerRunning ? 'Pause' : 'Resume'}
-                                        </button>
-                                        <button className="btn-timer-reset" onClick={resetTimer}>Reset</button>
-                                    </>
-                                )}
-                            </div>
-                        </motion.div>
-                    ) : (
-                        <motion.div
-                            key="minimized"
-                            className="minimized-content"
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.9 }}
-                            transition={{ duration: 0.2 }}
-                            onClick={() => setIsMinimized(false)} // Tap to expand (Mobile Friendly)
+                                </span>
+                                <button className={`mini-toggle-btn ${isTimerRunning ? 'running' : ''}`} onClick={(e) => { e.stopPropagation(); toggleTimer(); }}>
+                                    {isTimerRunning ? '⏸' : '▶'}
+                                </button>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
+                    {/* Overlay Controls (Moved to end for Z-Index Stacking) */}
+                    <motion.div className="overlay-controls">
+
+                        <button
+                            className="minimize-btn"
+                            onClick={(e) => { e.stopPropagation(); setIsMinimized(!isMinimized); }}
+                            title="Minimize"
                         >
-                            <span className="minimized-time">
-                                {timeLeft !== null
-                                    ? formatTime(timeLeft)
-                                    : formatTime(parseDuration(recipe.prepTime || '15 mins'))}
-                            </span>
-                            <button className={`mini-toggle-btn ${isTimerRunning ? 'running' : ''}`} onClick={(e) => { e.stopPropagation(); toggleTimer(); }}>
-                                {isTimerRunning ? '⏸' : '▶'}
-                            </button>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-
-                {/* Overlay Controls (Moved to end for Z-Index Stacking) */}
-                <motion.div className="overlay-controls">
-
-                    <button
-                        className="minimize-btn"
-                        onClick={(e) => { e.stopPropagation(); setIsMinimized(!isMinimized); }}
-                        title="Minimize"
-                    >
-                        {isMinimized ? '□' : '−'}
-                    </button>
+                            {isMinimized ? '□' : '−'}
+                        </button>
+                    </motion.div>
                 </motion.div>
-            </motion.div>
 
+            </div>
             <Footer />
-        </div>
+        </>
     );
 };
 

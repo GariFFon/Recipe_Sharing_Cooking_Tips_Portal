@@ -219,6 +219,86 @@
     margin-top: 2rem;
 }
 
+/* ========= LOAD MORE BUTTON ========= */
+.load-more-container {
+    text-align: center;
+    margin: 4rem 0 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+.load-more-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1rem 3rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: var(--font-body);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #1a1a1a;
+    /* Dark Text */
+    background: #ffffff;
+    /* White BG */
+    border: 3px solid #1a1a1a;
+    /* Thick Dark Border */
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 6px 6px 0 #ffd93d;
+    /* Funky Yellow Shadow */
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.load-more-btn:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 9px 9px 0 #ffd93d;
+}
+
+.load-more-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 #ffd93d;
+}
+
+.load-more-btn svg {
+    transition: transform 0.3s ease;
+}
+
+.load-more-btn:hover svg {
+    transform: translateY(3px);
+}
+
+.load-more-btn:disabled {
+    opacity: 0.7;
+    cursor: wait;
+    transform: none !important;
+    box-shadow: 4px 4px 0 #ccc !important;
+}
+
+/* Simple Loader for Button */
+.loader {
+    width: 24px;
+    height: 24px;
+    border: 3px solid #1a1a1a;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 .pagination-container {
     display: flex;
     justify-content: center;
@@ -309,127 +389,179 @@
     }
 }
 
-/* ========== DARK MODE STYLES FOR RECIPES PAGE (Platinum & Gold) ========== */
+/* ========== VIBRANT DARK MODE ========== */
+/* Lighter backgrounds + Bright Yellow-Gold accent for energy */
 
 .dark-mode .recipes-page {
-    background-color: #1a1a1a;
+    background: #18181b;
 }
 
 .dark-mode .recipes-hero {
-    background: linear-gradient(to bottom, #1a1a1a 0%, #0f0f0f 100%);
+    background: #18181b;
+    position: relative;
+}
+
+.dark-mode .recipes-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(circle at 20% 50%, rgba(251, 191, 36, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, rgba(251, 191, 36, 0.03) 0%, transparent 50%);
+    pointer-events: none;
 }
 
 .dark-mode .hero-sub {
-    color: #d4af37;
-    /* Gold Subheader */
+    color: #fbbf24;
+    text-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
 }
 
 .dark-mode .hero-title {
     color: #ffffff;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
+/* SEARCH & INPUTS */
 .dark-mode .hero-search input {
-    background-color: #1a1a1a;
-    border: 2px solid #e0e0e0;
-    /* Platinum Border */
-    color: #d4af37;
-    /* Gold Text */
+    background: #27272a;
+    border: 2px solid #3f3f46;
+    color: #fafafa;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
 }
 
 .dark-mode .hero-search input::placeholder {
-    color: #666;
+    color: #a1a1aa;
 }
 
 .dark-mode .hero-search:hover input {
-    border-color: #d4af37;
-    /* Gold Hover */
-    background-color: #1a1a1a;
-    box-shadow: 0 10px 20px -5px rgba(212, 175, 55, 0.1);
+    border-color: #fbbf24;
+    background: rgba(39, 39, 42, 0.8);
+    box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.15), 0 8px 12px -2px rgba(0, 0, 0, 0.3);
 }
 
 .dark-mode .search-btn {
-    color: #e0e0e0;
+    color: #a1a1aa;
 }
 
 .dark-mode .hero-search:hover .search-btn {
-    color: #d4af37;
+    color: #fbbf24;
 }
 
+/* FILTERS */
 .dark-mode .filter-btn {
-    background: transparent;
-    border: 2px solid #e0e0e0;
-    /* Platinum Border */
-    color: #e0e0e0;
+    background: #27272a;
+    border: 2px solid #52525b;
+    color: #d4d4d8;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
 }
 
 .dark-mode .filter-btn:hover {
-    border-color: #d4af37;
-    color: #d4af37;
-    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
+    background: rgba(39, 39, 42, 0.9);
+    border: 2px solid #fbbf24;
+    color: #fbbf24;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px -1px rgba(0, 0, 0, 0.3), 0 0 0 3px rgba(251, 191, 36, 0.15);
 }
 
 .dark-mode .filter-btn.active {
-    background: #d4af37;
-    /* Gold Background */
-    color: #000;
-    border-color: #d4af37;
-    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+    background: #fbbf24;
+    color: #18181b;
+    border: 2px solid #fcd34d;
+    box-shadow: 0 8px 16px -4px rgba(251, 191, 36, 0.4);
+    font-weight: 700;
+    transform: translateY(-2px);
 }
 
+/* SECTION HEADERS */
 .dark-mode .section-title {
     color: #ffffff;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .dark-mode .section-divider {
-    background-color: #d4af37;
+    background: linear-gradient(90deg, transparent, #fbbf24, transparent);
+    height: 3px;
+    box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
 }
 
 .dark-mode .results-count {
-    color: #888;
+    color: #d4d4d8;
 }
 
+/* EMPTY STATES */
 .dark-mode .loading,
 .dark-mode .empty-state {
-    color: #888;
+    color: #a1a1aa;
 }
 
 .dark-mode .empty-state button {
-    background: #1a1a1a;
-    border: 2px solid #e0e0e0;
-    color: #e0e0e0;
+    background: #fbbf24;
+    color: #18181b;
+    border: none;
+    font-weight: 700;
+    box-shadow: 0 4px 8px -1px rgba(251, 191, 36, 0.3);
 }
 
 .dark-mode .empty-state button:hover {
-    background: #e0e0e0;
-    color: #1a1a1a;
+    box-shadow: 0 8px 16px -4px rgba(251, 191, 36, 0.4);
+    transform: translateY(-2px);
 }
 
-.dark-mode .page-nav-btn,
-.dark-mode .page-num-btn {
-    background: #1a1a1a;
-    border: 1px solid #333;
-    color: #e0e0e0;
+/* LOAD MORE BUTTON */
+.dark-mode .load-more-btn {
+    background: #27272a;
+    color: #fbbf24;
+    font-weight: 700;
+    border: 2px solid #fbbf24;
+    box-shadow:
+        0 0 0 1px rgba(251, 191, 36, 0.2),
+        0 8px 16px -4px rgba(0, 0, 0, 0.4);
+    border-radius: 50px;
+    padding: 1rem 3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.dark-mode .page-nav-btn:hover:not(:disabled),
-.dark-mode .page-num-btn:hover:not(.active) {
-    background: #2d2d2d;
-    border-color: #e0e0e0;
+.dark-mode .load-more-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.15), transparent);
+    transition: left 0.5s ease;
 }
 
-.dark-mode .page-nav-btn:disabled {
-    background: #1a1a1a;
-    opacity: 0.4;
-    border-color: #333;
+.dark-mode .load-more-btn:hover::before {
+    left: 100%;
 }
 
-.dark-mode .page-num-btn.active {
-    background: #d4af37;
-    /* Gold Active */
-    color: #000;
-    border-color: #d4af37;
+.dark-mode .load-more-btn:hover {
+    background: #fbbf24;
+    color: #18181b;
+    border-color: #fcd34d;
+    box-shadow:
+        0 0 0 4px rgba(251, 191, 36, 0.2),
+        0 12px 20px -6px rgba(251, 191, 36, 0.4);
+    transform: translateY(-2px);
 }
 
-.dark-mode .page-dots {
-    color: #666;
+.dark-mode .load-more-btn:active {
+    transform: translateY(0);
+    box-shadow:
+        0 0 0 2px rgba(251, 191, 36, 0.2),
+        0 4px 8px -2px rgba(0, 0, 0, 0.4);
+}
+
+.dark-mode .loader {
+    border-color: #52525b;
+    border-top-color: #fbbf24;
 }

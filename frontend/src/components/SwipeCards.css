@@ -1,9 +1,9 @@
-/* Swipeable Cards Component - Vanilla CSS */
+/* Swipeable Cards Component - Responsive */
 
 /* Section Wrapper */
 .swipe-section-wrapper {
     width: 100%;
-    padding: 2rem 1rem;
+    padding: 4rem 1rem;
 }
 
 /* Section Header */
@@ -33,9 +33,10 @@
     justify-content: center;
     gap: 2rem;
     position: relative;
+    min-height: 550px;
 }
 
-/* Visual Indicators (non-interactive) */
+/* Visual Indicators */
 .swipe-indicator {
     display: flex;
     align-items: center;
@@ -66,9 +67,9 @@
 
 .swipe-cards-container {
     display: grid;
-    height: 600px;
+    height: 500px;
     width: 100%;
-    max-width: 400px;
+    max-width: 350px;
     place-items: center;
     background: transparent;
     position: relative;
@@ -76,11 +77,12 @@
 }
 
 .swipe-card {
-    height: 500px;
-    width: 400px;
+    height: 100%;
+    width: 100%;
+    max-height: 500px;
+    max-width: 350px;
     transform-origin: bottom;
-    border-radius: 0.5rem;
-    /* rounded-lg */
+    border-radius: 12px;
     background: white;
     object-fit: cover;
     cursor: grab;
@@ -156,103 +158,111 @@
     background: #667eea;
     color: white;
     border: none;
-    padding: 0.625rem 1.5rem;
-    border-radius: 0.375rem;
-    font-size: 0.95rem;
-    font-weight: 500;
-    letter-spacing: 0.3px;
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: 3px 3px 0px #1a1a1a;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    box-shadow: 4px 4px 0px #1a1a1a;
 }
 
 .swipe-reset-btn:hover {
     box-shadow: none;
-    transform: translate(3px, 3px);
+    transform: translate(4px, 4px);
 }
 
 .swipe-reset-btn:active {
-    box-shadow: 1px 1px 0px #1a1a1a;
+    box-shadow: 2px 2px 0px #1a1a1a;
     transform: translate(2px, 2px);
 }
 
-/* Responsive adjustments */
+/* Tablet */
+@media (max-width: 1024px) {
+    .swipe-cards-container {
+        max-width: 300px;
+        height: 450px;
+    }
+
+    .swipe-card {
+        max-width: 300px;
+        max-height: 450px;
+    }
+}
+
+/* Mobile */
 @media (max-width: 768px) {
+    .swipe-section-wrapper {
+        padding: 3rem 1rem;
+    }
+
     .swipe-section-header .section-title {
         font-size: 2rem;
     }
 
-    .swipe-section-header {
-        margin-bottom: 4rem;
-        /* Keep flexible spacing */
+    .swipe-cards-wrapper {
+        gap: 1rem;
+        min-height: 450px;
     }
 
-    .swipe-cards-wrapper {
-        gap: 2rem;
-        /* Keep gap */
-        padding: 3rem 0;
-        /* Add even MORE vertical padding to separate from other sections */
+    .swipe-indicator {
+        display: none;
     }
 
     .swipe-cards-container {
-        height: 400px;
-        /* Revert to original container height (was 450) */
-        max-width: 260px;
-        /* Slightly wider than original (240) but smaller than last try (280) */
+        max-width: 280px;
+        height: 420px;
     }
 
     .swipe-card {
-        height: 380px;
-        /* Slightly taller to help coverage */
-        width: 100%;
-        /* Fill container width */
-        object-fit: cover;
-        /* ESSENTIAL: Zoom/crop image to fill vertical space without black bars */
-        min-height: 100%;
-        /* Force full height usage */
+        max-width: 280px;
+        max-height: 420px;
+        border-radius: 8px;
+    }
+
+    .swipe-hint-text {
+        font-size: 1.1rem;
     }
 
     .swipe-hint-subtext {
-        font-size: 0.75rem;
+        font-size: 0.85rem;
     }
 }
 
+/* Small Mobile */
 @media (max-width: 480px) {
     .swipe-section-header .section-title {
         font-size: 1.75rem;
     }
 
     .swipe-cards-wrapper {
-        gap: 0.5rem;
-    }
-
-    .swipe-reset-btn {
-        padding: 0.5rem 1.25rem;
-        font-size: 0.875rem;
+        min-height: 400px;
     }
 
     .swipe-cards-container {
-        height: 350px;
-        max-width: 200px;
+        max-width: 240px;
+        height: 360px;
     }
 
     .swipe-card {
-        height: 280px;
-        width: 200px;
+        max-width: 240px;
+        max-height: 360px;
     }
 
     .swipe-hint {
-        bottom: 15px;
+        bottom: 20px;
     }
 
     .swipe-hint-text {
-        font-size: 0.875rem;
+        font-size: 1rem;
     }
 
     .swipe-hint-subtext {
-        font-size: 0.7rem;
+        font-size: 0.75rem;
+    }
+
+    .swipe-reset-btn {
+        padding: 0.625rem 1.5rem;
+        font-size: 0.9rem;
     }
 }

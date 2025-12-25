@@ -92,12 +92,16 @@ const Card = ({ id, url, setCards, cards, isFront, indexFromFront }) => {
     return "0deg";
   });
 
-  const exitX = useTransform(x, (value) => value < 0 ? -200 : 200);
-
-  const handleDragEnd = () => {
+  const handleDragEnd = (event, info) => {
     const xValue = x.get();
-    if (Math.abs(xValue) > 100) {
+    const threshold = 75; // Lower threshold for easier swiping on mobile
+
+    if (Math.abs(xValue) > threshold) {
+      // Card swiped away
       setCards((pv) => pv.filter((v) => v.id !== id));
+    } else {
+      // Reset card position if not swiped far enough
+      x.set(0);
     }
   };
 
@@ -112,34 +116,44 @@ const Card = ({ id, url, setCards, cards, isFront, indexFromFront }) => {
         x,
         opacity,
         rotate,
-        background: "white", // Ensure no black background shows
-        objectFit: "cover", // Failsafe
-        zIndex: 100 - indexFromFront, // Explicit stacking order
+        background: "white",
+        objectFit: "cover",
+        zIndex: 100 - indexFromFront,
         boxShadow: isFront
           ? "0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.5)"
           : undefined,
+        touchAction: isFront ? "none" : "auto", // Prevent scroll on front card
       }}
       animate={{
         scale: 1 - indexFromFront * 0.05,
-        y: -indexFromFront * 15, // Slightly smaller vertical gap
+        y: -indexFromFront * 15,
         opacity: 1,
         x: 0,
       }}
       initial={{
-        scale: 0.8, // Start smaller
+        scale: 0.8,
         opacity: 0,
-        y: -indexFromFront * 15 // Start at correct Y position
+        y: -indexFromFront * 15
       }}
       exit={{
-        x: x.get() < 0 ? -200 : 200,
+        x: x.get() < 0 ? -300 : 300,
         opacity: 0,
-        scale: 0.8,
-        transition: { duration: 0.5 }
+        scale: 0.5,
+        transition: { duration: 0.3 }
       }}
-      transition={{ type: "spring", stiffness: 60, damping: 20 }} // Even softer spring
+      transition={{
+        type: "spring",
+        stiffness: 300,
+        damping: 30
+      }}
       drag={isFront ? "x" : false}
-      dragElastic={1}
-      whileDrag={{ cursor: "grabbing" }}
+      dragConstraints={{ left: 0, right: 0 }}
+      dragElastic={0.7}
+      dragSnapToOrigin={false}
+      whileDrag={{
+        cursor: "grabbing",
+        scale: 1.05
+      }}
       onDragEnd={handleDragEnd}
       onMouseEnter={() => isFront && setIsHovered(true)}
       onMouseLeave={() => isFront && setIsHovered(false)}

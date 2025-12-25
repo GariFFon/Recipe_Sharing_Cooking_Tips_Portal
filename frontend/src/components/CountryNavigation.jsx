@@ -44,11 +44,15 @@ const CountryNavigation = () => {
     useEffect(() => {
         const fetchCuisines = async () => {
             try {
-                const response = await fetch(`${API_BASE_URL}/recipes/grouped`);
-                const data = await response.json();
+                // Fetch all countries (use large limit to get everything)
+                const response = await fetch(`${API_BASE_URL}/recipes/grouped?limit=100`);
+                const result = await response.json();
+
+                // Handle new paginated response format
+                const groupedData = result.data || result;
 
                 // Extract unique cuisines from grouped data
-                const uniqueCuisines = data.map(group => group.category).filter(Boolean);
+                const uniqueCuisines = groupedData.map(group => group.category).filter(Boolean);
                 setCuisines(uniqueCuisines);
             } catch (error) {
                 console.error('Error fetching cuisines:', error);

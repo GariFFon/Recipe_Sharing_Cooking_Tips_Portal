@@ -24,11 +24,17 @@ const CarouselSkeleton = ({ title }) => {
 };
 
 const LazyCarousel = ({ title, recipes, eager = false, id }) => {
-    const [isVisible, setIsVisible] = useState(eager);
+    // Check if this carousel is the scroll target
+    const params = new URLSearchParams(window.location.search);
+    const targetCuisine = params.get('cuisine');
+    const isScrollTarget = targetCuisine && id === `cuisine-${targetCuisine.toLowerCase().replace(/\s+/g, '-')}`;
+
+    // Load immediately if eager OR if this is the scroll target
+    const [isVisible, setIsVisible] = useState(eager || isScrollTarget);
     const ref = useRef();
 
     useEffect(() => {
-        if (eager) return; // Skip observer for eagerly loaded carousels
+        if (eager || isScrollTarget) return; // Skip observer for eagerly loaded or target carousels
 
         const observer = new IntersectionObserver(
             ([entry]) => {
@@ -50,10 +56,10 @@ const LazyCarousel = ({ title, recipes, eager = false, id }) => {
         return () => {
             if (observer) observer.disconnect();
         };
-    }, [eager]);
+    }, [eager, isScrollTarget]);
 
     return (
-        <div ref={ref} id={id} style={{ minHeight: isVisible ? 'auto' : '500px' }}>
+        <div ref={ref} id={id} className="lazy-carousel-wrapper" style={{ minHeight: isVisible ? 'auto' : '500px' }}>
             {isVisible ? (
                 <RecipeCarousel title={title} recipes={recipes} />
             ) : (

@@ -943,37 +943,38 @@
 }
 
 /* ========================================
-   FUNKY DARK MODE
-   High Contrast • Neon Accents • Sleek
+   VIBRANT DARK MODE
+   Lighter backgrounds + Bright Yellow-Gold
 ======================================== */
 
 .dark-mode .details-title {
     color: #ffffff;
-    text-shadow: 4px 4px 0 #d4a373;
+    text-shadow: 3px 3px 0 rgba(251, 191, 36, 0.3);
 }
 
 .dark-mode .back-link {
-    background: #1a1a1a;
-    border-color: #ffffff;
-    color: #ffffff;
-    box-shadow: 4px 4px 0 #ffffff;
+    background: rgba(39, 39, 42, 0.8);
+    backdrop-filter: blur(10px);
+    border: 2px solid #fbbf24;
+    color: #fbbf24;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .dark-mode .back-link:hover {
-    background: #ffd93d;
-    color: #000;
-    box-shadow: 6px 6px 0 #ffffff;
+    background: #fbbf24;
+    color: #18181b;
+    box-shadow: 0 6px 12px rgba(251, 191, 36, 0.4);
 }
 
 /* Meta Grid Dark */
 .dark-mode .meta-grid {
-    background: #1a1a1a;
-    border-color: #ffffff;
-    box-shadow: 8px 8px 0 #ffffff;
+    background: #27272a;
+    border: 2px solid #52525b;
+    box-shadow: 6px 6px 0 rgba(251, 191, 36, 0.3);
 }
 
 .dark-mode .meta-label {
-    color: #aaa;
+    color: #d4d4d8;
 }
 
 .dark-mode .meta-value {
@@ -981,116 +982,126 @@
 }
 
 .dark-mode .meta-item {
-    border-right-color: #333;
+    border-right-color: #3f3f46;
 }
 
 .dark-mode .servings-control {
-    background: #333;
-    border-color: #444;
+    background: #3f3f46;
+    border-color: #52525b;
 }
 
 .dark-mode .servings-control button {
-    background: #000;
-    border-color: #fff;
-    color: #fff;
-    box-shadow: 2px 2px 0 #fff;
+    background: #18181b;
+    border: 2px solid #fbbf24;
+    color: #fbbf24;
+    box-shadow: none;
+}
+
+.dark-mode .servings-control button:hover {
+    background: #fbbf24;
+    color: #18181b;
 }
 
 /* Hero Image Dark */
 .dark-mode .details-image {
-    border-color: #ffffff;
-    box-shadow: 16px 16px 0 rgba(255, 255, 255, 0.2);
+    border: 2px solid #52525b;
+    box-shadow: 10px 10px 0 rgba(251, 191, 36, 0.2);
 }
 
 .dark-mode .details-desc {
-    color: #e0e0e0;
-}
-
-.dark-mode .details-desc::before,
-.dark-mode .details-desc::after {
-    color: #ffd93d;
-    opacity: 0.8;
+    color: #e5e5e5;
 }
 
 /* Ingredients Dark */
 .dark-mode .ingredients-section {
-    background: #1a1a1a;
-    border-color: #ffffff;
-    box-shadow: 12px 12px 0 #333;
+    background: #27272a;
+    border: 2px solid #52525b;
+    box-shadow: 8px 8px 0 rgba(251, 191, 36, 0.3);
 }
 
 .dark-mode .ingredients-header {
-    border-bottom-color: #ffffff;
+    border-bottom-color: #52525b;
 }
 
 .dark-mode .ingredients-section h3 {
-    color: #fff;
+    color: #ffffff;
 }
 
 .dark-mode .scaling-switch {
-    background: #000;
+    background: #18181b;
+}
+
+.dark-mode .scaling-switch button.active {
+    background: #fbbf24;
+    color: #18181b;
 }
 
 .dark-mode .ingredients-section li {
-    border-bottom-color: #333;
+    border-bottom-color: #3f3f46;
 }
 
 .dark-mode .ingredients-section label {
-    color: #fff;
+    color: #fafafa;
 }
 
 .dark-mode .ingredients-section input[type="checkbox"] {
-    background: #000;
-    border-color: #fff;
+    background: #18181b;
+    border: 2px solid #fbbf24;
 }
 
 .dark-mode .ingredients-section input[type="checkbox"]:checked {
-    background: #fff;
-    box-shadow: 0 0 0 3px #ffd93d;
+    background: #fbbf24;
+    border-color: #fcd34d;
+    box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2);
 }
 
 .dark-mode .ingredients-section input:checked+label {
-    color: #666;
+    color: #71717a;
 }
 
 /* Instructions Dark */
 .dark-mode .instructions-section h3 {
-    color: #fff;
+    color: #ffffff;
+}
+
+.dark-mode .instructions-section h3::after {
+    background: #fbbf24;
 }
 
 .dark-mode .step-content {
-    background: #1a1a1a;
-    border-color: #fff;
-    box-shadow: 4px 4px 0 rgba(255, 255, 255, 0.1);
+    background: #27272a;
+    border: 2px solid #52525b;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .dark-mode .step-content p {
-    color: #e0e0e0;
+    color: #e5e5e5;
 }
 
 .dark-mode .step-num {
-    background: #ffd93d;
-    color: #000;
-    box-shadow: 4px 4px 0 #fff;
+    background: #fbbf24;
+    color: #18181b;
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
 }
 
 .dark-mode .step:not(:last-child)::before {
-    background: repeating-linear-gradient(to bottom, #444 0, #444 6px, transparent 6px, transparent 12px);
+    background-image: radial-gradient(circle, #fbbf24 30%, transparent 31%);
+    opacity: 0.6;
 }
 
 /* Tips Dark */
 .dark-mode .tips-section {
-    background: #2a2a2a;
-    border-color: #444;
-    color: #fff;
+    background: #27272a;
+    border: 2px solid #52525b;
+    color: #fafafa;
 }
 
 .dark-mode .tips-section h3 {
-    color: #ffd93d;
+    color: #fbbf24;
 }
 
 .dark-mode .tips-section::before {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(251, 191, 36, 0.1);
 }
 
 /* ========================================
@@ -1185,8 +1196,8 @@
 }
 
 .minimize-btn:hover {
-    background: #ffd93d;
-    /* Funky Yellow on hover */
+    background: #fbbf24;
+    /* Bright Yellow on hover */
     color: #000;
     border-color: #1a1a1a;
     transform: scale(1.1);
@@ -1201,7 +1212,8 @@
     flex-direction: row;
     align-items: center;
     box-shadow: 4px 4px 0 rgba(255, 255, 255, 0.2);
-    border: 2px solid #fff;
+    border: 2px solid #e0e0e0;
+    /* Silver Border */
     width: auto;
     overflow: visible;
     /* Allow overlay controls slightly out if needed, but here we keep inside */
@@ -1278,31 +1290,41 @@
 }
 
 .mini-toggle-btn.running {
-    background: #ffd93d;
-    box-shadow: 0 0 8px #ffd93d;
+    background: #fbbf24;
+    box-shadow: 0 0 8px #fbbf24;
 }
 
 
 
 /* Dark Mode Adjustments for Widget */
 .dark-mode .floating-timer-widget .timer-display-wrapper {
-    background: #1a1a1a;
-    /* Dark Card Background */
-    color: #ffffff;
-    /* White Text */
-    border-color: #fff;
-    box-shadow: 8px 8px 0 #fff;
+    background: #27272a;
+    color: #fafafa;
+    border: 2px solid #52525b;
+    box-shadow: 6px 6px 0 rgba(251, 191, 36, 0.3);
 }
 
+/* Specific inner text targeting */
 .dark-mode .floating-timer-widget .timer-display-wrapper h3,
-.dark-mode .floating-timer-widget .timer-display-wrapper .timer-time,
 .dark-mode .floating-timer-widget .timer-display-wrapper .timer-label {
-    color: #ffffff;
-    /* Ensure all inner text is white */
+    color: #d4d4d8;
 }
 
-.dark-mode .floating-timer-widget.minimized {
-    border-color: #ffd93d;
-    box-shadow: 4px 4px 0 #ffd93d;
-    background: #000;
+.dark-mode .floating-timer-widget .timer-display-wrapper .timer-time {
+    color: #fbbf24;
+    text-shadow: 0 0 12px rgba(251, 191, 36, 0.3);
+    font-weight: 800;
 }
+
+/* Minimized Pill State in Dark Mode */
+.dark-mode .floating-timer-widget.minimized {
+    background: #18181b;
+    border: 2px solid #fbbf24;
+    box-shadow: 4px 4px 0 rgba(251, 191, 36, 0.2);
+}
+
+.dark-mode .floating-timer-widget.minimized .minimized-time {
+    color: #fbbf24;
+}
+
+/* End of Dark Mode Adjustments */
