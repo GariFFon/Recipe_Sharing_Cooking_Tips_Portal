@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import RecipeCard from '../components/RecipeCard';
-import DraggableRecommendations from '../components/DraggableRecommendations';
+
 import { motion, AnimatePresence } from 'framer-motion';
 import { BACKEND_URL, API_BASE_URL } from '../config';
 import './Profile.css';
@@ -652,8 +652,7 @@ const Profile = () => {
                 )}
             </div>
 
-            {/* Draggable Recommendations Widget */}
-            <DraggableRecommendations />
+
         </div>
     );
 };
