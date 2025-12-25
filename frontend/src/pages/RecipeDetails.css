@@ -183,10 +183,69 @@
     box-shadow: 14px 14px 0 rgba(0, 0, 0, 1);
     /* Deep Brutalist Shadow */
     transition: transform 0.4s ease;
+    display: block;
+    /* Ensure no phantom spacing */
 }
 
-.details-image:hover {
+/* Image Container for Relative Positioning */
+.details-image-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 3.5rem;
+    /* Replaces bottom margin removed from meta-grid */
+    border-radius: 20px;
+}
+
+.details-image-container:hover .details-image {
     transform: rotate(-1deg) scale(1.01);
+}
+
+/* Floating Like Button */
+.details-like-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 3px solid #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 1);
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 10;
+    color: #ccc;
+}
+
+.details-like-btn svg {
+    fill: none;
+    transition: fill 0.3s ease, transform 0.2s ease;
+}
+
+.details-like-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 6px 6px 0 rgba(0, 0, 0, 1);
+}
+
+.details-like-btn:active {
+    transform: scale(0.95);
+    box-shadow: 2px 2px 0 rgba(0, 0, 0, 1);
+}
+
+.details-like-btn.active {
+    background: #ffd93d;
+    /* Active Yellow Background */
+    color: #e74c3c;
+    /* Red Heart */
+    border-color: #1a1a1a;
+}
+
+.details-like-btn.active svg {
+    fill: currentColor;
+    transform: scale(1.1);
 }
 
 /* 

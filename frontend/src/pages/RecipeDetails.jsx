@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import Footer from '../components/Footer';
 import { API_BASE_URL } from '../config';
 import './RecipeDetails.css';
@@ -13,6 +14,53 @@ const RecipeDetails = () => {
     // Portion Calculator State
     const [baseServings, setBaseServings] = useState(4); // Default, updated on fetch
     const [currentServings, setCurrentServings] = useState(4);
+
+    // Auth & Like Logic
+    const { user, updateUser } = useAuth();
+    const [liked, setLiked] = useState(false);
+
+    // Sync Like State
+    useEffect(() => {
+        if (user && user.favorites && recipe) {
+            const isFav = user.favorites.some(fav =>
+                (typeof fav === 'string' ? fav : fav._id) === recipe._id
+            );
+            setLiked(isFav);
+        } else {
+            setLiked(false);
+        }
+    }, [user, recipe]);
+
+    const toggleLike = async () => {
+        if (!user) {
+            alert('Please login to save favorites');
+            return;
+        }
+
+        const previousState = liked;
+        const newState = !liked;
+        setLiked(newState);
+
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`${API_BASE_URL}/auth/favorites/${recipe._id}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) throw new Error('Failed to update favorite');
+
+            const data = await response.json();
+            if (data.favorites) {
+                updateUser({ ...user, favorites: data.favorites });
+            }
+        } catch (error) {
+            console.error('Error toggling favorite:', error);
+            setLiked(previousState);
+        }
+    };
 
     useEffect(() => {
         fetch(`${API_BASE_URL}/recipes/${id}`)
@@ -107,7 +155,18 @@ const RecipeDetails = () => {
                         <span className="meta-value">{recipe.difficulty || 'Medium'}</span>
                     </div>
                 </div>
-                <img src={recipe.image} alt={recipe.title} className="details-image" />
+                <div className="details-image-container">
+                    <img src={recipe.image} alt={recipe.title} className="details-image" />
+                    <button
+                        className={`details-like-btn ${liked ? 'active' : ''}`}
+                        onClick={toggleLike}
+                        aria-label="Toggle Favorite"
+                    >
+                        <svg viewBox="0 0 24 24" width="28" height="28" fill={liked ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
 
             <div className="details-content">
