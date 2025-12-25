@@ -107,7 +107,7 @@ const SlideTabs = () => {
                 <Tab setPosition={setPosition} to="/recipes" tabsRef={tabsRef}>Recipes</Tab>
                 <Tab setPosition={setPosition} to="/lifestyle" tabsRef={tabsRef}>Lifestyle</Tab>
                 <Tab setPosition={setPosition} to="/about" tabsRef={tabsRef}>About</Tab>
-                <Tab setPosition={setPosition} to="/team" tabsRef={tabsRef}>Team</Tab>
+                {/* <Tab setPosition={setPosition} to="/team" tabsRef={tabsRef}>Team</Tab> */}
 
                 <Cursor position={position} />
             </ul>
@@ -247,7 +247,7 @@ const MobileMenu = ({ onClose }) => {
         { path: "/recipes", label: "Recipes" },
         { path: "/lifestyle", label: "Lifestyle" },
         { path: "/about", label: "About" },
-        { path: "/team", label: "Team" },
+        // { path: "/team", label: "Team" },
         { path: user ? "/profile" : "/login", label: user ? "Profile" : "Login" }
     ];
 
