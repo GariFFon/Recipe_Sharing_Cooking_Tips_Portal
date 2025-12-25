@@ -6,7 +6,7 @@ import Footer from '../components/Footer';
 import SwipeCards from '../components/SwipeCards';
 import VelocityScroll from '../components/VelocityScroll';
 import VariableProximity from '../components/VariableProximity';
-import SupremeCategory from '../components/SupremeCategory';
+import CountryNavigation from '../components/CountryNavigation';
 
 import SupremeNewsletter from '../components/SupremeNewsletter';
 import OurStoryLink from '../components/OurStoryLink';
@@ -232,13 +232,13 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* NEW: Categories Section */}
+            {/* NEW: Country Navigation Section */}
             <section className="home-categories">
                 <div className="section-header-center">
-                    <span className="script-sub">What are you craving?</span>
-                    <h2 className="section-title">Curated Collections</h2>
+                    <span className="script-sub">Explore Global Flavors</span>
+                    <h2 className="section-title">Discover by Country</h2>
                 </div>
-                <SupremeCategory />
+                <CountryNavigation />
             </section>
 
             {/* Narrative / Values Section (Only Cards now) */}

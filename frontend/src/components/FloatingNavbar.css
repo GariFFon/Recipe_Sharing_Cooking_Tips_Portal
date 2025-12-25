@@ -12,6 +12,12 @@
     z-index: 2100;
     pointer-events: none;
     box-sizing: border-box;
+    /* Hardware acceleration for smooth fixed positioning */
+    transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
 }
 
 /* --- Logo Styling --- */
@@ -648,6 +654,18 @@
         position: relative !important;
         top: 0 !important;
         right: 0 !important;
+        transform: translateZ(0);
+        will-change: transform;
+        backface-visibility: hidden;
+    }
+
+    /* Prevent theme toggle from shifting */
+    .theme-toggle-wrapper,
+    .theme-toggle,
+    .mobile-toggle-btn {
+        transform: translateZ(0);
+        will-change: transform;
+        backface-visibility: hidden;
     }
 
     /* Enhanced Mobile Logo */

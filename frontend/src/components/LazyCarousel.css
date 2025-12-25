@@ -1,0 +1,124 @@
+/* ========================================
+   LAZY CAROUSEL - Skeleton Loading State
+======================================== */
+
+.carousel-skeleton {
+    width: 100%;
+    margin-bottom: 6rem;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.skeleton-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    padding: 0 2rem;
+}
+
+.skeleton-badge {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: #f0f0f0;
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    border: 3px solid #e0e0e0;
+}
+
+.skeleton-icon {
+    width: 24px;
+    height: 24px;
+    background: #d0d0d0;
+    border-radius: 50%;
+}
+
+.skeleton-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    font-style: italic;
+    color: #d0d0d0;
+}
+
+.skeleton-count {
+    width: 100px;
+    height: 32px;
+    background: #d0d0d0;
+    border-radius: 20px;
+}
+
+.skeleton-wrapper {
+    background: #fdfaf3;
+    border: 3px solid #e0e0e0;
+    border-radius: 24px;
+    padding: 3rem 2rem;
+    box-shadow: 8px 8px 0 #e0e0e0;
+}
+
+.skeleton-cards {
+    display: flex;
+    gap: 2rem;
+    overflow: hidden;
+}
+
+.skeleton-card {
+    min-width: 340px;
+    height: 420px;
+    background: linear-gradient(90deg,
+            #f0f0f0 0%,
+            #e8e8e8 50%,
+            #f0f0f0 100%);
+    background-size: 200% 100%;
+    border: 3px solid #e0e0e0;
+    border-radius: 16px;
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .skeleton-header {
+        padding: 0 1rem;
+    }
+
+    .skeleton-badge {
+        padding: 0.6rem 1.5rem;
+    }
+
+    .skeleton-title {
+        font-size: 1.4rem;
+    }
+
+    .skeleton-wrapper {
+        border-radius: 16px;
+        padding: 2rem 1rem;
+        box-shadow: 6px 6px 0 #e0e0e0;
+    }
+
+    .skeleton-card {
+        min-width: 280px;
+        height: 350px;
+    }
+}

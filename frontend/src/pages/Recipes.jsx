@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import RecipeCard from '../components/RecipeCard';
 import RecipeCarousel from '../components/RecipeCarousel';
+import LazyCarousel from '../components/LazyCarousel';
 import SearchModal from '../components/SearchModal';
 import Footer from '../components/Footer';
 import { API_BASE_URL } from '../config';
@@ -12,6 +14,7 @@ const Recipes = () => {
     const [filterType, setFilterType] = useState('All'); // All, Veg, Non-Veg
     const [totalRecipes, setTotalRecipes] = useState(0);
     const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+    const location = useLocation();
 
     const fetchGroupedRecipes = async () => {
         try {
@@ -33,6 +36,26 @@ const Recipes = () => {
     useEffect(() => {
         fetchGroupedRecipes();
     }, [filterType]);
+
+    // Scroll to specific cuisine carousel when navigating from Home page
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const cuisine = params.get('cuisine');
+
+        if (cuisine && location.hash === '#scroll' && !loading) {
+            // Wait for carousels to render, then scroll
+            setTimeout(() => {
+                const cuisineId = `cuisine-${cuisine.toLowerCase().replace(/\s+/g, '-')}`;
+                const element = document.getElementById(cuisineId);
+
+                if (element) {
+                    const yOffset = -100; // Offset for fixed header
+                    const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+                }
+            }, 600); // Wait for lazy carousels to load
+        }
+    }, [location, loading]);
 
 
     return (
@@ -105,13 +128,18 @@ const Recipes = () => {
                 ) : (
                     <div className="carousels-container">
                         {groupedRecipes.length > 0 ? (
-                            groupedRecipes.map((group) => (
-                                <RecipeCarousel
-                                    key={group.category}
-                                    title={group.category}
-                                    recipes={group.recipes}
-                                />
-                            ))
+                            groupedRecipes.map((group, index) => {
+                                const cuisineId = `cuisine-${group.category.toLowerCase().replace(/\s+/g, '-')}`;
+                                return (
+                                    <LazyCarousel
+                                        key={group.category}
+                                        id={cuisineId}
+                                        title={group.category}
+                                        recipes={group.recipes}
+                                        eager={index < 2}
+                                    />
+                                );
+                            })
                         ) : (
                             <div className="empty-state">
                                 <p>No recipes found.</p>
