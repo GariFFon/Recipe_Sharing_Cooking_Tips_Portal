@@ -279,6 +279,39 @@ h3 {
     display: none;
 }
 
+/* Mobile: Egg-Shaped Blob */
+@media (max-width: 768px) {
+    .hero-img {
+        max-width: 350px;
+        height: 450px;
+        /* Taller than wide for egg shape */
+        border-radius: 45% 55% 60% 40% / 55% 60% 40% 45%;
+        /* Vertical oval */
+        animation: morph-egg 8s ease-in-out infinite;
+    }
+}
+
+/* Egg-specific morph animation */
+@keyframes morph-egg {
+
+    0%,
+    100% {
+        border-radius: 45% 55% 60% 40% / 55% 60% 40% 45%;
+    }
+
+    25% {
+        border-radius: 50% 50% 55% 45% / 60% 55% 45% 40%;
+    }
+
+    50% {
+        border-radius: 40% 60% 50% 50% / 50% 65% 35% 50%;
+    }
+
+    75% {
+        border-radius: 55% 45% 45% 55% / 45% 50% 50% 55%;
+    }
+}
+
 /* ========================================
    SECTION: Marquee Stats
 ======================================== */
@@ -1316,19 +1349,11 @@ h3 {
     }
 
     .hero-visual {
-        height: 350px;
-        margin-top: 6rem;
-        /* Restore spacing to avoid navbar overlap */
+        height: 400px;
     }
 
     .hero-img {
-        max-width: 85%;
-        height: 350px;
-        border-radius: 48% 52% 55% 45% / 52% 48% 52% 48%;
-        /* Gentle morph - stays closer to circle */
-        box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.1);
-        animation: morph 8s ease-in-out infinite;
-        /* Keep the animation */
+        height: 400px;
     }
 
     .hero-actions {

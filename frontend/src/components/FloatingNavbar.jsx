@@ -204,31 +204,58 @@ const MobileMenu = ({ onClose }) => {
     // "Circular Reveal" - Expands from the button position
     const menuVariants = {
         closed: {
-            clipPath: `circle(0px at calc(100% - 40px) 40px)`,
+            clipPath: "circle(0px at calc(100% - 5%) 2.35rem)", // Precise button center
             transition: {
                 type: "spring",
-                stiffness: 30, // Much softer closing (was 400)
-                damping: 15,
-                mass: 1
+                stiffness: 400,
+                damping: 40
             }
         },
         open: {
-            clipPath: `circle(150% at calc(100% - 40px) 40px)`,
+            clipPath: "circle(140% at calc(100% - 5%) 2.35rem)", // Stops just behind button
             transition: {
                 type: "spring",
                 stiffness: 20,
-                damping: 15, // Increased damping slightly to prevent too much bounce
-                mass: 1.2
+                damping: 10
             }
         }
     };
 
+    // Staggered Text Animations - Ultra Smooth
     const containerVariants = {
         open: {
-            transition: { staggerChildren: 0.1, delayChildren: 0.2 }
+            transition: {
+                staggerChildren: 0.07, // Tighter stagger for flow
+                delayChildren: 0.15 // Start sooner after circle opens
+            }
         },
         closed: {
-            transition: { staggerChildren: 0.05, staggerDirection: -1 }
+            transition: {
+                staggerChildren: 0.03,
+                staggerDirection: -1
+            }
+        }
+    };
+
+    const itemVariants = {
+        closed: {
+            y: 30,
+            opacity: 0,
+            transition: {
+                type: "spring",
+                stiffness: 300,
+                damping: 30
+            }
+        },
+        open: {
+            y: 0,
+            opacity: 1,
+            transition: {
+                type: "spring",
+                stiffness: 100, // Softer spring
+                damping: 15, // Less damping = more bounce
+                mass: 0.8 // Lighter feel
+            }
         }
     };
 
@@ -237,7 +264,6 @@ const MobileMenu = ({ onClose }) => {
         { path: "/recipes", label: "Recipes" },
         { path: "/lifestyle", label: "Lifestyle" },
         { path: "/about", label: "About" },
-        // { path: "/team", label: "Team" },
         { path: user ? "/profile" : "/login", label: user ? "Profile" : "Login" }
     ];
 
@@ -249,8 +275,10 @@ const MobileMenu = ({ onClose }) => {
             variants={menuVariants}
             className="mobile-menu-overlay"
         >
+            {/* --- Split Axis Background --- */}
             <div className="mm-split-axis"></div>
 
+            {/* --- Main Navigation --- */}
             <div className="mm-nav-wrapper">
                 <motion.nav
                     className="mm-nav-container"
@@ -260,105 +288,40 @@ const MobileMenu = ({ onClose }) => {
                     exit="closed"
                 >
                     {links.map((link, index) => (
-                        <KineticLink
-                            key={link.path}
-                            link={link}
-                            index={index}
-                            onClose={onClose}
-                        />
+                        <div key={link.path} className="mm-link-row">
+                            {/* Left Side: Number */}
+                            <motion.div variants={itemVariants} className="mm-number-col">
+                                <span className="mm-number">0{index + 1}</span>
+                            </motion.div>
+
+                            {/* Right Side: Link */}
+                            <motion.div variants={itemVariants} className="mm-text-col">
+                                <Link
+                                    to={link.path}
+                                    onClick={onClose}
+                                    className="mm-link-item"
+                                >
+                                    {link.label}
+                                </Link>
+                            </motion.div>
+                        </div>
                     ))}
                 </motion.nav>
             </div>
 
+            {/* --- Footer --- */}
             <motion.div
                 className="mm-footer"
-                variants={{
-                    closed: { opacity: 0, y: 20 },
-                    open: { opacity: 1, y: 0, transition: { delay: 0.6 } }
-                }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
             >
                 <div className="mm-socials">
-                    {['Instagram', 'Twitter', 'Pinterest'].map((social, i) => (
-                        <motion.a
-                            key={social}
-                            href="#"
-                            className="mm-social-link"
-                            whileHover={{ y: -5, color: "#d4a373" }}
-                        >
-                            {social}
-                        </motion.a>
-                    ))}
+                    <a href="#" className="mm-social-link">Instagram</a>
+                    <a href="#" className="mm-social-link">Twitter</a>
+                    <a href="#" className="mm-social-link">Pinterest</a>
                 </div>
             </motion.div>
-        </motion.div>
-    );
-};
-
-const KineticLink = ({ link, index, onClose }) => {
-    return (
-        <motion.div
-            className="mm-link-row"
-            // Dramatic Entrance: Slide Up + Skew + Fade
-            variants={{
-                closed: { y: 40, skewY: 5, opacity: 0 },
-                open: {
-                    y: 0,
-                    skewY: 0,
-                    opacity: 1,
-                    transition: {
-                        type: "spring",
-                        stiffness: 80,
-                        damping: 12,
-                        mass: 0.8
-                    }
-                }
-            }}
-            whileHover="hover"
-        >
-            {/* Number - Slide In */}
-            <div className="mm-number-col">
-                <motion.span
-                    className="mm-number"
-                    variants={{
-                        hover: { x: 5, color: "#d4a373" }
-                    }}
-                    transition={{ duration: 0.2 }}
-                >
-                    0{index + 1}
-                </motion.span>
-            </div>
-
-            {/* Text - 3D Flip Effect */}
-            <div className="mm-text-col">
-                <Link
-                    to={link.path}
-                    onClick={onClose}
-                    className="mm-link-item-wrapper"
-                >
-                    <div className="mm-kinetic-text">
-                        <motion.span
-                            className="mm-text-layer primary"
-                            variants={{
-                                hover: { y: "-100%" },
-                                open: { y: "0%" }
-                            }}
-                            transition={{ duration: 0.5, ease: [0.33, 1, 0.68, 1] }} // Cubic Bezier for snap
-                        >
-                            {link.label}
-                        </motion.span>
-                        <motion.span
-                            className="mm-text-layer secondary"
-                            variants={{
-                                open: { y: "100%" },
-                                hover: { y: "0%" }
-                            }}
-                            transition={{ duration: 0.5, ease: [0.33, 1, 0.68, 1] }}
-                        >
-                            {link.label}
-                        </motion.span>
-                    </div>
-                </Link>
-            </div>
         </motion.div>
     );
 };

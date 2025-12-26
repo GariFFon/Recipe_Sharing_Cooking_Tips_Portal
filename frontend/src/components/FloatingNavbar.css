@@ -394,12 +394,15 @@
     height: 100vh;
     background: var(--color-cream, #fdfaf3);
     z-index: 2000;
+    /* Below toggle button */
     display: flex;
     flex-direction: column;
     justify-content: center;
+    /* Center content vertically */
     padding: 0;
     pointer-events: auto;
     overflow: hidden;
+    /* No scroll, just fixed layout */
 }
 
 /* Vertical Split Line */
@@ -407,6 +410,7 @@
     position: absolute;
     top: 0;
     left: 25%;
+    /* Axis at 25% width */
     width: 1px;
     height: 100%;
     background: rgba(26, 26, 26, 0.1);
@@ -420,6 +424,7 @@
     flex-direction: column;
     z-index: 1;
     padding-top: 4rem;
+    /* Offset for navbar area */
 }
 
 .mm-nav-container {
@@ -432,33 +437,35 @@
 .mm-link-row {
     display: flex;
     width: 100%;
-    align-items: center;
-    /* Center vertically */
-    padding: 1rem 0;
+    align-items: baseline;
+    /* Align text baselines */
+    padding: 1.5rem 0;
     position: relative;
     cursor: pointer;
     overflow: hidden;
+    /* For any hover ripple effects */
 }
 
 /* Left Column: Numbers */
 .mm-number-col {
     width: 25%;
+    /* Matches axis */
     display: flex;
     justify-content: flex-end;
+    /* Align next to line */
     padding-right: 1.5rem;
     box-sizing: border-box;
 }
 
 .mm-number {
     font-family: 'Space Mono', monospace;
+    /* Tech/Drafting feel */
     font-size: 0.85rem;
     color: var(--color-accent, #d4a373);
     opacity: 0.8;
-    display: block;
-    /* For motion transforms */
 }
 
-/* Right Column: Links (Kinetic Wrapper) */
+/* Right Column: Links */
 .mm-text-col {
     width: 75%;
     padding-left: 2rem;
@@ -467,64 +474,28 @@
     align-items: center;
 }
 
-.mm-link-item-wrapper {
+.mm-link-item {
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-size: 3.5rem;
+    /* Massive, Editorial size */
+    line-height: 1;
+    color: var(--color-dark, #1a1a1a);
     text-decoration: none;
-    display: block;
-    overflow: hidden;
-    height: 4.5rem;
-    /* Reduced height (was 6.5rem) - Tighter Spacing */
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    transition: all 0.4s ease;
+    transform-origin: left center;
 }
 
-.mm-kinetic-text {
-    position: relative;
-    display: block;
-    height: 100%;
-    /* display: flex; REMOVED to prevent misalignment */
-    /* align-items: center; REMOVED */
-}
-
-.mm-text-layer {
-    font-family: 'Playfair Display', serif;
-    /* Original font */
-    font-size: 3rem;
-    line-height: 4.5rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-    display: block;
-    position: relative;
-    white-space: nowrap;
-
-    /* Original solid color - no gradient */
-    color: #7a7a7a;
-    background: none;
-    -webkit-background-clip: initial;
-    -webkit-text-fill-color: initial;
-
-    /* No filter */
-    filter: none;
-}
-
-.mm-text-layer.secondary {
-    /* "Antique Gold" Gradient */
-    background: linear-gradient(180deg, #d4a373 0%, #ffebb8 45%, #b08d55 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-}
-
-.mm-text-layer.secondary {
+/* Hover Effects */
+.mm-link-row:hover .mm-link-item {
     color: var(--color-accent, #d4a373);
-    position: absolute;
-    /* Keep absolute to overlay */
-    top: 0;
-    left: 0;
-    width: 100%;
-    /* Ensure full width match */
+    transform: translateX(10px) skewX(-5deg);
+    /* Slight italic skew on hover */
+}
+
+.mm-link-row:hover .mm-number {
+    color: var(--color-dark, #1a1a1a);
 }
 
 /* Footer (Socials) */
@@ -532,6 +503,7 @@
     position: absolute;
     bottom: 3rem;
     left: 25%;
+    /* Align with split content */
     padding-left: 2rem;
     z-index: 10;
 }
@@ -547,9 +519,9 @@
     text-transform: uppercase;
     letter-spacing: 0.15em;
     color: rgba(26, 26, 26, 0.4);
+    /* Fade interaction */
     text-decoration: none;
-    display: inline-block;
-    /* For motion transforms */
+    transition: color 0.3s ease;
 }
 
 .mm-social-link:hover {
@@ -809,21 +781,12 @@
 }
 
 /* Link Items */
-.dark-mode .mm-text-layer {
-    /* Original solid white - no gradient */
-    color: #e8e8e8;
-    background: none;
-    -webkit-background-clip: initial;
-    -webkit-text-fill-color: initial;
-    filter: none;
+.dark-mode .mm-link-item {
+    color: #e0e0e0;
 }
 
-.dark-mode .mm-text-layer.secondary {
-    /* "Midnight Gold" Gradient for Hover */
-    background: linear-gradient(180deg, #ffd700 0%, #fcf6ba 50%, #b38728 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+.dark-mode .mm-link-row:hover .mm-link-item {
+    color: #d4af37;
 }
 
 .dark-mode .mm-link-row:hover .mm-number {
