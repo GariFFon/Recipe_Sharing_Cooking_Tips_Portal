@@ -462,3 +462,18 @@
         /* No button transform on touch */
     }
 }
+
+/* Dark Mode Mobile Override - Fix text visibility */
+@media (max-width: 768px) {
+    .dark-mode .recipe-title {
+        color: #ffffff !important;
+    }
+
+    .dark-mode .card-content {
+        background: #1a1a1a !important;
+    }
+
+    .dark-mode .card-meta {
+        border-top-color: #d4af37 !important;
+    }
+}

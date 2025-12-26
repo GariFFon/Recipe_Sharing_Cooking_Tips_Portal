@@ -5,6 +5,9 @@ on:
     # Run every day at midnight UTC
     - cron: '0 0 * * *'
   workflow_dispatch: # Allows manual trigger
+  # Trigger every 6 hours to check for updates
+  schedule:
+    - cron: '0 */6 * * *'
 
 jobs:
   sync:

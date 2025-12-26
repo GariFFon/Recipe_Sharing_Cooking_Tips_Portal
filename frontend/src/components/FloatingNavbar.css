@@ -397,8 +397,8 @@
     /* Below toggle button */
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    /* Center content vertically */
+    justify-content: flex-start;
+    /* Position at top */
     padding: 0;
     pointer-events: auto;
     overflow: hidden;
@@ -422,9 +422,8 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    z-index: 1;
-    padding-top: 4rem;
-    /* Offset for navbar area */
+    padding-top: 9rem;
+    /* Optimal spacing from navbar */
 }
 
 .mm-nav-container {
