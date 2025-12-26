@@ -11,11 +11,17 @@ const User = require('../models/User');
 const Recipe = require('../models/Recipe');
 const { auth, JWT_SECRET } = require('../middleware/auth');
 
+console.log('📧 Auth Route Configuration Loaded:');
+console.log(`Email Host: ${process.env.EMAIL_HOST}`);
+console.log(`Email User: ${process.env.EMAIL_USER}`);
+console.log(`Email Pass Length: ${process.env.EMAIL_PASS ? process.env.EMAIL_PASS.length : 'MISSING'}`);
+
 // Configure nodemailer with explicit settings for easier debugging
+// Configure nodemailer with environment variables or default to Gmail
 const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 587,
-  secure: false, // Use STARTTLS (usually better for cloud/Render)
+  host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+  port: parseInt(process.env.EMAIL_PORT) || 587,
+  secure: process.env.EMAIL_SECURE === 'true', // true for 465, false for other ports
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
@@ -226,9 +232,10 @@ router.post('/send-otp', [
 
     // Send email
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
       to: normalizedEmail,
       subject: 'Email Verification OTP - Recipe Sharing Portal',
+      // ... (keep html content same) ...
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
           <h2 style="color: #333; text-align: center;">Email Verification</h2>
@@ -244,7 +251,8 @@ router.post('/send-otp', [
       `
     };
 
-    await transporter.sendMail(mailOptions);
+    const info = await transporter.sendMail(mailOptions);
+    console.log(`✅ OTP sent to ${normalizedEmail}. Message ID: ${info.messageId}`);
 
     res.status(200).json({ message: 'OTP sent to your email' });
   } catch (error) {
